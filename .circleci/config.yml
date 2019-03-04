@@ -38,3 +38,6 @@ jobs:
             . venv/bin/activate
             pytest --cov=genie_pkg --cov-report=html
       
+      - store_artifacts:
+          path: htmlcov
+          destination: tr1
