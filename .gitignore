@@ -1,0 +1,7 @@
+htmlcov/
+.history/
+dist/
+build/
+data_genie_keshav.egg-info/
+.coverage
+**/__pycache__/**
