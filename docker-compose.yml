@@ -6,3 +6,10 @@ services:
       target: dev
     volumes:
       - .:/app:cached
+  
+  build_pip:
+    build:
+      context: .
+      target: base
+    volumes:
+      - .:/app:cached  
