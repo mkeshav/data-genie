@@ -5,10 +5,13 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../genie_pkg")
 import pytest
 import random
 
-from fw import surprise_me, generate, type_choices
+from fw import generate, type_choices
 
 def test_fw():
-    (colspecs, data) = surprise_me()
+    ncols = random.randint(1, 10)
+    nrows = random.randint(1, 3)
+    colspecs = [('f'+str(i), random.randint(1, 10), random.choice(type_choices),) for i in range(ncols)]
+    data = generate(colspecs, 1)
     expected_length = sum([c[1] for c in colspecs])
     for d in data:
         decoded = d.decode()

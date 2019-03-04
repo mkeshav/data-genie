@@ -50,10 +50,3 @@ def generate(colspecs, nrows, encoding='utf-8'):
         data.insert(0, ''.join([c[1] for c in col_data]).encode(encoding))
 
     return data
-
-
-def surprise_me():
-    ncols = random.randint(1, 10)
-    nrows = random.randint(1, 3)
-    colspecs = [('f'+str(i), random.randint(1, 10), random.choice(type_choices),) for i in range(ncols)]
-    return (colspecs, generate(colspecs, nrows))
