@@ -2,8 +2,8 @@
 
 set -eu
 
-# REPO_URL and TWINE_PASSWORD should be set
+# Repo by default on twine is pypi.org, TWINE_PASSWORD should be set
 echo "Building...."
 python3 setup.py sdist bdist_wheel
 echo "Uploading...."
-python3 -m twine upload --repository-url $REPO_URL -u mkeshav dist/*
+python3 -m twine upload -u mkeshav dist/*
