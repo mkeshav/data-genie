@@ -1,6 +1,56 @@
 version: 2
 jobs:
-  build:
+  test:
+    docker:
+      # specify the version you desire here
+      - image: circleci/python:3.7.2
+
+    working_directory: ~/data-genie
+
+    environment:
+      TERM: dumb
+    
+    steps:
+      - checkout
+# Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+
+      - run:
+          name: Install pip package dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            python3 -m pip install --upgrade pip setuptools wheel
+            python3 -m pip install twine
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}      
+
+      - run:
+          name: Run tests
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pytest --cov=genie_pkg --cov-report=html
+      
+      - store_artifacts:
+          path: htmlcov
+          destination: tr1
+
+  package_pypi_upload:
     docker:
       # specify the version you desire here
       - image: circleci/python:3.7.2
@@ -40,19 +90,23 @@ jobs:
           key: v1-dependencies-{{ checksum "requirements.txt" }}      
 
       - run:
-          name: Run tests
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pytest --cov=genie_pkg --cov-report=html
-      
-      - store_artifacts:
-          path: htmlcov
-          destination: tr1
-
-      - run:
           name: Upload pip to pypi
           command: |
             python3 -m venv venv
             . venv/bin/activate
             ./upload_pypi
+
+workflows:
+  version: 2
+  build-test-and-approval-deploy:
+    jobs:
+      - test  # your custom job from your config, that builds your code
+      - hold: # <<< A job that will require manual approval in the CircleCI web application.
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+          requires: # We only run the "hold" job when test2 has succeeded
+           - test
+      # On approval of the `hold` job, any successive job that requires the `hold` job will run. 
+      # In this case, a user is manually triggering the deploy job.
+      - package_pypi_upload:
+          requires:
+            - hold
