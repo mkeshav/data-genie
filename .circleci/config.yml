@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/python:3.7.2
+
+    working_directory: ~/data-genie
+
+    environment:
+      TERM: dumb
+    
+    steps:
+      - checkout
+      - run:
+          command: |
+            pip install requirements.txt
+      - run:
+          command: |
+            pytest --cov=genie_pkg --cov-report=html
+      
