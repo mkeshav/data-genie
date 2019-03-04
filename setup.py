@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="data-genie-keshav",
+    name="data-genie-mkeshav",
     version="0.0.2",
     author="Keshav Murthy",
     author_email="mkeshav@gmail.com",
