@@ -1,1 +1,4 @@
 PyMonad
+pytest
+pytest-sugar
+pytest-cov

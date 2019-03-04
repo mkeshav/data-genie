@@ -1,4 +1,4 @@
-FROM python:3.7 as base
+FROM python:3.7 as dev
 
 LABEL Author="Keshav Murthy"
 
@@ -11,10 +11,5 @@ WORKDIR /app
 COPY requirements* /app/
 
 RUN python3 -m pip install -r requirements.txt
-
-FROM base as dev
-
-ADD requirements_dev.txt requirements_dev.txt
-RUN python3 -m pip install -r requirements_dev.txt
 
 ADD . /app
