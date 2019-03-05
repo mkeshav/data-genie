@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/bb/mkeshav/data_genie.svg?style=svg)](https://circleci.com/bb/mkeshav/data_genie)
+
 # Data Genie
 
 Genie that can satisfy your data wish.
