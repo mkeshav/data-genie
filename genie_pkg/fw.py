@@ -44,9 +44,6 @@ def _generate_columns(colspecs):
 
 
 def generate(colspecs, nrows, encoding='utf-8'):
-    data = []
     for i in range(nrows):
         col_data = _generate_columns(colspecs)
-        data.insert(0, ''.join([c[1] for c in col_data]).encode(encoding))
-
-    return data
+        yield ''.join([c[1] for c in col_data]).encode(encoding)
