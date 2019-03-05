@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="data-genie-mkeshav",
-    version="0.0.6",
+    version="0.0.7",
     author="Keshav Murthy",
     author_email="mkeshav@gmail.com",
     description="A small genie to generate test data",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://mkeshav@bitbucket.org/mkeshav/data_genie.git",
+    url="https://bitbucket.org/mkeshav/data_genie",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
