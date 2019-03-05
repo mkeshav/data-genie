@@ -30,16 +30,16 @@ def _generate(width):
     return ''.join([random.choice(special)] + random_chars)
 
 
-gen_fns = {
-    'int': _generate_int,
-    'float': _generate_float,
-    'str': _generate,
-}
-
 type_choices = ['int', 'float', 'str']
 
 
 def _generate_columns(colspecs):
+    gen_fns = {
+        'int': _generate_int,
+        'float': _generate_float,
+        'str': _generate,
+    }
+
     return [(col[0], gen_fns.get(col[2], _generate)(col[1])) for col in colspecs]
 
 

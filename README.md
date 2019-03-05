@@ -1,6 +1,7 @@
 # Data Genie
 
-Genie that can satisfy your data wish
+Genie that can satisfy your data wish.
+Supports generation of fixedwidth content (as of this writing.)
 
 # Install
 python3 -m pip install data-genie-mkeshav
@@ -11,5 +12,6 @@ from genie_pkg import fw
 colspecs = [('f1', 4, 'float'), ('f2', 3, 'int'), ('f3', 10, 'str')]
 nrows = 10
 encoding = 'windows-1252'
-fw.generate(colspecs, nrows, encoding)
+for d in fw.generate(colspecs, nrows, encoding):
+    do_something(d)
 ```
