@@ -3,7 +3,7 @@
 Genie that can satisfy your data wish
 
 # Install
-python3 -m pip install --index-url https://test.pypi.org/simple/ data-genie-mkeshav
+python3 -m pip install data-genie-mkeshav
 
 # Usage
 ```
