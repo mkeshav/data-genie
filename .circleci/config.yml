@@ -42,8 +42,12 @@ jobs:
           path: report.html
 
       - store_artifacts:
+          path: /code/test-results
+          destination: test
+
+      - store_artifacts:
           path: htmlcov
-          destination: tr1
+          destination: cov
 
   package_pypi_upload:
     docker:
