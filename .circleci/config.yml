@@ -44,8 +44,11 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pytest --cov=genie_pkg --cov-report=html
+            pytest --cov=genie_pkg --cov-report=html --html=report.html --self-contained-html
       
+      - store_test_results:
+          path: report.html
+
       - store_artifacts:
           path: htmlcov
           destination: tr1
@@ -63,19 +66,6 @@ jobs:
     steps:
       - checkout
 # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "requirements.txt" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run:
-          name: install dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-
       - run:
           name: Install pip package dependencies
           command: |
@@ -84,11 +74,6 @@ jobs:
             python3 -m pip install --upgrade pip setuptools wheel
             python3 -m pip install twine
             
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}      
-
       - run:
           name: Upload pip to pypi
           command: |

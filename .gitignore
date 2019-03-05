@@ -5,3 +5,4 @@ build/
 data_genie_*.egg-info/
 .coverage
 **/__pycache__/**
+report.html
