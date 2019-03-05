@@ -4,3 +4,4 @@ pytest
 pytest-sugar
 pytest-html
 pytest-cov
+jsonschema
