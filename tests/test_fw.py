@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../genie_pkg")
 import pytest
 import random
 
-from fw import generate, type_choices
+from fw_genie import generate, type_choices
 
 def test_fw():
     ncols = random.randint(1, 10)

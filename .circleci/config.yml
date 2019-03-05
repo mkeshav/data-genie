@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   test:
     docker:
@@ -50,12 +50,12 @@ jobs:
           destination: cov
 
   package_pypi_upload:
+    
     docker:
       # specify the version you desire here
       - image: circleci/python:3.7.2
 
     working_directory: ~/data-genie
-
     environment:
       TERM: dumb
     
@@ -78,7 +78,7 @@ jobs:
             ./upload_pypi
 
 workflows:
-  version: 2
+  version: 2.1
   build-test-and-approval-deploy:
     jobs:
       - test  # your custom job from your config, that builds your code
@@ -86,8 +86,16 @@ workflows:
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
           requires: # We only run the "hold" job when test2 has succeeded
            - test
+          filters:
+            branches:
+              only:
+                - master
       # On approval of the `hold` job, any successive job that requires the `hold` job will run. 
       # In this case, a user is manually triggering the deploy job.
       - package_pypi_upload:
           requires:
             - hold
+          filters:
+            branches:
+              only:
+                - master

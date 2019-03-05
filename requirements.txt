@@ -1,4 +1,5 @@
 PyMonad
+jinja2
 pytest
 pytest-sugar
 pytest-html
