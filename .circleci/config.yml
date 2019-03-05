@@ -40,9 +40,10 @@ jobs:
       
       - store_test_results:
           path: report.html
+          destination: test-results/report.html
 
       - store_artifacts:
-          path: /code/test-results
+          path: report.html
           destination: test
 
       - store_artifacts:
