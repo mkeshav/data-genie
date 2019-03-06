@@ -58,13 +58,15 @@ json.dumps(entries)
 ```
 Available template functions
 
-- `random_integer(max_expected_value)`
+- `random_integer(start, max_expected_value)`
 - `random_string_with_special_chars(length_of_expected_string)`
 - `random_string_list(size_of_list, length_of_expected_string)`
 - `random_string(length_of_expected_string)`
-- `random_float(max_expected_value, number_of_decimal_places)`
+- `random_float(start, max_expected_value, number_of_decimal_places)`
 - `random_bool()`
 - `now_epoch()`
+- `guid()`
+- `random_choice_of(list_of_choices)`
 
 ## Inject Custom template functions
 You can do this, or submit a PR if you think your function will be useful for others
