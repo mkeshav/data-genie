@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="data-genie-mkeshav",
-    version="0.0.9",
+    version="0.1.0",
     author="Keshav Murthy",
     author_email="mkeshav@gmail.com",
     description="A small genie to generate test data",

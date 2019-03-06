@@ -6,6 +6,7 @@ import string
 import json
 
 import time
+from typing import NewType
 
 _current_milli_time = lambda: int(round(time.time() * 1000))
 
@@ -42,25 +43,22 @@ def random_bool():
 def now_epoch():
     return _current_milli_time()
 
-def _create_template_with_globals(template_string):
+JinjaTemplate = NewType('JinjaTemplate', Template)
+
+def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
+    template.globals['random_integer'] = random_integer
+    template.globals['random_float'] = random_float
+    template.globals['random_string'] = random_string
+    template.globals['random_string_with_special_chars'] = random_string_with_special_chars
+    template.globals['random_string_list'] = random_string_list
+    template.globals['now_epoch'] = now_epoch
+    template.globals['random_bool'] = random_bool
+    template.globals['random_integer_list'] = random_integer_list
+    return template
+
+def generate(template_string) -> str:
     t = Template(template_string)
-    t.globals['random_integer'] = random_integer
-    t.globals['random_float'] = random_float
-    t.globals['random_string'] = random_string
-    t.globals['random_string_with_special_chars'] = random_string_with_special_chars
-    t.globals['random_string_list'] = random_string_list
-    t.globals['now_epoch'] = now_epoch
-    t.globals['random_bool'] = random_bool
-    t.globals['random_integer_list'] = random_integer_list
-    return t
+    return _add_template_functions(t).render()
 
-def generate(template_string):
-    return _create_template_with_globals(template_string).render()
-
-def repeat(template_string, times):
-    t = _create_template_with_globals(template_string)
-    entries = []
-    for i in range(0, times):
-        entries.insert(0, json.loads(t.render()))
-        
-    return json.dumps(entries)
+def generate_with_custom_template_function(template: JinjaTemplate) -> str:
+    return _add_template_functions(template).render()

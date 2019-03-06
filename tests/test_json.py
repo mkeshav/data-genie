@@ -5,8 +5,10 @@ import json
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../genie_pkg")
 
-from json_genie import generate, repeat
+from json_genie import generate, generate_with_custom_template_function
 from jsonschema import validate
+from jinja2 import Template
+import random
 
 def test_almighty():
     schema = {
@@ -67,12 +69,28 @@ def test_almighty():
     d = json.loads(generate(template))
     validate(instance=d, schema=schema)
 
-def test_repeat():
+fruit_choices = ['mango', 'apple', 'durian', 'jackfruit']
+def favourite_fruit():
+    return random.choice(fruit_choices)
+
+def test_generate_with_custom_template_function():
     template = '''
         {
-            "id": {{random_integer(1000)}}
+            "k1": {{random_integer(1000)}},
+            "k2": "{{favourite_fruit()}}"
         }
     '''
-    d = json.loads(repeat(template, 2))
-    assert len(d) == 2
 
+    schema = {
+        "type": "object",
+        "properties": {
+            "k1" : {"type" : "number"},
+            "k2" : {"type" : "string", "enum": fruit_choices}
+        }
+    }
+
+    t = Template(template)
+    t.globals['favourite_fruit'] = favourite_fruit
+
+    d = json.loads(generate_with_custom_template_function(t))
+    validate(instance=d, schema=schema)

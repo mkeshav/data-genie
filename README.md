@@ -1,3 +1,4 @@
+[![PyPI version](https://badge.fury.io/py/data-genie-mkeshav.svg)](https://badge.fury.io/py/data-genie-mkeshav)
 [![CircleCI](https://circleci.com/bb/mkeshav/data_genie.svg?style=svg)](https://circleci.com/bb/mkeshav/data_genie)
 
 # Data Genie
@@ -19,6 +20,8 @@ for d in fw_genie.generate(colspecs, nrows, encoding):
 ```
 
 # Usage (Json)
+One json object (nested if necessary)
+
 ```
 from genie_pkg import json_genie
 template = '''
@@ -45,6 +48,14 @@ d = json.loads(json_genie.generate(template))
 do_something(d)
 ```
 
+To Create a list of json objects
+```
+entries = []
+for i in range(0, n):
+    entries.insert(0, json.loads(json_genie.generate(template)))
+        
+json.dumps(entries)
+```
 Available template functions
 
 - `random_integer(max_expected_value)`
@@ -54,3 +65,23 @@ Available template functions
 - `random_float(max_expected_value, number_of_decimal_places)`
 - `random_bool()`
 - `now_epoch()`
+
+## Inject Custom template functions
+```
+from json_genie import generate, generate_with_custom_template_function
+fruit_choices = ['mango', 'apple', 'durian', 'jackfruit']
+def favourite_fruit():
+    return random.choice(fruit_choices)
+
+template = '''
+    {
+        "k1": {{random_integer(1000)}},
+        "k2": "{{favourite_fruit()}}"
+    }
+'''
+
+t = Template(template)
+t.globals['favourite_fruit'] = favourite_fruit
+
+d = json.loads(generate_with_custom_template_function(t))
+```
