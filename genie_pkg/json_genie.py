@@ -8,7 +8,7 @@ import json
 import time
 from typing import NewType
 
-_current_milli_time = lambda: int(round(time.time() * 1000))
+def _current_milli_time(): return int(round(time.time() * 1000))
 
 def random_integer(max):
     return random.randint(1, max)
