@@ -14,8 +14,8 @@ def _current_milli_time(): return int(round(time.time() * 1000))
 def random_integer(start, max):
     return random.randint(start, max)
 
-def random_float(max, decimal_places):
-    return round(random.uniform(1, max), decimal_places)
+def random_float(start, max, decimal_places):
+    return round(random.uniform(start, max), decimal_places)
 
 def random_string(length):
     return ''.join([random.choice(string.ascii_letters) for i in range(0, length)])

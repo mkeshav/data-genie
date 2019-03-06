@@ -53,7 +53,7 @@ def test_almighty():
             "k1": {{random_integer(1, 1000)}},
             "k2": "{{random_string_with_special_chars(5)}}",
             "k3": {{random_string_list(2, 8)}},
-            "k4": {{random_float(100, 2)}},
+            "k4": {{random_float(1, 100, 2)}},
             "k5": {{random_bool()}},
             "k6": {{now_epoch()}},
             "k7": "{{random_string(5)}}",
