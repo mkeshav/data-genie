@@ -7,6 +7,7 @@ import json
 
 import time
 from typing import NewType
+import uuid
 
 def _current_milli_time(): return int(round(time.time() * 1000))
 
@@ -43,6 +44,10 @@ def random_bool():
 def now_epoch():
     return _current_milli_time()
 
+def guid():
+    return str(uuid.uuid4())
+
+
 JinjaTemplate = NewType('JinjaTemplate', Template)
 
 def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
@@ -54,6 +59,7 @@ def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
     template.globals['now_epoch'] = now_epoch
     template.globals['random_bool'] = random_bool
     template.globals['random_integer_list'] = random_integer_list
+    template.globals['guid'] = guid
     return template
 
 def generate(template_string) -> str:

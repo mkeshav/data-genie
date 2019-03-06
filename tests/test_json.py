@@ -42,7 +42,8 @@ def test_almighty():
                     ]
                 }
             },
-            "k9": {"type": "array", "items": {"type": "integer"}}
+            "k9": {"type": "array", "items": {"type": "integer"}},
+            "k10": {"type": "string"}
         }
     }
 
@@ -63,7 +64,8 @@ def test_almighty():
                     "y1": {{random_integer(1000)}}
                 }
             ],
-            "k9": {{random_integer_list(2, 100)}}
+            "k9": {{random_integer_list(2, 100)}},
+            "k10": "{{guid()}}"
         }
     '''
     d = json.loads(generate(template))
