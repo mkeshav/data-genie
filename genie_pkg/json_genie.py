@@ -47,6 +47,8 @@ def now_epoch():
 def guid():
     return str(uuid.uuid4())
 
+def random_choice_of(choices) -> str:
+    return str(random.choice(choices))
 
 JinjaTemplate = NewType('JinjaTemplate', Template)
 
@@ -60,6 +62,7 @@ def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
     template.globals['random_bool'] = random_bool
     template.globals['random_integer_list'] = random_integer_list
     template.globals['guid'] = guid
+    template.globals['random_choice_of'] = random_choice_of
     return template
 
 def generate(template_string) -> str:
@@ -68,3 +71,4 @@ def generate(template_string) -> str:
 
 def generate_with_custom_template_function(template: JinjaTemplate) -> str:
     return _add_template_functions(template).render()
+

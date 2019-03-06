@@ -43,7 +43,8 @@ def test_almighty():
                 }
             },
             "k9": {"type": "array", "items": {"type": "integer"}},
-            "k10": {"type": "string"}
+            "k10": {"type": "string"},
+            "k11": {"type": "string"}
         }
     }
 
@@ -65,6 +66,7 @@ def test_almighty():
                 }
             ],
             "k9": {{random_integer_list(2, 100)}},
+            "k11": "{{random_choice_of(['apple', 'mango'])}}",
             "k10": "{{guid()}}"
         }
     '''
