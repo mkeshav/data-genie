@@ -50,7 +50,7 @@ def test_almighty():
 
     template = '''
         {
-            "k1": {{random_integer(1000)}},
+            "k1": {{random_integer(1, 1000)}},
             "k2": "{{random_string_with_special_chars(5)}}",
             "k3": {{random_string_list(2, 8)}},
             "k4": {{random_float(100, 2)}},
@@ -59,13 +59,13 @@ def test_almighty():
             "k7": "{{random_string(5)}}",
             "k8": [
                 {
-                    "y1": {{random_integer(1000)}}
+                    "y1": {{random_integer(20, 40)}}
                 },
                 {
-                    "y1": {{random_integer(1000)}}
+                    "y1": {{random_integer(20, 60)}}
                 }
             ],
-            "k9": {{random_integer_list(2, 100)}},
+            "k9": {{random_integer_list(2, 60, 100)}},
             "k11": "{{random_choice_of(['apple', 'mango'])}}",
             "k10": "{{guid()}}"
         }
@@ -80,7 +80,7 @@ def favourite_fruit():
 def test_generate_with_custom_template_function():
     template = '''
         {
-            "k1": {{random_integer(1000)}},
+            "k1": {{random_integer(1, 1000)}},
             "k2": "{{favourite_fruit()}}"
         }
     '''

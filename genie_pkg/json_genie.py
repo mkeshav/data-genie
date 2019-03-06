@@ -11,8 +11,8 @@ import uuid
 
 def _current_milli_time(): return int(round(time.time() * 1000))
 
-def random_integer(max):
-    return random.randint(1, max)
+def random_integer(start, max):
+    return random.randint(start, max)
 
 def random_float(max, decimal_places):
     return round(random.uniform(1, max), decimal_places)
@@ -32,10 +32,10 @@ def random_string_list(list_size, item_length):
     #json dumps is to get python list as json compatible string.
     return json.dumps(l)
 
-def random_integer_list(list_size, max):
+def random_integer_list(list_size, start, max):
     l = []
     for i in range(0, list_size):
-        l.insert(0, random_integer(max)) 
+        l.insert(0, random_integer(start, max)) 
     return l
 
 def random_bool():
@@ -66,9 +66,16 @@ def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
     return template
 
 def generate(template_string) -> str:
+    """
+        Generate json using the template_string
+    """
+    
     t = Template(template_string)
     return _add_template_functions(t).render()
 
 def generate_with_custom_template_function(template: JinjaTemplate) -> str:
+    """
+        Generate json using the provided jinja template
+    """
     return _add_template_functions(template).render()
 
