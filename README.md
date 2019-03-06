@@ -67,6 +67,8 @@ Available template functions
 - `now_epoch()`
 
 ## Inject Custom template functions
+You can do this, or submit a PR if you think your function will be useful for others
+
 ```
 from json_genie import generate, generate_with_custom_template_function
 fruit_choices = ['mango', 'apple', 'durian', 'jackfruit']
