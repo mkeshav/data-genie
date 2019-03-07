@@ -18,6 +18,11 @@ encoding = 'windows-1252'
 for d in fw_genie.generate(colspecs, nrows, encoding):
     do_something(d)
 ```
+### Types supported
+- int
+- date (default format will be YYYY/MM/DD, if you want to override, pass valid python datetime format)
+- float
+- string
 
 # Usage (Json)
 One json object (nested if necessary)
