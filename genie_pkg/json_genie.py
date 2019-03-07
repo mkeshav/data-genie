@@ -8,6 +8,7 @@ import json
 import time
 from typing import NewType
 import uuid
+from datetime import datetime, timedelta
 
 def _current_milli_time(): return int(round(time.time() * 1000))
 
@@ -50,6 +51,9 @@ def guid():
 def random_choice_of(choices) -> str:
     return str(random.choice(choices))
 
+def date_with_format(format_string='%Y/%m/%d', delta_days=0):
+    return (datetime.today() - timedelta(days=delta_days)).strftime(format_string)
+
 JinjaTemplate = NewType('JinjaTemplate', Template)
 
 def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
@@ -63,6 +67,7 @@ def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
     template.globals['random_integer_list'] = random_integer_list
     template.globals['guid'] = guid
     template.globals['random_choice_of'] = random_choice_of
+    template.globals['date_with_format'] = date_with_format
     return template
 
 def generate(template_string) -> str:

@@ -72,6 +72,7 @@ Available template functions
 - `now_epoch()`
 - `guid()`
 - `random_choice_of(list_of_choices)`
+- `date_with_format(valid_python_dateformat_string, delta_days)` Will return date formatted as format string. use delta days to go forwards and backwards from today.
 
 ## Inject Custom template functions
 You can do this, or submit a PR if you think your function will be useful for others
