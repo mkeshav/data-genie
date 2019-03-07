@@ -42,7 +42,7 @@ def _generate_columns(colspecs):
     for col in colspecs:
         field_name, length, data_type, *date_format = col
         if data_type == 'date':
-            f =  date_format if date_format else '%Y/%m/%d' 
+            f =  date_format[0] if date_format else '%Y/%m/%d' 
             data = _generate_date(f)
         else:
             data = gen_fns.get(data_type, _generate)(length)
@@ -54,5 +54,4 @@ def _generate_columns(colspecs):
 def generate(colspecs, nrows, encoding='utf-8'):
     for i in range(nrows):
         col_data = _generate_columns(colspecs)
-        print(col_data)
         yield ''.join([c[1] for c in col_data]).encode(encoding)
