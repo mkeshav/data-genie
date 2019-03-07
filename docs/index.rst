@@ -5,16 +5,12 @@
 
 Welcome to data-genie's documentation!
 ======================================
+Data genie is a library to generate data for testing purposes
+so you don't make the mistake of using production data in test environments
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   quickstart
+   fixed-width
+   json
