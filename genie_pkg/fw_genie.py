@@ -1,4 +1,3 @@
-from pymonad import curry
 import random
 import string
 import datetime
