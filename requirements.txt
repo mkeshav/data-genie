@@ -1,4 +1,3 @@
-PyMonad
 jinja2
 pytest
 pytest-sugar
