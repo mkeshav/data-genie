@@ -5,14 +5,16 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../genie_pkg")
 import pytest
 import random
 
-from fw_genie import generate
+from fw_genie import generate, _generate_float_2
 
 type_choices = ['int', 'float', 'str']
 
 def test_fw():
+    min_width = 4 #this is to make sure floats are valid
     ncols = random.randint(1, 10)
     nrows = random.randint(1, 3)
-    colspecs = [('f'+str(i), random.randint(1, 10), random.choice(type_choices),) for i in range(ncols)] + [('date_field', 10, 'date', '%d/%m/%Y')]
+    default_specs = [('f'+str(i), random.randint(min_width, 10), random.choice(type_choices),) for i in range(ncols)]
+    colspecs =  default_specs + [('date_field', 10, 'date', '%d/%m/%Y'), ('special_float', 10, 'float', 3)]
     data = generate(colspecs, 1)
     expected_length = sum([c[1] for c in colspecs])
     for d in data:

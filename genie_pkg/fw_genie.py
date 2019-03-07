@@ -10,7 +10,7 @@ def _generate_int(width):
     return sn.zfill(width)
 
 
-def _generate_float(width):
+def _generate_float(width, number_of_decimals=2):
     if width < 3:
         return ''.zfill(width)
     elif width == 3:
@@ -19,6 +19,14 @@ def _generate_float(width):
         # 1 to 10 with 2 decimal places will make sure it is 4 in string length always
         return str(round(random.uniform(1, 10), 2)).zfill(width)
 
+def _generate_float_2(width, number_of_decimals):
+    if width < 4:
+        return ''.zfill(width)
+    else:
+        real_width = width - number_of_decimals - 1
+        data = random.uniform(1, int(real_width * "9"))
+        float_format = f"0{str(real_width+4)}.{number_of_decimals}f"
+        return f"{data:{float_format}}"
 
 def _generate(width):
     special = ["¢", "£", "¥"]
@@ -33,18 +41,21 @@ def _generate_date(format_string, delta_days=0):
 def _generate_columns(colspecs):
     gen_fns = {
         'int': _generate_int,
-        'float': _generate_float,
         'str': _generate,
     }
 
     col_data = []
     for col in colspecs:
-        field_name, length, data_type, *date_format = col
+        field_name, length, data_type, *optional = col
         if data_type == 'date':
-            f =  date_format[0] if date_format else '%Y/%m/%d' 
-            data = _generate_date(f)
+            f =  optional[0] if optional else '%Y/%m/%d' 
+            data = _generate_date(f) #not passing delta days yet
+        elif data_type == 'float':
+            number_of_decimals = optional[0] if optional else 2 
+            data = _generate_float(length, number_of_decimals)
         else:
             data = gen_fns.get(data_type, _generate)(length)
+
         col_data.append((field_name, data))
 
     return col_data
