@@ -6,3 +6,7 @@ data_genie_*.egg-info/
 .coverage
 **/__pycache__/**
 report.html
+
+docs/_build
+docs/_static
+docs/_templates

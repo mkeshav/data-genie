@@ -4,3 +4,4 @@ pytest-sugar
 pytest-html
 pytest-cov
 jsonschema
+sphinx
