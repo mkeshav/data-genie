@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -eu
+
+protected_branch='master'
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+if [ $protected_branch = $current_branch ] 
+then
+    ver=$(python setup.py --version)
+    echo "Tagging with version: $ver"
+    git tag -a v$ver -m "Version $ver Release"
+    echo "Pushing tags"
+    git push origin --tags
+    exit 0
+else
+    exit 0
+fi
