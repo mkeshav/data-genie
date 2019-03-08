@@ -76,6 +76,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             ./upload_pypi
+            ./git_tag.sh
 
 workflows:
   version: 2.1
