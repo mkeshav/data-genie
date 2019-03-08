@@ -4,11 +4,8 @@ import datetime
 from datetime import datetime, timedelta
 
 def _generate_int(width):
-    sn = str(random.randint(1, 1000))
-    if len(sn) > width:
-        sn = sn[:width]
-    return sn.zfill(width)
-
+    max_value = int(width * "9")
+    return str(random.randint(1, max_value)).zfill(width)
 
 def _generate_float(width, number_of_decimals=2):
     if width < 3:
