@@ -1,5 +1,7 @@
 [![PyPI version](https://badge.fury.io/py/data-genie-mkeshav.svg)](https://badge.fury.io/py/data-genie-mkeshav)
 [![CircleCI](https://circleci.com/bb/mkeshav/data_genie.svg?style=svg)](https://circleci.com/bb/mkeshav/data_genie)
+[![Documentation Status](https://readthedocs.org/projects/data-genie/badge/?version=latest)](https://data-genie.readthedocs.io/en/latest/?badge=latest)
+
 
 # Data Genie
 
