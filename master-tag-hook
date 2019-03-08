@@ -8,9 +8,8 @@ if [ $protected_branch = $current_branch ]
 then
     ver=$(python setup.py --version)
     echo "Tagging with version: v$ver"
-    git tag -a v$ver -m "Version $ver Release"
+    git tag -af v$ver -m "Version $ver Release"
     echo "Pushing tags"
-    git push --delete origin v$ver
     git push origin --tags -f
     exit 0
 else
