@@ -10,7 +10,7 @@ then
     echo "Tagging with version: $ver"
     git tag -a v$ver -m "Version $ver Release"
     echo "Pushing tags"
-    git push origin --tags
+    git push origin --tags -f
     exit 0
 else
     exit 0
