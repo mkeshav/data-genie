@@ -75,7 +75,6 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            ./git_tag.sh
             ./upload_pypi
 
 workflows:
