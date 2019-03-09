@@ -6,7 +6,7 @@ protected_branch='master'
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 if [ $protected_branch = $current_branch ] 
 then
-    read -p "You're about to push to master. Have you tagged? > " -n 2 -r < /dev/tty
+    read -p "You're about to push to master. Have you tagged?[Y|y] > " -n 2 -r < /dev/tty
     echo
     if echo $REPLY | grep -E '^[Yy]$' > /dev/null
     then
