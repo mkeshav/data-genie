@@ -7,22 +7,14 @@ def _generate_int(width):
     max_value = int(width * "9")
     return str(random.randint(1, max_value)).zfill(width)
 
-def _generate_float(width, number_of_decimals=2):
-    if width < 3:
-        return ''.zfill(width)
-    elif width == 3:
-        return '0.0'
-    else:        
-        # 1 to 10 with 2 decimal places will make sure it is 4 in string length always
-        return str(round(random.uniform(1, 10), 2)).zfill(width)
-
-def _generate_float_2(width, number_of_decimals):
+def _generate_float(width, number_of_decimals):
     if width < 4:
         return ''.zfill(width)
     else:
         real_width = width - number_of_decimals - 1
-        data = random.uniform(1, int(real_width * "9"))
-        float_format = f"0{str(real_width+4)}.{number_of_decimals}f"
+        max_value = int(real_width * "9")
+        data = random.uniform(1, max_value)
+        float_format = f"0{str(real_width+3)}.{number_of_decimals}f"
         return f"{data:{float_format}}"
 
 def _generate(width):

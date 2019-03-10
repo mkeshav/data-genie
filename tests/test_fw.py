@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../genie_pkg")
 import pytest
 import random
 
-from fw_genie import generate, _generate_float_2
+from fw_genie import generate
 
 type_choices = ['int', 'float', 'str']
 
