@@ -1,4 +1,5 @@
 jinja2
+pandas
 pytest
 pytest-sugar
 pytest-html

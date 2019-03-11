@@ -71,16 +71,29 @@ def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
     return template
 
 def generate(template_string) -> str:
-    """
-        Generate json using the template_string
-    """
+    '''
+        Generate json data for the provided specification
+
+        Args:
+            template_string (str): Jinja template string
+
+        Returns:
+            data (str): Jinja template rendered.
+    '''
     
     t = Template(template_string)
     return _add_template_functions(t).render()
 
 def generate_with_custom_template_function(template: JinjaTemplate) -> str:
-    """
-        Generate json using the provided jinja template
-    """
+    '''
+        Generate json data for the provided specification
+
+        Args:
+            template (Template): Jinja template
+
+        Returns:
+            data (str): Jinja template rendered.
+    '''
+
     return _add_template_functions(template).render()
 
