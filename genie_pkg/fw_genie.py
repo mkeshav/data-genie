@@ -3,6 +3,7 @@ import string
 import datetime
 from datetime import datetime, timedelta
 from typing import NewType
+from utils import generate_email
 
 def _generate_int(width):
     max_value = int(width * "9")
@@ -30,15 +31,6 @@ def _generate(width):
 def _generate_date(format_string, delta_days=0):
     return (datetime.today() - timedelta(days=delta_days)).strftime(format_string)
 
-def _generate_email(width, domain):
-    actual_length = width - len(domain) - 1 # 1 for @
-    if actual_length <= 0:
-        minimum_expected_length = len(domain) + 2 # 1 for @
-        raise Exception("With the domain {0}, Minimum length you should pass is {1}".format(domain, minimum_expected_length))
-
-    local_part = [random.choice(string.ascii_letters) for i in range(0, actual_length)]
-    return ''.join(local_part) + '@' + domain
-
 def _gen(data_type, length, optional=None):
     domain_choices = ['gmail.com', 'hotmail.com', 'yahoo.com']
     gen_fns = {
@@ -53,7 +45,7 @@ def _gen(data_type, length, optional=None):
         data = _generate_float(length, number_of_decimals)
     elif data_type == 'email':
         domain = optional[0] if optional else random.choice(domain_choices)
-        data = _generate_email(length, domain)
+        data = generate_email(length, domain)
     else:
         data = gen_fns.get(data_type, _generate)(length)
 
