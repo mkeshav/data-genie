@@ -4,24 +4,24 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../genie_pkg")
 
 import pytest
 import random
-import io
 
-from fw_genie import generate, mutate_beyond_recognition
-import pandas as pd
+from fw_genie import generate, anonymise_columns
 
 type_choices = ['int', 'float', 'str']
 
 def test_fw():
     min_width = 4 #this is to make sure floats are valid
-    ncols = random.randint(1, 10)
-    nrows = random.randint(1, 3)
-    default_specs = [(random.randint(min_width, 10), random.choice(type_choices),) for i in range(ncols)]
-    colspecs =  default_specs + [(10, 'date', '%d/%m/%Y'), (10, 'float', 3), (15, 'email', 'mail.com')]
-    data = generate(colspecs, nrows=1)
-    expected_length = sum([c[0] for c in colspecs])
-    for d in data:
-        decoded = d.decode()
-        assert len(decoded) == expected_length
+    # Run all the tests in a loop to have better confidance of randomisation.
+    for i in range(2, 5):
+        ncols = random.randint(1, 10)
+        nrows = random.randint(1, 3)
+        default_specs = [(random.randint(min_width, 10), random.choice(type_choices),) for i in range(ncols)]
+        colspecs =  default_specs + [(10, 'date', '%d/%m/%Y'), (10, 'float', 3), (15, 'email', 'mail.com')]
+        data = generate(colspecs, nrows=1)
+        expected_length = sum([c[0] for c in colspecs])
+        for d in data:
+            decoded = d.decode()
+            assert len(decoded) == expected_length
 
 
 def test_generate_bad_decode():
@@ -49,17 +49,22 @@ def test_generate_good_decode():
             assert False
 
 
-def test_mutate():
-    colspecs = [(0, 5), (5, 8), (8, 11), (11, 14), (14, 20), (20, 28), (28, 38)]
+def test_anonymise():
     input_encoding = 'windows-1252'
     row = 'FReNG£Ni£iFthtR¥ubOswUPhmQWJoypvF¢MFcR'.encode(input_encoding)
 
-    cols_mutate_spec = [(0, 5, 'int'), (28, 38, 'float')]
-    mutated = mutate_beyond_recognition(row, row_colspecs=colspecs, mutable_col_specs=cols_mutate_spec, encoding=input_encoding)
-    
-    assert len(mutated) == len(row.decode(input_encoding))
-    df = pd.read_fwf(io.StringIO(mutated), colspecs=colspecs,
-                           encoding=input_encoding,
-                           header=None, dtype=str)
-    assert df.at[0,0] != 'FReNG'
-    assert isinstance(float(df.at[0, 6]), float) == True
+    anonymous_col_specs = [(0, 5, 'int'), (28, 38, 'float')]
+    anonymised = anonymise_columns(row, anonymous_col_specs, input_encoding)
+    decoded = anonymised.decode(input_encoding)
+    assert len(decoded) == len(row.decode(input_encoding))
+    v = decoded[:5]
+    assert v != 'FReNG'
+    assert isinstance(int(v), int) == True
+
+
+def test_bad_email_config_throws_exception():
+    with pytest.raises(Exception) as e_info:
+        row = 'FReNG£Ni£iFthtR¥ubOswUPhmQWJoypvF¢MFcR'.encode()
+
+        anonymous_col_specs = [(28, 38, 'email', 'hotmail.com')]
+        anonymise_columns(row, anonymous_col_specs)
