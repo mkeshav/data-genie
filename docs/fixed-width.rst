@@ -5,6 +5,8 @@ This module supports generation of fixed width data.Mostly needed when
 dealing with output from legacy Mainframe systems
 
 
+To generate completely random data
+
 .. code-block:: python
 
    from genie_pkg import fw_genie
@@ -14,6 +16,9 @@ dealing with output from legacy Mainframe systems
    encoding = 'windows-1252'
    for d in fw_genie.generate(colspecs, nrows, encoding):
       do_something(d)
+
+If you want to just mutate some parts of your fixed
+width data (Say to remove piis etc)
 
 .. code-block:: python
 
