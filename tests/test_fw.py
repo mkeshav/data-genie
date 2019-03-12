@@ -8,9 +8,9 @@ import random
 from fw_genie import generate, anonymise_columns
 
 type_choices = ['int', 'float', 'str']
+min_width = 5 #this is to make sure floats are valid
 
 def test_fw():
-    min_width = 4 #this is to make sure floats are valid
     # Run all the tests in a loop to have better confidance of randomisation.
     for i in range(2, 5):
         ncols = random.randint(1, 10)
@@ -27,7 +27,7 @@ def test_fw():
 def test_generate_bad_decode():
     #has to have atleast 1 special char for this test to work
     ncols = random.randint(1, 10)
-    colspecs = [(random.randint(1, 10), random.choice(type_choices),) for i in range(ncols)]
+    colspecs = [(random.randint(min_width, 10), random.choice(type_choices),) for i in range(ncols)]
     #run the test more than once
     for i in range(2, 5):
         for d in generate(colspecs + [(8, 'str')], nrows=1, encoding='windows-1252'):
@@ -40,7 +40,7 @@ def test_generate_bad_decode():
 
 def test_generate_good_decode():
     ncols = random.randint(1, 10)
-    colspecs = [(random.randint(1, 10), random.choice(type_choices),) for i in range(ncols)]
+    colspecs = [(random.randint(min_width, 10), random.choice(type_choices),) for i in range(ncols)]
     for d in generate(colspecs + [(8, 'str')], nrows=1):
         try:
             print(d.decode())
