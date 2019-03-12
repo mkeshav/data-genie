@@ -40,7 +40,10 @@ This module supports generation of Json data.
 - `now_epoch()`
 - `guid()`
 - `random_choice_of(list_of_choices)`
-- `date_with_format(valid_python_dateformat_string, delta_days)` Will return date formatted as format string. use delta days to go forwards and backwards from today.
+- `date_with_format(valid_python_dateformat_string, delta_days)`
+   Will return date formatted as format string. use delta days to go forwards
+   and backwards from today.
+- `random_email_id(length, domain)` Length is inclusive of domain
 
 **Inject Custom template functions**
 

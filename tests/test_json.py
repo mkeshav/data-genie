@@ -45,7 +45,8 @@ def test_almighty():
             "k9": {"type": "array", "items": {"type": "integer"}},
             "k10": {"type": "string"},
             "k11": {"type": "string"},
-            "k12": {"type": "string"}
+            "k12": {"type": "string"},
+            "k13": {"type": "string"}
         },
         "reauired": [
             "k1", "k2", "k3"
@@ -72,7 +73,8 @@ def test_almighty():
             "k9": {{random_integer_list(2, 60, 100)}},
             "k11": "{{random_choice_of(['apple', 'mango'])}}",
             "k10": "{{guid()}}",
-            "k12": "{{date_with_format('%d/%m/%Y', -10)}}"
+            "k12": "{{date_with_format('%d/%m/%Y', -10)}}",
+            "k13": "{{random_email_id(20, 'gmail.com')}}"
         }
     '''
     d = json.loads(generate(template))

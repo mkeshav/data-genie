@@ -3,7 +3,7 @@ import string
 import datetime
 from datetime import datetime, timedelta
 from typing import NewType
-from utils import generate_email
+from utils import generate_email_id
 
 def _generate_int(width):
     max_value = int(width * "9")
@@ -45,7 +45,7 @@ def _gen(data_type, length, optional=None):
         data = _generate_float(length, number_of_decimals)
     elif data_type == 'email':
         domain = optional[0] if optional else random.choice(domain_choices)
-        data = generate_email(length, domain)
+        data = generate_email_id(length, domain)
     else:
         data = gen_fns.get(data_type, _generate)(length)
 
