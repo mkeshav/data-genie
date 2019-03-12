@@ -4,8 +4,10 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../genie_pkg")
 
 import pytest
 import random
+import io
 
 from fw_genie import generate, mutate_beyond_recognition
+import pandas as pd
 
 type_choices = ['int', 'float', 'str']
 
@@ -56,3 +58,8 @@ def test_mutate():
     mutated = mutate_beyond_recognition(row, row_colspecs=colspecs, mutable_col_specs=cols_mutate_spec, encoding=input_encoding)
     
     assert len(mutated) == len(row.decode(input_encoding))
+    df = pd.read_fwf(io.StringIO(mutated), colspecs=colspecs,
+                           encoding=input_encoding,
+                           header=None, dtype=str)
+    assert df.at[0,0] != 'FReNG'
+    assert isinstance(float(df.at[0, 6]), float) == True
