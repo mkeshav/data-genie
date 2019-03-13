@@ -37,6 +37,12 @@ def _gen(data_type, length, optional=None):
         'int': _generate_int,
         'str': _generate,
     }
+    if data_type == 'myval':
+        val = str(optional[0])
+        if len(val) == length:
+            data = val
+        else:
+            raise Exception("Provided value {0} is not of length {1}".format(val, length))
     if data_type == 'date':
         f =  optional[0] if optional else '%Y/%m/%d' 
         data = _generate_date(f) #not passing delta days yet

@@ -16,7 +16,10 @@ def test_fw():
         ncols = random.randint(1, 10)
         nrows = random.randint(1, 3)
         default_specs = [(random.randint(min_width, 10), random.choice(type_choices),) for i in range(ncols)]
-        colspecs =  default_specs + [(10, 'date', '%d/%m/%Y'), (10, 'float', 3), (15, 'email', 'mail.com')]
+        colspecs =  default_specs + [(10, 'date', '%d/%m/%Y'), 
+                                    (10, 'float', 3), 
+                                    (15, 'email', 'mail.com'),
+                                    (10, 'myval', 'returnasis')]
         data = generate(colspecs, nrows=1)
         expected_length = sum([c[0] for c in colspecs])
         for d in data:
@@ -68,3 +71,9 @@ def test_bad_email_config_throws_exception():
 
         anonymous_col_specs = [(28, 38, 'email', 'hotmail.com')]
         anonymise_columns(row, anonymous_col_specs)
+
+def test_bad_myval_throws_exception():
+    with pytest.raises(Exception) as e_info:
+        colspecs =  [(10, 'myval', '14/3/2019')]
+        for d in generate(colspecs, nrows=1):
+            assert d is not None
