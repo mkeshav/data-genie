@@ -44,6 +44,7 @@ This module supports generation of Json data.
    Will return date formatted as format string. use delta days to go forwards
    and backwards from today.
 - `random_email_id(length, domain)` Length is inclusive of domain
+- `random_ipv4()`
 
 **Inject Custom template functions**
 

@@ -9,7 +9,7 @@ import time
 from typing import NewType
 import uuid
 from datetime import datetime, timedelta
-from utils import generate_email_id
+from utils import generate_email_id, generate_ip
 
 def _current_milli_time(): return int(round(time.time() * 1000))
 
@@ -55,6 +55,9 @@ def random_choice_of(choices) -> str:
 def random_email_id(width, domain) -> str:
     return generate_email_id(width, domain)
 
+def random_ipv4() -> str:
+    return generate_ip()
+
 def date_with_format(format_string='%Y/%m/%d', delta_days=0):
     return (datetime.today() - timedelta(days=delta_days)).strftime(format_string)
 
@@ -73,6 +76,7 @@ def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
     template.globals['random_choice_of'] = random_choice_of
     template.globals['date_with_format'] = date_with_format
     template.globals['random_email_id'] = random_email_id
+    template.globals['random_ipv4'] = random_ipv4
     return template
 
 def generate(template_string) -> str:
