@@ -35,9 +35,9 @@ Fixed width supports below types
 - float (If number of decimal places are not passed, it will default to 2).
       *Length is inclusive of decimal places.*
 - int
-- date (Length will be ignored and date will be according to format specified.
-      Make sure it is valid python datetime format and
-      you account for the length)
+- date (Make sure format is valid python datetime format.
+      If the length passed does not match what the format produces,
+      exception will be raised.)
 - str
 - email (if domain is not passed, it will default to gmail.com).
       *Length is inclusive of domain you specify.*

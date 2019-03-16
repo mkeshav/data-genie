@@ -77,3 +77,9 @@ def test_bad_myval_throws_exception():
         colspecs =  [(10, 'myval', '14/3/2019')]
         for d in generate(colspecs, nrows=1):
             assert d is not None
+
+def test_bad_date_length_throws_exception():
+    with pytest.raises(Exception) as e_info:
+        colspecs =  [(8, 'date')]
+        for d in generate(colspecs, nrows=1):
+            assert d is not None

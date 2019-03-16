@@ -9,23 +9,9 @@ import time
 from typing import NewType
 import uuid
 from datetime import datetime, timedelta
-from utils import generate_email_id, generate_ip
+from utils import *
 
 def _current_milli_time(): return int(round(time.time() * 1000))
-
-def random_integer(start, max):
-    return random.randint(start, max)
-
-def random_float(start, max, decimal_places):
-    return round(random.uniform(start, max), decimal_places)
-
-def random_string(length):
-    return ''.join([random.choice(string.ascii_letters) for i in range(0, length)])
-
-def random_string_with_special_chars(length):
-    special = ["¢", "£", "¥"]
-    random_chars = [random.choice(string.ascii_letters + ''.join(special)) for i in range(0, length - 1)]
-    return ''.join([random.choice(special)] + random_chars)
 
 def random_string_list(list_size, item_length):
     l = []
@@ -59,7 +45,7 @@ def random_ipv4() -> str:
     return generate_ip()
 
 def date_with_format(format_string='%Y/%m/%d', delta_days=0):
-    return (datetime.today() - timedelta(days=delta_days)).strftime(format_string)
+    return random_date_from_today(format_string, delta_days)
 
 JinjaTemplate = NewType('JinjaTemplate', Template)
 
