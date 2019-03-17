@@ -15,7 +15,8 @@ def test_csv():
     for i in range(2, 5):
         ncols = random.randint(1, 10)
         default_specs = [(random.choice(type_choices), random.randint(5, 15)) for i in range(ncols)]
-        colspecs =  default_specs + [('email', 'mail.com')]
+        colspecs =  default_specs + [('email', 'mail.com'),
+                                    ('date', '%d/%m/%Y'),]
         data = generate(colspecs, nrows=1)
         for d in data:
             decoded = d.decode()

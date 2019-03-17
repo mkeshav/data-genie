@@ -14,6 +14,9 @@ def _gen(data_type, optional=None):
     elif data_type == 'float':
         max_value = optional[0] if optional else 999
         data = random_float(start=1, max=max_value, decimal_places=2)
+    elif data_type == 'date':
+        format_string = optional[0] if optional else '%Y/%m/%d'
+        data = random_date_from_today(format_string)
     elif data_type == 'special_string':
         length = optional[0] if optional else 20
         data = random_string_with_special_chars(length)

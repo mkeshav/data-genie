@@ -48,7 +48,8 @@ This module supports generation of Json data.
 
 **Inject Custom template functions**
 
-You can do this, or submit a PR if you think your function will be useful for others
+You can do this, or submit a PR if you think your
+function will be useful for others
 
 .. code-block:: python
 
@@ -62,7 +63,6 @@ You can do this, or submit a PR if you think your function will be useful for ot
          "k1": {{random_integer(1000)}},
          "k2": "{{favourite_fruit()}}"
       }
-      
    t = Template(template)
    t.globals['favourite_fruit'] = favourite_fruit
 
