@@ -11,11 +11,11 @@ To generate completely random data
    [('special_string', 13), ('int', 15), ('float', 7), ('float', 8), ('str', 9), ('str', 5), ('int', 5)]
    nrows = 10
    encoding = 'windows-1252'
-   for d in fw_genie.generate(colspecs, nrows, encoding):
+   for d in delimited_genie.generate(colspecs, nrows, encoding):
       do_something(d)
 
-If you want to just anonymise some parts of your fixed
-width data (Say to remove piis etc)
+If you want to just anonymise some parts of your
+csv data (Say to remove piis etc)
 
 .. code-block:: python
 
