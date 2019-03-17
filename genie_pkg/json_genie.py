@@ -5,13 +5,9 @@ import random
 import string
 import json
 
-import time
 from typing import NewType
-import uuid
 from datetime import datetime, timedelta
 from utils import *
-
-def _current_milli_time(): return int(round(time.time() * 1000))
 
 def random_string_list(list_size, item_length):
     l = []
@@ -25,15 +21,6 @@ def random_integer_list(list_size, start, max):
     for i in range(0, list_size):
         l.insert(0, random_integer(start, max)) 
     return l
-
-def random_bool():
-    return random.choice(['true', 'false'])
-
-def now_epoch():
-    return _current_milli_time()
-
-def guid():
-    return str(uuid.uuid4())
 
 def random_choice_of(choices) -> str:
     return str(random.choice(choices))

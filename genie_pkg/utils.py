@@ -3,6 +3,8 @@ import string
 from random import getrandbits, choice, uniform, randint
 from ipaddress import IPv4Address, IPv6Address, IPv4Network
 from datetime import datetime, timedelta
+import time
+import uuid
 
 def generate_email_id(width, domain):
     actual_length = width - len(domain) - 1 # 1 for @
@@ -47,3 +49,14 @@ def random_string_with_special_chars(length):
 
 def random_date_from_today(format_string, delta_days=0):
     return (datetime.today() - timedelta(days=delta_days)).strftime(format_string)
+
+def _current_milli_time(): return int(round(time.time() * 1000))
+
+def random_bool():
+    return choice(['true', 'false'])
+
+def now_epoch():
+    return _current_milli_time()
+
+def guid():
+    return str(uuid.uuid4())
