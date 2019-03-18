@@ -36,7 +36,7 @@ def _generate_date(format_string, length, delta_days=0):
 
     return d
 
-def _gen(data_type, length, optional=None):
+def _gen(data_type, length, optional):
     domain_choices = ['gmail.com', 'hotmail.com', 'yahoo.com']
     gen_fns = {
         'int': _generate_int,
