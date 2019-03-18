@@ -9,7 +9,7 @@ def _generate_int(width):
     max_value = int(width * "9")
     return str(random.randint(1, max_value)).zfill(width)
 
-def _generate_float(width, number_of_decimals):
+def _generate_float(width, number_of_decimals=2):
     real_width = width - number_of_decimals - 1
     if real_width < 1:
         min_expected_length = number_of_decimals + 2
@@ -28,7 +28,7 @@ def _generate(width):
     return ''.join([random.choice(special)] + random_chars)
 
 
-def _generate_date(format_string, length, delta_days=0):
+def _generate_date(length, format_string='%Y/%m/%d', delta_days=0):
     d = random_date_from_today(format_string, delta_days)
     if len(d) > length:
         raise Exception(
@@ -37,7 +37,6 @@ def _generate_date(format_string, length, delta_days=0):
     return d
 
 def _gen(data_type, length, optional):
-    domain_choices = ['gmail.com', 'hotmail.com', 'yahoo.com']
     gen_fns = {
         'int': _generate_int,
         'str': _generate,
@@ -49,14 +48,11 @@ def _gen(data_type, length, optional):
         else:
             raise Exception("Provided value {0} is not of length {1}".format(val, length))
     if data_type == 'date':
-        f =  optional[0] if optional else '%Y/%m/%d' 
-        data = _generate_date(f, length) #not passing delta days yet
+        data = _generate_date(length, *optional) #not passing delta days yet
     elif data_type == 'float':
-        number_of_decimals = optional[0] if optional else 2 
-        data = _generate_float(length, number_of_decimals)
+        data = _generate_float(length, *optional)
     elif data_type == 'email':
-        domain = optional[0] if optional else random.choice(domain_choices)
-        data = generate_email_id(length, domain)
+        data = generate_email_id(length, *optional)
     else:
         data = gen_fns.get(data_type, _generate)(length)
 

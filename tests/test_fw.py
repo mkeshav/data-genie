@@ -16,7 +16,7 @@ def test_fw():
         ncols = random.randint(1, 10)
         nrows = random.randint(1, 3)
         default_specs = [(random.randint(min_width, 10), random.choice(type_choices),) for i in range(ncols)]
-        colspecs =  default_specs + [(10, 'date', '%d/%m/%Y'), 
+        colspecs =  default_specs + [(10, 'date', '%d/%m/%Y', 2), 
                                     (10, 'float', 3), 
                                     (15, 'email', 'mail.com'),
                                     (10, 'myval', 'returnasis')]

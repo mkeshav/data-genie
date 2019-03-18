@@ -39,5 +39,5 @@ Fixed width supports below types
       If the length passed does not match what the format produces,
       exception will be raised.)
 - str
-- email (if domain is not passed, it will default to gmail.com).
+- email (if domain is not passed, it will default to dummy.com).
       *Length is inclusive of domain you specify.*

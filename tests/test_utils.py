@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../genie_pkg")
 
-from utils import generate_ip, generate_ipv4_in_subnet
+from utils import generate_ip, generate_ipv4_in_subnet, random_float
 import re
 def test_ipv4():
     ipv4 = generate_ip()

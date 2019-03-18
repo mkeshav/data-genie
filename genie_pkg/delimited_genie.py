@@ -2,27 +2,19 @@
 from utils import *
 import csv
 
-def _gen(data_type, optional=None):
-    domain_choices = ['gmail.com', 'hotmail.com', 'yahoo.com']
-
+def _gen(data_type, optional):
     if data_type == 'email':
-        domain = optional[0] if optional else random.choice(domain_choices)
-        data = generate_email_id(len(domain)+10, domain)
+        data = generate_email_id(*optional)
     elif data_type == 'int':
-        max_value = optional[0] if optional else 999
-        data = random_integer(start=1, max=max_value)
+        data = random_integer(*optional)
     elif data_type == 'float':
-        max_value = optional[0] if optional else 999
-        data = random_float(start=1, max=max_value, decimal_places=2)
+        data = random_float(*optional)
     elif data_type == 'date':
-        format_string = optional[0] if optional else '%Y/%m/%d'
-        data = random_date_from_today(format_string)
+        data = random_date_from_today(*optional)
     elif data_type == 'special_string':
-        length = optional[0] if optional else 20
-        data = random_string_with_special_chars(length)
+        data = random_string_with_special_chars(*optional)
     else:
-        length = optional[0] if optional else 20
-        data = random_string(length)
+        data = random_string(*optional)
 
     return str(data)
 

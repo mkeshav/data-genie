@@ -6,10 +6,10 @@ from datetime import datetime, timedelta
 import time
 import uuid
 
-def generate_email_id(width, domain):
+def generate_email_id(width, domain='dummy.com'):
     actual_length = width - len(domain) - 1 # 1 for @
-    if actual_length <= 0:
-        minimum_expected_length = len(domain) + 2 # 1 for @
+    if actual_length < 1:
+        minimum_expected_length = len(domain) + 2 # 1 for @ and 1 for .
         raise Exception("With the domain {0}, Minimum length you should pass is {1}".format(domain, minimum_expected_length))
 
     local_part = [choice(string.ascii_letters) for i in range(0, actual_length)]
@@ -33,21 +33,21 @@ def generate_ipv4_in_subnet(subnet_cidr):
     bits = getrandbits(subnet.max_prefixlen - subnet.prefixlen)
     return str(IPv4Address(subnet.network_address + bits))
 
-def random_integer(start, max):
-    return randint(start, max)
+def random_integer(start=1, max_value=999):
+    return randint(start, max_value)
 
-def random_float(start, max, decimal_places):
-    return round(uniform(start, max), decimal_places)
+def random_float(start=1, max_value=999, decimal_places=2):
+    return round(uniform(start, max_value), decimal_places)
 
-def random_string(length):
+def random_string(length=20):
     return ''.join([choice(string.ascii_letters) for i in range(0, length)])
 
-def random_string_with_special_chars(length):
+def random_string_with_special_chars(length=20):
     special = ["¢", "£", "¥"]
     random_chars = [choice(string.ascii_letters + ''.join(special)) for i in range(0, length - 1)]
     return ''.join([choice(special)] + random_chars)
 
-def random_date_from_today(format_string, delta_days=0):
+def random_date_from_today(format_string='%Y/%m/%d', delta_days=0):
     return (datetime.today() - timedelta(days=delta_days)).strftime(format_string)
 
 def _current_milli_time(): return int(round(time.time() * 1000))

@@ -33,6 +33,8 @@ CSV supports below types
 - int
 - str
 - special_string (With special characters)
-- email (if domain is not passed, it will default to gmail.com).
-      *Length is inclusive of domain you specify.*
-- date (Make sure format is valid python datetime format)
+- email (length, optional_domain) if domain is not passed,
+      it will default to dummy.com.
+      (*Length is inclusive of domain you specify.*)
+- date (Make sure format is valid python datetime format.
+      Optional delta days to go back or in future)
