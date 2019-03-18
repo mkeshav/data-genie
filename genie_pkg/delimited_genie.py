@@ -1,6 +1,9 @@
 
-from utils import *
 import csv
+import sys, os
+sys.path.append( os.path.join( os.path.dirname(__file__), os.path.pardir ) )
+from genie_pkg import utils
+from utils import *
 
 def _gen(data_type, optional):
     if data_type == 'email':

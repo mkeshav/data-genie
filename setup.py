@@ -12,7 +12,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://bitbucket.org/mkeshav/data_genie",
-    packages=find_packages(),
+    packages=find_packages(exclude=('tests', 'docs')),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

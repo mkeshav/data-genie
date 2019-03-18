@@ -3,7 +3,9 @@ import string
 import datetime
 from datetime import datetime, timedelta
 from typing import NewType
-from utils import generate_email_id, random_date_from_today
+import sys, os
+sys.path.append( os.path.join( os.path.dirname(__file__), os.path.pardir ) )
+from genie_pkg import utils
 
 def _generate_int(width):
     max_value = int(width * "9")
@@ -29,7 +31,7 @@ def _generate(width):
 
 
 def _generate_date(length, format_string='%Y/%m/%d', delta_days=0):
-    d = random_date_from_today(format_string, delta_days)
+    d = utils.random_date_from_today(format_string, delta_days)
     if len(d) > length:
         raise Exception(
             "Format {0}, does not produce date of length {1}".format(format_string, length))
@@ -52,7 +54,7 @@ def _gen(data_type, length, optional):
     elif data_type == 'float':
         data = _generate_float(length, *optional)
     elif data_type == 'email':
-        data = generate_email_id(length, *optional)
+        data = utils.generate_email_id(length, *optional)
     else:
         data = gen_fns.get(data_type, _generate)(length)
 

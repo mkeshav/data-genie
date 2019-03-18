@@ -7,6 +7,9 @@ import json
 
 from typing import NewType
 from datetime import datetime, timedelta
+import sys, os
+sys.path.append( os.path.join( os.path.dirname(__file__), os.path.pardir ) )
+from genie_pkg import utils
 from utils import *
 
 def random_string_list(list_size, item_length):
