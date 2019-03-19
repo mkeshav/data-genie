@@ -83,3 +83,10 @@ def test_bad_date_length_throws_exception():
         colspecs =  [(8, 'date')]
         for d in generate(colspecs, nrows=1):
             assert d is not None
+
+def test_bad_float_length_throws_exception():
+    with pytest.raises(Exception) as e_info:
+        colspecs =  [(4, 'float', 3)]
+        for d in generate(colspecs, nrows=1):
+            assert d is not None
+
