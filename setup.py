@@ -11,7 +11,7 @@ setup(
     description="A small genie to generate test data",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://bitbucket.org/mkeshav/data_genie",
+    url="https://github.com/mkeshav/data-genie.git",
     packages=find_packages(include=('genie_pkg',)),
     classifiers=[
         "Programming Language :: Python :: 3",
