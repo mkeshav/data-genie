@@ -6,7 +6,7 @@
 # Data Genie
 
 Genie that can satisfy your data wish.
-Supports generation of fixedwidth and json content
+Supports generation of fixedwidth, csv and json content
 
 # Install
 python3 -m pip install data-genie-mkeshav
