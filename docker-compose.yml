@@ -6,3 +6,4 @@ services:
       target: dev
     volumes:
       - .:/app:cached
+    command: bash -c "python3 setup.py develop && pytest -vv"

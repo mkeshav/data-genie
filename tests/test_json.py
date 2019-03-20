@@ -3,25 +3,24 @@ import sys
 import os
 import json
 
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../genie_pkg")
-
-from json_genie import generate, generate_with_custom_template_function
+from genie_pkg.json_genie import generate, generate_with_custom_template_function
 from jsonschema import validate
 from jinja2 import Template
 import random
+
 
 def test_almighty():
     schema = {
         "type": "object",
         "properties": {
-            "k1" : {"type" : "number"},
-            "k2" : {"type" : "string"},
-            "k3" : {"type" : "array", "items": {"type": "string"}},
-            "k4" : {"type" : "number"},
-            "k5" : {"type" : "boolean"},
-            "k6" : {"type" : "number"},
-            "k7" : {"type" : "string"},
-            "k8" : {
+            "k1": {"type": "number"},
+            "k2": {"type": "string"},
+            "k3": {"type": "array", "items": {"type": "string"}},
+            "k4": {"type": "number"},
+            "k5": {"type": "boolean"},
+            "k6": {"type": "number"},
+            "k7": {"type": "string"},
+            "k8": {
                 "type": "array",
                 "items": {
                     "anyOf": [
@@ -82,9 +81,13 @@ def test_almighty():
     d = json.loads(generate(template))
     validate(instance=d, schema=schema)
 
+
 fruit_choices = ['mango', 'apple', 'durian', 'jackfruit']
+
+
 def favourite_fruit():
     return random.choice(fruit_choices)
+
 
 def test_generate_with_custom_template_function():
     template = '''
@@ -97,8 +100,8 @@ def test_generate_with_custom_template_function():
     schema = {
         "type": "object",
         "properties": {
-            "k1" : {"type" : "number"},
-            "k2" : {"type" : "string", "enum": fruit_choices}
+            "k1": {"type": "number"},
+            "k2": {"type": "string", "enum": fruit_choices}
         }
     }
 

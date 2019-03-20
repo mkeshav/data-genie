@@ -36,6 +36,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
+            python3 setup.py develop
             pytest --cov=genie_pkg --cov-fail-under 95 --cov-report=html --html=report.html --self-contained-html
       
       - store_test_results:

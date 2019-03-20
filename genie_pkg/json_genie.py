@@ -7,37 +7,46 @@ import json
 
 from typing import NewType
 from datetime import datetime, timedelta
-import sys, os
-sys.path.append( os.path.join( os.path.dirname(__file__), os.path.pardir ) )
-from genie_pkg import utils
-from utils import *
+import sys
+import os
+
+from genie_pkg.utils import *
+
 
 def random_string_list(list_size, item_length):
     l = []
     for i in range(0, list_size):
-        l.insert(0, ''.join([random.choice(string.ascii_letters) for i in range(0, item_length)])) 
-    #json dumps is to get python list as json compatible string.
+        l.insert(0, ''.join([random.choice(string.ascii_letters)
+                             for i in range(0, item_length)]))
+    # json dumps is to get python list as json compatible string.
     return json.dumps(l)
+
 
 def random_integer_list(list_size, start, max):
     l = []
     for i in range(0, list_size):
-        l.insert(0, random_integer(start, max)) 
+        l.insert(0, random_integer(start, max))
     return l
+
 
 def random_choice_of(choices) -> str:
     return str(random.choice(choices))
 
+
 def random_email_id(width, domain) -> str:
     return generate_email_id(width, domain)
+
 
 def random_ipv4() -> str:
     return generate_ip()
 
+
 def date_with_format(format_string='%Y/%m/%d', delta_days=0):
     return random_date_from_today(format_string, delta_days)
 
+
 JinjaTemplate = NewType('JinjaTemplate', Template)
+
 
 def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
     template.globals['random_integer'] = random_integer
@@ -55,6 +64,7 @@ def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
     template.globals['random_ipv4'] = random_ipv4
     return template
 
+
 def generate(template_string) -> str:
     '''
         Generate json data for the provided specification
@@ -65,9 +75,10 @@ def generate(template_string) -> str:
         Returns:
             data (str): Jinja template rendered.
     '''
-    
+
     t = Template(template_string)
     return _add_template_functions(t).render()
+
 
 def generate_with_custom_template_function(template: JinjaTemplate) -> str:
     '''
@@ -81,4 +92,3 @@ def generate_with_custom_template_function(template: JinjaTemplate) -> str:
     '''
 
     return _add_template_functions(template).render()
-

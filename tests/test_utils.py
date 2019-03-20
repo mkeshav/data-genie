@@ -1,17 +1,20 @@
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../genie_pkg")
 
-from utils import generate_ip, generate_ipv4_in_subnet, random_float
+from genie_pkg.utils import generate_ip, generate_ipv4_in_subnet, random_float
 import re
+
+
 def test_ipv4():
     ipv4 = generate_ip()
     assert re.match('\d+\.\d+\.\d+\.\d+', ipv4)
 
+
 def test_ipv6():
     ipv6 = generate_ip(v=6)
     v6_part_regex = r'[a-z0-9]{2,4}'
-    assert re.match('{0}:{0}:{0}:{0}:{0}:{0}:{0}:{0}'.format(v6_part_regex), ipv6)
+    assert re.match(
+        '{0}:{0}:{0}:{0}:{0}:{0}:{0}:{0}'.format(v6_part_regex), ipv6)
 
 
 def test_ipv4_subnet():

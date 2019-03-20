@@ -1,11 +1,10 @@
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../genie_pkg")
 
 import pytest
 import random
 
-from fw_genie import generate, anonymise_columns
+from genie_pkg.fw_genie import generate, anonymise_columns
 
 type_choices = ['int', 'float', 'str']
 min_width = 5 #this is to make sure floats are valid

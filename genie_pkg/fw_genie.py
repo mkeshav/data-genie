@@ -3,13 +3,16 @@ import string
 import datetime
 from datetime import datetime, timedelta
 from typing import NewType
-import sys, os
-sys.path.append( os.path.join( os.path.dirname(__file__), os.path.pardir ) )
+import sys
+import os
+
 from genie_pkg import utils
+
 
 def _generate_int(width):
     max_value = int(width * "9")
     return str(random.randint(1, max_value)).zfill(width)
+
 
 def _generate_float(width, number_of_decimals=2):
     real_width = width - number_of_decimals - 1
@@ -23,10 +26,12 @@ def _generate_float(width, number_of_decimals=2):
     float_format = f"{str(real_width+number_of_decimals)}.{number_of_decimals}f"
     return f"{data:{float_format}}".zfill(width)
 
+
 def _generate(width):
     special = ["¢", "£", "¥"]
-    #random chars upto width - 1 to make sure there is atleast 1 special
-    random_chars = [random.choice(string.ascii_letters + ''.join(special)) for i in range(0, width - 1)]
+    # random chars upto width - 1 to make sure there is atleast 1 special
+    random_chars = [random.choice(
+        string.ascii_letters + ''.join(special)) for i in range(0, width - 1)]
     return ''.join([random.choice(special)] + random_chars)
 
 
@@ -38,6 +43,7 @@ def _generate_date(length, format_string='%Y/%m/%d', delta_days=0):
 
     return d
 
+
 def _gen(data_type, length, optional):
     gen_fns = {
         'int': _generate_int,
@@ -48,9 +54,10 @@ def _gen(data_type, length, optional):
         if len(val) == length:
             data = val
         else:
-            raise Exception("Provided value {0} is not of length {1}".format(val, length))
+            raise Exception(
+                "Provided value {0} is not of length {1}".format(val, length))
     if data_type == 'date':
-        data = _generate_date(length, *optional) #not passing delta days yet
+        data = _generate_date(length, *optional)  # not passing delta days yet
     elif data_type == 'float':
         data = _generate_float(length, *optional)
     elif data_type == 'email':
@@ -60,10 +67,11 @@ def _gen(data_type, length, optional):
 
     return data
 
+
 def _generate_columns(colspecs):
     row_data = []
     for col in colspecs:
-        length, data_type, *optional = col        
+        length, data_type, *optional = col
         row_data.append(_gen(data_type, length, optional))
 
     return row_data
@@ -106,5 +114,5 @@ def anonymise_columns(row: bytes, anonymous_col_specs, encoding='utf-8') -> byte
         length = end - start
         data = _gen(data_type, length, optional)
         anonymised = ''.join([before, data, after])
-    
+
     return anonymised.encode(encoding)

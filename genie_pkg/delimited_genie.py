@@ -1,9 +1,10 @@
 
 import csv
-import sys, os
-sys.path.append( os.path.join( os.path.dirname(__file__), os.path.pardir ) )
-from genie_pkg import utils
-from utils import *
+import sys
+import os
+
+from genie_pkg.utils import *
+
 
 def _gen(data_type, optional):
     if data_type == 'email':
@@ -21,6 +22,7 @@ def _gen(data_type, optional):
 
     return str(data)
 
+
 def _generate_columns(colspecs):
     row_data = []
     for col in colspecs:
@@ -28,6 +30,7 @@ def _generate_columns(colspecs):
         row_data.append(_gen(data_type, optional))
 
     return row_data
+
 
 def anonymise_columns(row: bytes, anonymous_col_specs, encoding='utf-8', delimiter=',') -> bytes:
     '''
@@ -49,8 +52,9 @@ def anonymise_columns(row: bytes, anonymous_col_specs, encoding='utf-8', delimit
         data = _gen(data_type, optional)
         anonymised_csv[col_index] = data
         anonymised = delimiter.join(anonymised_csv)
-    
+
     return anonymised.encode(encoding)
+
 
 def generate(colspecs, nrows, encoding='utf-8', delimiter=','):
     '''
