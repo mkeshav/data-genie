@@ -1,9 +1,10 @@
 version: '3.7'
 services:
-  app:
+  test:
     build:
       context: .
       target: dev
     volumes:
       - .:/app:cached
-    command: bash -c "python3 setup.py develop && pytest -vv"
+    command: >
+      bash -c "python3 setup.py develop && pytest -vv"

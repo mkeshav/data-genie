@@ -11,6 +11,7 @@ WORKDIR /app
 COPY requirements* /app/
 
 RUN python3 -m pip install -r requirements.txt
+RUN python3 -m pip install -r requirements_dev.txt
 
 ADD . /app
 ENV PATH="/root/.local/bin:${PATH}"

@@ -3,6 +3,9 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+with open("requirements.txt", "r") as fh:
+    install_requires = fh.readlines()
+
 setup(
     name="data-genie-mkeshav",
     version="0.2.9",
@@ -18,7 +21,5 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    install_requires=[
-        'jinja2',
-    ],
+    install_requires=install_requires
 )

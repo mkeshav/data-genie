@@ -1,8 +1,1 @@
 jinja2
-pytest
-pytest-sugar
-pytest-html
-pytest-cov
-pipdeptree
-jsonschema
-sphinx

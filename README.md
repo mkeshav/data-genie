@@ -12,7 +12,7 @@ Supports generation of fixedwidth and json content
 python3 -m pip install data-genie-mkeshav
 
 # Run tests
-- All tests (`docker-compose run --rm app`)
-- Single test in a file(`docker-compose run --rm app bash -c "python setup.py develop &&  pytest tests/test_fw.py -k 'test_float'"`)
+- All tests (`docker-compose run --rm test`)
+- Single test in a file(`docker-compose run --rm test bash -c "python setup.py develop &&  pytest tests/test_fw.py -k 'test_float'"`)
 
 - Detailed [Documentation](https://data-genie.readthedocs.io)
