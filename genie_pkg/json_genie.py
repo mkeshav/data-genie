@@ -7,8 +7,7 @@ import json
 
 from typing import NewType
 from datetime import datetime, timedelta
-import sys
-import os
+
 
 from genie_pkg.utils import *
 

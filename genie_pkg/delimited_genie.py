@@ -1,7 +1,5 @@
 
 import csv
-import sys
-import os
 
 from genie_pkg.utils import *
 

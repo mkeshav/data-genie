@@ -3,8 +3,6 @@ import string
 import datetime
 from datetime import datetime, timedelta
 from typing import NewType
-import sys
-import os
 
 from genie_pkg import utils
 
