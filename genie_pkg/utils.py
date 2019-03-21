@@ -5,6 +5,7 @@ from ipaddress import IPv4Address, IPv6Address, IPv4Network
 from datetime import datetime, timedelta
 import time
 import uuid
+import math
 
 
 def generate_email_id(width, domain='dummy.com'):
@@ -75,3 +76,43 @@ def now_epoch():
 
 def guid():
     return str(uuid.uuid4())
+
+def random_geo_coords(center=(-37.814, 144.963,), radius=10000, n=1):
+    '''
+        Generate random geo co ordinates
+
+        Args:
+            center (tuple-> (lat, long)): geo center to start from (defaults to melbourne)
+            radius (int): Radius in meters (defaults to 1000)
+            n (int): Number of desired coords (defaults to 1)
+
+            When using geographic (lat,lon) coordinates, 
+            then x0 (longitude) and y0 (latitude) will be in degrees but r will most 
+            likely be in meters (or feet or miles or some other linear measurement). 
+            First, convert the radius r into degrees as if you were located near the 
+            equator. Here, there are about 111,300 meters in a degree.
+
+            Second, after generating x and y as in step (1), 
+            adjust the x-coordinate for the shrinking of the east-west distances:
+
+
+        Returns:
+            data: Iterator over n.
+    '''
+
+    r = radius/111300 #about 111300 meters in one degree
+    x0,y0 = center
+    for i in range(n):
+        u = float(uniform(0.0,1.0))
+        v = float(uniform(0.0,1.0))
+        w = r * math.sqrt(u)
+        t = 2 * math.pi * v
+        x = w * math.cos(t) 
+        y = w * math.sin(t)
+        
+        x_latitude  = x + x0
+        y_longitude = y + y0
+        #3th decimal provides accuracy upto 110m (https://gis.stackexchange.com/questions/8650/measuring-accuracy-of-latitude-and-longitude)
+        yield (round(x_latitude, 3), round(y_longitude,3),)
+
+

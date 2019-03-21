@@ -17,18 +17,18 @@ def test_csv():
         default_specs = [(random.choice(type_choices),
                           random.randint(5, 15)) for i in range(ncols)]
         colspecs = default_specs + [('email', 15, 'mail.com'),
-                                    ('date', '%d/%m/%Y', 3), ]
+                                    ('date', '%d/%m/%Y', 3),]
         delimiter=random.choice([',', '|'])
         data = generate(colspecs, nrows=1, delimiter=delimiter)
         for d in data:
             decoded = d.decode()
-            print(decoded)
             csv_data = list(csv.reader(decoded.splitlines(), delimiter=delimiter))[0]
+            print(csv_data)
             assert len(csv_data) == len(colspecs)
 
 
 def test_anonymise():
-    input_encoding = 'windows-1252'
+    input_encoding = 'windows-1252' 
     row = 'FReNG,£Ni,£iFthtR¥ubOswUPh,mQWJoypv,F¢MFcR'.encode(input_encoding)
 
     anonymous_col_specs = [(1, 'int'), (4, 'float')]

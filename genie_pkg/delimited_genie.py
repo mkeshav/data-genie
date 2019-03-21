@@ -15,6 +15,8 @@ def _gen(data_type, optional):
         data = random_date_from_today(*optional)
     elif data_type == 'special_string':
         data = random_string_with_special_chars(*optional)
+    elif data_type == 'geo_coord':
+        data = list(random_geo_coords(*optional))[0]
     else:
         data = random_string(*optional)
 
