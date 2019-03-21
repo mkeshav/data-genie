@@ -18,10 +18,12 @@ def test_csv():
                           random.randint(5, 15)) for i in range(ncols)]
         colspecs = default_specs + [('email', 15, 'mail.com'),
                                     ('date', '%d/%m/%Y', 3), ]
-        data = generate(colspecs, nrows=1)
+        delimiter=random.choice([',', '|'])
+        data = generate(colspecs, nrows=1, delimiter=delimiter)
         for d in data:
             decoded = d.decode()
-            csv_data = list(csv.reader(decoded.splitlines()))[0]
+            print(decoded)
+            csv_data = list(csv.reader(decoded.splitlines(), delimiter=delimiter))[0]
             assert len(csv_data) == len(colspecs)
 
 
