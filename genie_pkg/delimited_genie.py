@@ -8,9 +8,9 @@ def _gen(data_type, optional):
     if data_type == 'email':
         data = generate_email_id(*optional)
     elif data_type == 'int':
-        data = random_integer(*optional)
+        data = str(random_integer(*optional))
     elif data_type == 'float':
-        data = random_float(*optional)
+        data = str(random_float(*optional))
     elif data_type == 'date':
         data = random_date_from_today(*optional)
     elif data_type == 'special_string':
@@ -20,14 +20,20 @@ def _gen(data_type, optional):
     else:
         data = random_string(*optional)
 
-    return str(data)
+    return data
 
 
 def _generate_columns(colspecs):
     row_data = []
     for col in colspecs:
         data_type, *optional = col
-        row_data.append(_gen(data_type, optional))
+        data = _gen(data_type, optional)
+        if data_type == 'geo_coord':
+            x0, y0 = data
+            row_data.append(str(x0))
+            row_data.append(str(y0))
+        else:
+            row_data.append(data)
 
     return row_data
 
