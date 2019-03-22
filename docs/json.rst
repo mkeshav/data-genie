@@ -45,6 +45,8 @@ This module supports generation of Json data.
    and backwards from today.
 - `random_email_id(length, domain)` Length is inclusive of domain
 - `random_ipv4()`
+- `random_geo(center: tuple(latitude, longitude), radius_in_meters)`
+   center defaults to melbourne and radius to 10000
 
 **Inject Custom template functions**
 
