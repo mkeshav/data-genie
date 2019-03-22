@@ -44,6 +44,11 @@ def date_with_format(format_string='%Y/%m/%d', delta_days=0):
     return random_date_from_today(format_string, delta_days)
 
 
+def random_geo():
+    x0, y0 = random_geo_coords()
+    return json.dumps({"latitude": x0, "longitude": y0})
+
+
 JinjaTemplate = NewType('JinjaTemplate', Template)
 
 
@@ -61,6 +66,7 @@ def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
     template.globals['date_with_format'] = date_with_format
     template.globals['random_email_id'] = random_email_id
     template.globals['random_ipv4'] = random_ipv4
+    template.globals['random_geo'] = random_geo
     return template
 
 

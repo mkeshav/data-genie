@@ -46,7 +46,18 @@ def test_almighty():
             "k11": {"type": "string"},
             "k12": {"type": "string"},
             "k13": {"type": "string"},
-            "k14": {"type": "string"}
+            "k14": {"type": "string"},
+            "k15": {
+                "type": "object",
+                "properties": {
+                    "latitude":{"type": "number"},
+                    "longitude":{"type": "number"}
+                },
+                "required": [
+                    "latitude",
+                    "longitude"
+                ]
+            }
         },
         "reauired": [
             "k1", "k2", "k3"
@@ -75,7 +86,8 @@ def test_almighty():
             "k10": "{{guid()}}",
             "k12": "{{date_with_format('%d/%m/%Y', -10)}}",
             "k13": "{{random_email_id(20, 'gmail.com')}}",
-            "k14": "{{random_ipv4()}}"
+            "k14": "{{random_ipv4()}}",
+            "k15": {{random_geo()}}
         }
     '''
     d = json.loads(generate(template))
