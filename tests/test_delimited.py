@@ -6,6 +6,7 @@ import random
 
 from genie_pkg.delimited_genie import generate, anonymise_columns
 import csv
+import math
 
 type_choices = ['int', 'float', 'str', 'special_string']
 
@@ -30,12 +31,14 @@ def test_csv():
 
 def test_anonymise():
     input_encoding = 'windows-1252' 
-    row = 'FReNG,£Ni,£iFthtR¥ubOswUPh,mQWJoypv,F¢MFcR'.encode(input_encoding)
+    row = 'FReNG,£Ni,£iFthtR¥ubOswUPh,mQWJoypv,F¢MFcR,-37.814,144.963'.encode(input_encoding)
 
-    anonymous_col_specs = [(1, 'int'), (4, 'float')]
+    anonymous_col_specs = [(1, 'float'), (4, 'int'), (5, 'geo_coord', (40.84, -73.87,), 1000)]
     anonymised = anonymise_columns(
         row, anonymous_col_specs, encoding=input_encoding)
     decoded = anonymised.decode(input_encoding)
     csv_data = list(csv.reader(decoded.splitlines()))[0]
-    assert isinstance(int(csv_data[1]), int) == True
-    assert isinstance(float(csv_data[4]), float) == True
+    print(csv_data)
+    assert isinstance(int(csv_data[4]), int) == True
+    assert isinstance(float(csv_data[1]), float) == True
+    assert math.isclose(float(csv_data[5]), 40.84, abs_tol=0.010)

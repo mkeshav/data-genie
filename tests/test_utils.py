@@ -25,8 +25,6 @@ def test_ipv4_subnet():
 
 def test_random_geo():
     for i in range(5):
-        l = list(random_geo_coords(radius=1000))
-        assert len(l) == 1
-        x0, y0 = l[0]
+        x0, y0 = random_geo_coords(radius=1000)
         assert math.isclose(x0, -37.814, abs_tol=0.010)
         assert math.isclose(y0, 144.963, abs_tol=0.010)

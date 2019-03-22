@@ -77,14 +77,13 @@ def now_epoch():
 def guid():
     return str(uuid.uuid4())
 
-def random_geo_coords(center=(-37.814, 144.963,), radius=10000, n=1):
+def random_geo_coords(center=(-37.814, 144.963,), radius=10000):
     '''
         Generate random geo co ordinates
 
         Args:
             center (tuple-> (lat, long)): geo center to start from (defaults to melbourne)
             radius (int): Radius in meters (defaults to 1000)
-            n (int): Number of desired coords (defaults to 1)
 
             When using geographic (lat,lon) coordinates, 
             then x0 (longitude) and y0 (latitude) will be in degrees but r will most 
@@ -97,22 +96,21 @@ def random_geo_coords(center=(-37.814, 144.963,), radius=10000, n=1):
 
 
         Returns:
-            data: Iterator over n.
+            data: (float, float)
     '''
 
     r = radius/111300 #about 111300 meters in one degree
     x0,y0 = center
-    for i in range(n):
-        u = float(uniform(0.0,1.0))
-        v = float(uniform(0.0,1.0))
-        w = r * math.sqrt(u)
-        t = 2 * math.pi * v
-        x = w * math.cos(t) 
-        y = w * math.sin(t)
-        
-        x_latitude  = x + x0
-        y_longitude = y + y0
-        #3th decimal provides accuracy upto 110m (https://gis.stackexchange.com/questions/8650/measuring-accuracy-of-latitude-and-longitude)
-        yield (round(x_latitude, 3), round(y_longitude,3),)
+    u = float(uniform(0.0,1.0))
+    v = float(uniform(0.0,1.0))
+    w = r * math.sqrt(u)
+    t = 2 * math.pi * v
+    x = w * math.cos(t) 
+    y = w * math.sin(t)
+    
+    x_latitude  = x + x0
+    y_longitude = y + y0
+    #3th decimal provides accuracy upto 110m (https://gis.stackexchange.com/questions/8650/measuring-accuracy-of-latitude-and-longitude)
+    return (round(x_latitude, 3), round(y_longitude,3),)
 
 

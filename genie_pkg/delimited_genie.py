@@ -16,7 +16,7 @@ def _gen(data_type, optional):
     elif data_type == 'special_string':
         data = random_string_with_special_chars(*optional)
     elif data_type == 'geo_coord':
-        data = list(random_geo_coords(*optional))[0]
+        data = random_geo_coords(*optional)
     else:
         data = random_string(*optional)
 
@@ -56,7 +56,13 @@ def anonymise_columns(row: bytes, anonymous_col_specs, encoding='utf-8', delimit
     for ac in anonymous_col_specs:
         col_index, data_type, *optional = ac
         data = _gen(data_type, optional)
-        anonymised_csv[col_index] = data
+        if data_type == 'geo_coord':
+            x0, y0 = data
+            anonymised_csv[col_index] = str(x0)
+            anonymised_csv[col_index+1] = str(y0)
+        else:
+            anonymised_csv[col_index] = data
+
         anonymised = delimiter.join(anonymised_csv)
 
     return anonymised.encode(encoding)
