@@ -44,8 +44,8 @@ def date_with_format(format_string='%Y/%m/%d', delta_days=0):
     return random_date_from_today(format_string, delta_days)
 
 
-def random_geo(center=(-37.814, 144.963,), radius=10000):
-    x0, y0 = random_geo_coords(center, radius)
+def random_geo(center=(-37.814, 144.963,), radius=10000, accuracy=3):
+    x0, y0 = random_geo_coords(center, radius, accuracy)
     return json.dumps({"latitude": x0, "longitude": y0})
 
 

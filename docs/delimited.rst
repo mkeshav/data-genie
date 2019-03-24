@@ -38,4 +38,5 @@ CSV supports below types
       (*Length is inclusive of domain you specify.*)
 - date (Make sure format is valid python datetime format.
       Optional delta days to go back or in future)
-- geo_coord (center:tuple(lat,lng), radius_in_meters)
+- geo_coord (center:tuple(lat,lng), radius_in_meters, accuracy_digits)
+  center defaults to melbourne, radius = 10000 and accuracy_digits=3

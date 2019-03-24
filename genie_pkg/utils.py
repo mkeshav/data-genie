@@ -77,13 +77,15 @@ def now_epoch():
 def guid():
     return str(uuid.uuid4())
 
-def random_geo_coords(center=(-37.814, 144.963,), radius=10000):
+def random_geo_coords(center=(-37.814, 144.963,), radius=10000, accuracy=3):
     '''
         Generate random geo co ordinates
 
         Args:
             center (tuple-> (lat, long)): geo center to start from (defaults to melbourne)
             radius (int): Radius in meters (defaults to 1000)
+            accuracy (int): Coordinate accuracy (3 decimals means upto 110m)
+            https://gis.stackexchange.com/questions/8650/measuring-accuracy-of-latitude-and-longitude
 
             When using geographic (lat,lon) coordinates, 
             then x0 (longitude) and y0 (latitude) will be in degrees but r will most 
@@ -110,7 +112,6 @@ def random_geo_coords(center=(-37.814, 144.963,), radius=10000):
     
     x_latitude  = x + x0
     y_longitude = y + y0
-    #3th decimal provides accuracy upto 110m (https://gis.stackexchange.com/questions/8650/measuring-accuracy-of-latitude-and-longitude)
-    return (round(x_latitude, 3), round(y_longitude,3),)
+    return (round(x_latitude, accuracy), round(y_longitude, accuracy),)
 
 
