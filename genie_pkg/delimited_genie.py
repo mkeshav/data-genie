@@ -19,6 +19,8 @@ def _gen(data_type, optional):
         data = random_geo_coords(*optional)
     elif data_type == 'cc_mastercard':
         data = random_mastercard_number()
+    elif data_type == 'cc_visacard':
+        data = random_visacard_number(*optional)
     else:
         data = random_string(*optional)
 

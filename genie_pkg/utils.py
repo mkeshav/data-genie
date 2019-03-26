@@ -144,10 +144,26 @@ def check_digit_luhn_mod_10(digits):
     sum_of_digs = sum(calibrated_digits)
     return (sum_of_digs * 9) % 10
 
+def _random_cc(prefixes, type, length):
+    digs = _credit_card_digits(prefixes, length)
+    cd = check_digit_luhn_mod_10(digs)
+    return ''.join(digs + [str(cd)])
+
 def random_mastercard_number():
     mastercard_prefixes = [
         ['5', '1'], ['5', '2'], ['5', '3'], ['5', '4'], ['5', '5']]
+    return _random_cc(mastercard_prefixes, type='mastercard', length=16)
 
-    digs = _credit_card_digits(mastercard_prefixes, 16)
-    cd = check_digit_luhn_mod_10(digs)
-    return ''.join(digs + [str(cd)])
+def random_visacard_number(length=16):
+    visa_prefixes = [
+        ['4', '5', '3', '9'],
+        ['4', '5', '5', '6'],
+        ['4', '9', '1', '6'],
+        ['4', '5', '3', '2'],
+        ['4', '9', '2', '9'],
+        ['4', '0', '2', '4', '0', '0', '7', '1'],
+        ['4', '4', '8', '6'],
+        ['4', '7', '1', '6'],
+        ['4']]
+    
+    return _random_cc(visa_prefixes, type='visa', length=length)

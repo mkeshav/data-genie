@@ -68,6 +68,7 @@ def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
     template.globals['random_ipv4'] = random_ipv4
     template.globals['random_geo'] = random_geo
     template.globals['random_mastercard_number'] = random_mastercard_number
+    template.globals['random_visacard_number'] = random_visacard_number
     return template
 
 

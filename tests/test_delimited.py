@@ -20,6 +20,7 @@ def test_csv():
         colspecs = default_specs + [('email', 15, 'mail.com'),
                                     ('date', '%d/%m/%Y', 3), 
                                     ('cc_mastercard',),
+                                    ('cc_visacard', 13),
                                     ('geo_coord', (40.84, -73.87,),)]
         delimiter=random.choice([',', '|'])
         data = generate(colspecs, nrows=1, delimiter=delimiter)
@@ -27,6 +28,8 @@ def test_csv():
             decoded = d.decode()
             csv_data = list(csv.reader(decoded.splitlines(), delimiter=delimiter))[0]
             assert len(csv_data) == len(colspecs) + 1 # +1 is because geo_coord will produce 2 values
+            visa_number = csv_data[-3:-2][0]
+            assert len(visa_number) == 13
 
 
 def test_anonymise():
