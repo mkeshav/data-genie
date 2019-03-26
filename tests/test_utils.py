@@ -28,3 +28,14 @@ def test_random_geo():
         x0, y0 = random_geo_coords(radius=1000)
         assert math.isclose(x0, -37.814, abs_tol=0.010)
         assert math.isclose(y0, 144.963, abs_tol=0.010)
+
+def test_check_digit_luhn_mod_10():
+    assert check_digit_luhn_mod_10('7992739871') == 3
+    assert check_digit_luhn_mod_10('536990340067168') == 0
+    assert check_digit_luhn_mod_10('540436862055838') == 9
+    assert check_digit_luhn_mod_10('532420806394835') == 7
+    assert check_digit_luhn_mod_10('532420499852544') == 4
+
+def test_random_mastercard_number():
+    assert random_mastercard_number() is not None
+
