@@ -12,7 +12,7 @@ type_choices = ['int', 'float', 'str', 'special_string']
 
 
 def test_csv():
-    # Run all the tests in a loop to have better confidance of randomisation.
+    # Run all the tests in a loop to have better confidence of randomisation.
     for i in range(2, 5):
         ncols = random.randint(1, 10)
         default_specs = [(random.choice(type_choices),

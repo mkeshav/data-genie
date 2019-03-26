@@ -7,25 +7,33 @@ This module supports generation of Json data.
 
    from genie_pkg import json_genie
    template = '''
-         {
-               "k1": {{random_integer(1000)}},
-               "k2": "{{random_string_with_special_chars(5)}}",
-               "k3": {{random_string_list(2, 8)}},
-               "k4": {{random_float(100, 2)}},
-               "k5": {{random_bool()}},
-               "k6": {{now_epoch()}},
-               "k7": "{{random_string(5)}}",
-               "k8": [
-                  {
-                     "y1": {{random_integer(1000)}}
-                  },
-                  {
-                     "y1": {{random_integer(1000)}}
-                  }
-               ],
-               "k9": {{random_integer_list(2, 100)}}
-         }
-      '''
+        {
+            "k1": {{random_integer(1, 1000)}},
+            "k2": "{{random_string_with_special_chars(5)}}",
+            "k3": {{random_string_list(2, 8)}},
+            "k4": {{random_float(1, 100, 2)}},
+            "k5": {{random_bool()}},
+            "k6": {{now_epoch()}},
+            "k7": "{{random_string(5)}}",
+            "k8": [
+                {
+                    "y1": {{random_integer(20, 40)}}
+                },
+                {
+                    "y1": {{random_integer(20, 60)}}
+                }
+            ],
+            "k9": {{random_integer_list(2, 60, 100)}},
+            "k11": "{{random_choice_of(['apple', 'mango'])}}",
+            "k10": "{{guid()}}",
+            "k12": "{{date_with_format('%d/%m/%Y', -10)}}",
+            "k13": "{{random_email_id(20, 'gmail.com')}}",
+            "k14": "{{random_ipv4()}}",
+            "k15": {{random_geo(accuracy=4)}},
+            "k16": "{{random_mastercard_number()}}",
+            "k17": "{{random_visacard_number()}}"
+        }
+    '''
    d = json.loads(json_genie.generate(template))
    do_something(d)
 

@@ -11,7 +11,12 @@ To generate completely random data
 
    from genie_pkg import fw_genie
    number_of_decimals = 3
-   colspecs = [(5, 'float', 3), (3, 'int'), (10, 'str'), (10, 'date', '%Y/%m/%d')]
+   colspecs = [
+         (5, 'float', 3), (3, 'int'), (10, 'str'),
+         (10, 'date', '%Y/%m/%d'),
+         (15, 'email', 'mail.com'),
+         (10, 'myval', 'returnasis')
+      ]
    nrows = 10
    encoding = 'windows-1252'
    for d in fw_genie.generate(colspecs, nrows, encoding):
@@ -41,3 +46,4 @@ Fixed width supports below types
 - str
 - email (if domain is not passed, it will default to dummy.com).
       *Length is inclusive of domain you specify.*
+- myval (value that you just want to return as is)

@@ -1,17 +1,25 @@
 Delimited (CSV)
 ===============
 
-This module supports generation of delimited data.
+This module supports generation of delimited data. Delimiter will default to **,**
 
 To generate completely random data
 
 .. code-block:: python
 
    from genie_pkg import delimited_genie
-   [('special_string', 13), ('int', 15), ('float', 7), ('float', 8), ('str', 9), ('str', 5), ('int', 5)]
+   colspecs =
+         [
+            ('special_string', 13),
+            ('int', 15),
+            ('float', 7), ('float', 8), ('str', 9),
+            ('str', 5), ('int', 5), ('email', 15, 'mail.com'),
+            ('date', '%d/%m/%Y', 3), ('cc_mastercard',),
+            ('cc_visacard', 13), ('geo_coord', (40.84, -73.87,),)
+         ]
    nrows = 10
    encoding = 'windows-1252'
-   for d in delimited_genie.generate(colspecs, nrows, encoding):
+   for d in delimited_genie.generate(colspecs, nrows, encoding, delimiter='|'):
       do_something(d)
 
 If you want to just anonymise some parts of your
@@ -24,7 +32,8 @@ csv data (Say to remove piis etc)
    row = 'FReNG,£Ni,£iFthtR¥ubOswUPh,mQWJoypv,F¢MFcR'.encode(input_encoding)
 
    anonymous_col_specs = [(1, 'int'), (4, 'float')]
-   anonymised = delimited_genie.anonymise_columns(row, anonymous_col_specs, encoding=input_encoding)
+   anonymised = delimited_genie.anonymise_columns(row,
+                        anonymous_col_specs, encoding=input_encoding)
    do_something(anonymised)
 
 CSV supports below types
