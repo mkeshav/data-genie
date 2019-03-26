@@ -19,13 +19,13 @@ def test_csv():
                           random.randint(5, 15)) for i in range(ncols)]
         colspecs = default_specs + [('email', 15, 'mail.com'),
                                     ('date', '%d/%m/%Y', 3), 
+                                    ('cc_mastercard',),
                                     ('geo_coord', (40.84, -73.87,),)]
         delimiter=random.choice([',', '|'])
         data = generate(colspecs, nrows=1, delimiter=delimiter)
         for d in data:
             decoded = d.decode()
             csv_data = list(csv.reader(decoded.splitlines(), delimiter=delimiter))[0]
-            print(csv_data)
             assert len(csv_data) == len(colspecs) + 1 # +1 is because geo_coord will produce 2 values
 
 
@@ -38,7 +38,6 @@ def test_anonymise():
         row, anonymous_col_specs, encoding=input_encoding)
     decoded = anonymised.decode(input_encoding)
     csv_data = list(csv.reader(decoded.splitlines()))[0]
-    print(csv_data)
     assert isinstance(int(csv_data[4]), int) == True
     assert isinstance(float(csv_data[1]), float) == True
     assert math.isclose(float(csv_data[5]), 40.84, abs_tol=0.010)
