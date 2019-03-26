@@ -40,3 +40,4 @@ CSV supports below types
       Optional delta days to go back or in future)
 - geo_coord (center:tuple(lat,lng), radius_in_meters, accuracy_digits)
   center defaults to melbourne, radius = 10000 and accuracy_digits=3
+- cc_mastercard (generates 16 digit valid mastercard number)

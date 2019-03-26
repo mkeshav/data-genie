@@ -47,6 +47,7 @@ This module supports generation of Json data.
 - `random_ipv4()`
 - `random_geo(center: tuple(latitude, longitude), radius_in_meters)`
    center defaults to melbourne and radius to 10000
+- random_mastercard_number() (generates 16 digit valid mastercard number)
 
 **Inject Custom template functions**
 
