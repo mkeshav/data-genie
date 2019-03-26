@@ -58,7 +58,8 @@ def test_almighty():
                     "longitude"
                 ]
             },
-            "k16": {"type": "string"}
+            "k16": {"type": "string"},
+            "k17": {"type": "string"}
         },
         "reauired": [
             "k1", "k2", "k3"
@@ -89,7 +90,8 @@ def test_almighty():
             "k13": "{{random_email_id(20, 'gmail.com')}}",
             "k14": "{{random_ipv4()}}",
             "k15": {{random_geo(accuracy=4)}},
-            "k16": "{{random_mastercard_number()}}"
+            "k16": "{{random_mastercard_number()}}",
+            "k17": "{{random_visacard_number()}}"
         }
     '''
     d = json.loads(generate(template))
