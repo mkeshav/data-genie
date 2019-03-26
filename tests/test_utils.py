@@ -29,13 +29,23 @@ def test_random_geo():
         assert math.isclose(x0, -37.814, abs_tol=0.010)
         assert math.isclose(y0, 144.963, abs_tol=0.010)
 
-def test_check_digit_luhn_mod_10():
+def test_check_digit_luhn_mod_10_mc():
     assert check_digit_luhn_mod_10('7992739871') == 3
     assert check_digit_luhn_mod_10('536990340067168') == 0
     assert check_digit_luhn_mod_10('540436862055838') == 9
     assert check_digit_luhn_mod_10('532420806394835') == 7
     assert check_digit_luhn_mod_10('532420499852544') == 4
 
+def test_check_digit_luhn_mod_10_visa():
+    assert check_digit_luhn_mod_10('402400714020726') == 6
+    assert check_digit_luhn_mod_10('433696811345131') == 9
+    assert check_digit_luhn_mod_10('455604196816395') == 0
+    assert check_digit_luhn_mod_10('453260352189118') == 4
+        
 def test_random_mastercard_number():
     assert random_mastercard_number() is not None
+
+def test_random_visacard_number():
+    cc = random_visacard_number(13)
+    assert len(cc) == 13
 
