@@ -1,4 +1,4 @@
-FROM python:3.7 as dev
+FROM python:3.7-slim as dev
 
 LABEL Author="Keshav Murthy"
 

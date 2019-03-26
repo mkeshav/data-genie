@@ -14,5 +14,6 @@ python3 -m pip install data-genie-mkeshav
 # Run tests
 - All tests (`docker-compose run --rm test`)
 - Single test in a file(`docker-compose run --rm test bash -c "python setup.py develop &&  pytest tests/test_fw.py -k 'test_float'"`)
+- `docker inspect --format='{{.Id}} {{.Parent}}'     $(docker images --filter since=<image_id> --quiet)` to check dependent child images
 
 - Detailed [Documentation](https://data-genie.readthedocs.io)
