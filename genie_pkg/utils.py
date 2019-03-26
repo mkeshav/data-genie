@@ -1,6 +1,6 @@
 import string
 
-from random import getrandbits, choice, uniform, randint
+from random import getrandbits, choice, uniform, randint, Random
 from ipaddress import IPv4Address, IPv6Address, IPv4Network
 from datetime import datetime, timedelta
 import time
@@ -115,3 +115,39 @@ def random_geo_coords(center=(-37.814, 144.963,), radius=10000, accuracy=3):
     return (round(x_latitude, accuracy), round(y_longitude, accuracy),)
 
 
+def _credit_card_digits(prefixes, length):
+    rnd = Random()
+    rnd.seed()
+
+    prefix = choice(prefixes)
+    digits = [str(rnd.choice(range(0, 10))) for n in range(length - 1 - len(prefix))]
+
+    return prefix + digits
+
+def check_digit_luhn_mod_10(digits):
+    '''
+        https://en.wikipedia.org/wiki/Luhn_algorithm
+    '''
+    
+    reversed_digits = digits[::-1]
+    calibrated_digits = []
+    for i, d in enumerate(reversed_digits):
+        if i % 2 == 0:
+            m = int(d) * 2
+            if m > 9:
+                calibrated_digits.append(m-9)
+            else:
+                calibrated_digits.append(m)
+        else:
+            calibrated_digits.append(int(d))
+    
+    sum_of_digs = sum(calibrated_digits)
+    return (sum_of_digs * 9) % 10
+
+def random_mastercard_number():
+    mastercard_prefixes = [
+        ['5', '1'], ['5', '2'], ['5', '3'], ['5', '4'], ['5', '5']]
+
+    digs = _credit_card_digits(mastercard_prefixes, 16)
+    cd = check_digit_luhn_mod_10(digs)
+    return ''.join(digs + [str(cd)])
