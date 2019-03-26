@@ -48,6 +48,8 @@ This module supports generation of Json data.
 - `random_geo(center: tuple(latitude, longitude), radius_in_meters)`
    center defaults to melbourne and radius to 10000
 - random_mastercard_number() (generates 16 digit valid mastercard number)
+- random_visacard_number(length=16|13) (generates 16 digit(default)
+   valid visacard number)
 
 **Inject Custom template functions**
 

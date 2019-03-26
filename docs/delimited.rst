@@ -41,3 +41,4 @@ CSV supports below types
 - geo_coord (center:tuple(lat,lng), radius_in_meters, accuracy_digits)
   center defaults to melbourne, radius = 10000 and accuracy_digits=3
 - cc_mastercard (generates 16 digit valid mastercard number)
+- cc_visacard (length) (length can be 16 or 13) (generates 16 digit by default)
