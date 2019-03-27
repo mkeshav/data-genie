@@ -47,14 +47,14 @@ def _gen(data_type, length, optional):
         'int': _generate_int,
         'str': _generate,
     }
-    if data_type == 'myval':
-        val = str(optional[0])
+    if data_type == 'one_of':
+        val = str(utils.one_of(*optional))
         if len(val) == length:
             data = val
         else:
             raise Exception(
                 "Provided value {0} is not of length {1}".format(val, length))
-    if data_type == 'date':
+    elif data_type == 'date':
         data = _generate_date(length, *optional)  # not passing delta days yet
     elif data_type == 'float':
         data = _generate_float(length, *optional)

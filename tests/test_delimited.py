@@ -10,6 +10,12 @@ import math
 
 type_choices = ['int', 'float', 'str', 'special_string']
 
+def _fetch_column_index(colspecs, col_name):
+    for i, c in enumerate(colspecs):
+        data_type, *notused = c
+        if col_name == data_type:
+            return i    
+    return
 
 def test_csv():
     # Run all the tests in a loop to have better confidence of randomisation.
@@ -28,9 +34,8 @@ def test_csv():
             decoded = d.decode()
             csv_data = list(csv.reader(decoded.splitlines(), delimiter=delimiter))[0]
             assert len(csv_data) == len(colspecs) + 1 # +1 is because geo_coord will produce 2 values
-            visa_number = csv_data[-3:-2][0]
-            assert len(visa_number) == 13
-
+            visa_column_idx = _fetch_column_index(colspecs, 'cc_visacard')
+            assert len(csv_data[visa_column_idx]) == 13
 
 def test_anonymise():
     input_encoding = 'windows-1252' 

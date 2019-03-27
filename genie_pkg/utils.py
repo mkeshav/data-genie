@@ -167,3 +167,9 @@ def random_visacard_number(length=16):
         ['4']]
     
     return _random_cc(visa_prefixes, type='visa', length=length)
+
+def one_of(choices):
+    if type(choices) is not list:
+        raise Exception("Provided value should be a list of choices")
+        
+    return choice(choices)
