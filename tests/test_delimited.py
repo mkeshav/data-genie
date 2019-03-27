@@ -25,6 +25,7 @@ def test_csv():
                           random.randint(5, 15)) for i in range(ncols)]
         colspecs = default_specs + [('email', 15, 'mail.com'),
                                     ('date', '%d/%m/%Y', 3), 
+                                    ('one_of', ['AU', 'NZ']),
                                     ('cc_mastercard',),
                                     ('cc_visacard', 13),
                                     ('geo_coord', (40.84, -73.87,),)]
@@ -36,6 +37,8 @@ def test_csv():
             assert len(csv_data) == len(colspecs) + 1 # +1 is because geo_coord will produce 2 values
             visa_column_idx = _fetch_column_index(colspecs, 'cc_visacard')
             assert len(csv_data[visa_column_idx]) == 13
+            country_idx = _fetch_column_index(colspecs, 'one_of')
+            assert csv_data[country_idx] in ['AU', 'NZ']
 
 def test_anonymise():
     input_encoding = 'windows-1252' 
