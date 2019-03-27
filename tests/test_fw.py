@@ -18,13 +18,15 @@ def test_fw():
         colspecs =  default_specs + [(10, 'date', '%d/%m/%Y', 2), 
                                     (10, 'float', 3), 
                                     (15, 'email', 'mail.com'),
-                                    (10, 'myval', 'returnasis')]
+                                    (10, 'one_of', ['returnasis'])]
         data = generate(colspecs, nrows=1)
         expected_length = sum([c[0] for c in colspecs])
         for d in data:
             decoded = d.decode()
             assert len(decoded) == expected_length
-
+            assert 'returnasis' in decoded
+            assert 'mail.com' in decoded
+            
 
 def test_generate_bad_decode():
     #has to have atleast 1 special char for this test to work
@@ -70,12 +72,6 @@ def test_bad_email_config_throws_exception():
 
         anonymous_col_specs = [(28, 38, 'email', 'hotmail.com')]
         anonymise_columns(row, anonymous_col_specs)
-
-def test_bad_myval_throws_exception():
-    with pytest.raises(Exception) as e_info:
-        colspecs =  [(10, 'myval', '14/3/2019')]
-        for d in generate(colspecs, nrows=1):
-            assert d is not None
 
 def test_bad_date_length_throws_exception():
     with pytest.raises(Exception) as e_info:

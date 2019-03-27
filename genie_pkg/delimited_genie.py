@@ -21,6 +21,8 @@ def _gen(data_type, optional):
         data = random_mastercard_number()
     elif data_type == 'cc_visacard':
         data = random_visacard_number(*optional)
+    elif data_type == 'one_of':
+        data = one_of(*optional)
     else:
         data = random_string(*optional)
 

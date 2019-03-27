@@ -3,6 +3,7 @@ import os
 
 from genie_pkg.utils import *
 import re
+import pytest
 
 
 def test_ipv4():
@@ -49,3 +50,13 @@ def test_random_visacard_number():
     cc = random_visacard_number(13)
     assert len(cc) == 13
 
+
+def test_one_of():
+    choices = [1, 2, 3]
+    v = one_of(choices)
+    assert v in choices
+
+def test_one_of_throws_exception():
+    with pytest.raises(Exception) as e_info:
+        one_of('blah')
+        assert False

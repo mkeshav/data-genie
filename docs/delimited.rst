@@ -51,3 +51,5 @@ CSV supports below types
   center defaults to melbourne, radius = 10000 and accuracy_digits=3
 - cc_mastercard (generates 16 digit valid mastercard number)
 - cc_visacard (length) (length can be 16 or 13) (generates 16 digit by default)
+- one_of (list of choices) returns random choice from the list passed.
+      Useful for things like product codes, country code etc.

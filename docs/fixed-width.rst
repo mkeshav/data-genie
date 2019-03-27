@@ -46,4 +46,6 @@ Fixed width supports below types
 - str
 - email (if domain is not passed, it will default to dummy.com).
       *Length is inclusive of domain you specify.*
-- myval (value that you just want to return as is)
+- one_of (list of choices) returns random choice from the list passed.
+      If the length does not match, it will throw exception. Useful for
+      things like product codes

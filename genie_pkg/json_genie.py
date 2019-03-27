@@ -29,7 +29,7 @@ def random_integer_list(list_size, start, max):
 
 
 def random_choice_of(choices) -> str:
-    return str(random.choice(choices))
+    return str(one_of(choices))
 
 
 def random_email_id(width, domain) -> str:
