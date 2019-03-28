@@ -85,3 +85,9 @@ def test_bad_float_length_throws_exception():
         for d in generate(colspecs, nrows=1):
             assert d is not None
 
+
+def test_bad_one_of_throws_exception_bad_length():
+    with pytest.raises(Exception) as e_info:
+        colspecs =  [(5, 'one_of', ['returnasis'])]
+        for d in generate(colspecs, nrows=1):
+            assert False
