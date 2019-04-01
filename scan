@@ -6,4 +6,5 @@ echo "Generate coverage and test report"
 python3 setup.py develop && pytest --cov=genie_pkg --cov-report=xml --junitxml=pytest-report.xml
 
 echo "Scanning now..."
+# SONAR_CLOUD_TOKEN should be added in circleci
 sonar-scanner -X -Dsonar.login="$SONAR_CLOUD_TOKEN"
