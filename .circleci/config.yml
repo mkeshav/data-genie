@@ -52,11 +52,17 @@ jobs:
           path: htmlcov
           destination: cov
 
+  sonar_scan:
+    machine: true
+    steps:
+      - checkout
+      - setup_remote_docker
+
       - run:
           name: Scan
           command: |
             docker-compose run --rm test ./scan
-            
+
   package_pypi_upload:
     
     docker:
@@ -90,6 +96,7 @@ workflows:
   build-test-and-approval-deploy:
     jobs:
       - test  # your custom job from your config, that builds your code
+      - sonar_scan
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
           requires: # We only run the "hold" job when test2 has succeeded
