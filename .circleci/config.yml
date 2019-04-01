@@ -12,7 +12,9 @@ jobs:
     
     steps:
       - checkout
-# Download and cache dependencies
+      - setup_remote_docker
+
+      # Download and cache dependencies
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "requirements.txt" }}
@@ -50,6 +52,11 @@ jobs:
           path: htmlcov
           destination: cov
 
+      - run:
+          name: Scan
+          command: |
+            docker-compose run --rm test ./scan
+            
   package_pypi_upload:
     
     docker:
@@ -62,7 +69,7 @@ jobs:
     
     steps:
       - checkout
-# Download and cache dependencies
+      # Download and cache dependencies
       - run:
           name: Install pip package dependencies
           command: |
@@ -76,10 +83,10 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            ./upload_pypi
+            ./upload_pypi            
 
 workflows:
-  version: 2.1
+  version: 2
   build-test-and-approval-deploy:
     jobs:
       - test  # your custom job from your config, that builds your code
