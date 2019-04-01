@@ -1,5 +1,5 @@
 [![PyPI version](https://badge.fury.io/py/data-genie-mkeshav.svg)](https://badge.fury.io/py/data-genie-mkeshav)
-(https://circleci.com/gh/mkeshav/data-genie/tree/master.svg?style=svg&circle-token=ec2327c448c58747d5ded5b95cab2f2371b9a095)](https://circleci.com/gh/mkeshav/data-genie/tree/master)
+[![CircleCI](https://circleci.com/gh/mkeshav/data-genie/tree/master.svg?style=svg&circle-token=ec2327c448c58747d5ded5b95cab2f2371b9a095)](https://circleci.com/gh/mkeshav/data-genie/tree/master)
 [![Documentation Status](https://readthedocs.org/projects/data-genie/badge/?version=latest)](https://data-genie.readthedocs.io/en/latest/?badge=latest)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mkeshav_data-genie&metric=alert_status)](https://sonarcloud.io/dashboard?id=mkeshav_data-genie)
 
