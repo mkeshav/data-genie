@@ -8,4 +8,5 @@ services:
       - .:/app:cached
     command: >
       bash -c "python3 setup.py develop && pytest -vv"
-    env_file: .env
+    environment:
+      - SONAR_CLOUD_TOKEN
