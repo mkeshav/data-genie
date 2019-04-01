@@ -17,3 +17,8 @@ python3 -m pip install data-genie-mkeshav
 - `docker inspect --format='{{.Id}} {{.Parent}}'     $(docker images --filter since=<image_id> --quiet)` to check dependent child images
 
 - Detailed [Documentation](https://data-genie.readthedocs.io)
+
+# Sonar Scan
+Gitignored .env file contains the SONAR_QUBE_TOKEN variable
+
+- `sonar-scanner -Dsonar.login=$SONAR_QUBE_TOKEN`
