@@ -11,7 +11,6 @@ if [ 'master' = $CIRCLE_BRANCH ]
 then
     sonar-scanner -X -Dsonar.login="$SONAR_CLOUD_TOKEN"
 else
-    echo $CIRCLE_PULL_REQUEST
     PR_KEY=$(echo "$CIRCLE_PULL_REQUEST" | cut -f7 -d "/")
     sonar-scanner -X -Dsonar.login="$SONAR_CLOUD_TOKEN" \
                     -Dsonar.pullrequest.branch="$CIRCLE_BRANCH" \
