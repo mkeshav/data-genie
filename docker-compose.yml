@@ -10,3 +10,5 @@ services:
       bash -c "python3 setup.py develop && pytest -vv"
     environment:
       - SONAR_CLOUD_TOKEN
+      - CIRCLE_BRANCH
+      - CIRCLE_PULL_REQUEST
