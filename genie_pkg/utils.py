@@ -173,3 +173,9 @@ def one_of(choices):
         raise Exception("Provided value should be a list of choices")
         
     return choice(choices)
+
+def one_of_1(choices):
+    if type(choices) is not list:
+        raise Exception("Provided value should be a list of choices")
+        
+    return choice(choices)
