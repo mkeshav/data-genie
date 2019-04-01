@@ -7,10 +7,9 @@ python3 setup.py develop && pytest --cov=genie_pkg --cov-report=xml --junitxml=p
 
 echo "Scanning now..."
 # SONAR_CLOUD_TOKEN should be added in circleci
-current_branch=$(git rev-parse --abbrev-ref HEAD)
-if [ 'master' = $current_branch ] 
+if [ 'master' = $CIRCLE_BRANCH ] 
 then
     sonar-scanner -X -Dsonar.login="$SONAR_CLOUD_TOKEN"
 else
-    sonar-scanner -X -Dsonar.login="$SONAR_CLOUD_TOKEN" -Dsonar.pullrequest.branch="$current_branch"
+    sonar-scanner -X -Dsonar.login="$SONAR_CLOUD_TOKEN" -Dsonar.pullrequest.branch="$CIRCLE_BRANCH"
 fi
