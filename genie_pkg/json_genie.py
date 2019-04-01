@@ -14,16 +14,16 @@ from genie_pkg.utils import *
 
 def random_string_list(list_size, item_length):
     l = []
-    for i in range(0, list_size):
+    for _ in range(0, list_size):
         l.insert(0, ''.join([random.choice(string.ascii_letters)
-                             for i in range(0, item_length)]))
+                             for _ in range(0, item_length)]))
     # json dumps is to get python list as json compatible string.
     return json.dumps(l)
 
 
 def random_integer_list(list_size, start, max):
     l = []
-    for i in range(0, list_size):
+    for _ in range(0, list_size):
         l.insert(0, random_integer(start, max))
     return l
 

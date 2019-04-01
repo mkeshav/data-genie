@@ -16,7 +16,7 @@ def generate_email_id(width, domain='dummy.com'):
             domain, minimum_expected_length))
 
     local_part = [choice(string.ascii_letters)
-                  for i in range(0, actual_length)]
+                  for _ in range(0, actual_length)]
     return ''.join(local_part) + '@' + domain
 
 
@@ -49,13 +49,13 @@ def random_float(start=1, max_value=999, decimal_places=2):
 
 
 def random_string(length=20):
-    return ''.join([choice(string.ascii_letters) for i in range(0, length)])
+    return ''.join([choice(string.ascii_letters) for _ in range(0, length)])
 
 
 def random_string_with_special_chars(length=20):
     special = ["¢", "£", "¥"]
     random_chars = [choice(string.ascii_letters + ''.join(special))
-                    for i in range(0, length - 1)]
+                    for _ in range(0, length - 1)]
     return ''.join([choice(special)] + random_chars)
 
 
@@ -120,7 +120,7 @@ def _credit_card_digits(prefixes, length):
     rnd.seed()
 
     prefix = choice(prefixes)
-    digits = [str(rnd.choice(range(0, 10))) for n in range(length - 1 - len(prefix))]
+    digits = [str(rnd.choice(range(0, 10))) for _ in range(length - 1 - len(prefix))]
 
     return prefix + digits
 

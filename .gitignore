@@ -11,3 +11,7 @@ docs/_build
 docs/_static
 docs/_templates
 .vscode
+.scannerwork/
+.env
+pytest-report.xml
+coverage.xml

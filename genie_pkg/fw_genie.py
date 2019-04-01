@@ -29,7 +29,7 @@ def _generate(width):
     special = ["¢", "£", "¥"]
     # random chars upto width - 1 to make sure there is atleast 1 special
     random_chars = [random.choice(
-        string.ascii_letters + ''.join(special)) for i in range(0, width - 1)]
+        string.ascii_letters + ''.join(special)) for _ in range(0, width - 1)]
     return ''.join([random.choice(special)] + random_chars)
 
 
@@ -87,7 +87,7 @@ def generate(colspecs, nrows, encoding='utf-8'):
         Returns:
             data: Iterator over nrows.
     '''
-    for i in range(nrows):
+    for _ in range(nrows):
         row_data = _generate_columns(colspecs)
         yield ''.join(row_data).encode(encoding)
 
