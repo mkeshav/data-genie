@@ -13,3 +13,5 @@ docs/_templates
 .vscode
 .scannerwork/
 .env
+pytest-report.xml
+coverage.xml

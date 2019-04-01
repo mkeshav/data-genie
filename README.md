@@ -21,5 +21,4 @@ python3 -m pip install data-genie-mkeshav
 # Sonar Scan
 Gitignored .env file contains the SONAR_QUBE_TOKEN variable
 
-- `docker-compose run --rm test bash`
-- `sonar-scanner -Dsonar.login=$SONAR_QUBE_TOKEN`
+- `docker-compose run --rm test ./scan`
