@@ -87,6 +87,6 @@ def generate(colspecs, nrows, encoding='utf-8', delimiter=','):
         Returns:
             data: Iterator over nrows.
     '''
-    for i in range(nrows):
+    for _ in range(nrows):
         row_data = _generate_columns(colspecs)
         yield delimiter.join(row_data).encode(encoding)
