@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
 
 setup(
     name="data-genie-mkeshav",
-    version="0.3.8",
+    version="0.3.9",
     author="Keshav Murthy",
     author_email="mkeshav@gmail.com",
     description="A small genie to generate test data",
