@@ -1,6 +1,4 @@
 import pytest
-import sys
-import os
 import json
 
 from genie_pkg.json_genie import generate, generate_with_custom_template_function

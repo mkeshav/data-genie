@@ -6,7 +6,9 @@ from datetime import datetime, timedelta
 import time
 import uuid
 import math
+import markovify
 
+from pkg_resources import resource_string
 
 def generate_email_id(width, domain='dummy.com'):
     actual_length = width - len(domain) - 1  # 1 for @
@@ -173,3 +175,10 @@ def one_of(choices):
         raise Exception("Provided value should be a list of choices")
         
     return choice(choices)
+
+def random_wonderland_text(number_of_sentences=5) -> str:
+    text = resource_string(__name__, 'wonderland.txt')
+    text_model = markovify.Text(text.decode())
+    sentences = [text_model.make_sentence() for _ in range(number_of_sentences)]
+    return ' '.join(sentences)
+
