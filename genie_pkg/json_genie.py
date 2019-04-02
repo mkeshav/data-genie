@@ -49,6 +49,9 @@ def random_geo(center=(-37.814, 144.963,), radius=10000, accuracy=3):
     return json.dumps({"latitude": x0, "longitude": y0})
 
 
+def random_text():
+    return random_wonderland_text()
+
 JinjaTemplate = NewType('JinjaTemplate', Template)
 
 
@@ -69,6 +72,7 @@ def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
     template.globals['random_geo'] = random_geo
     template.globals['random_mastercard_number'] = random_mastercard_number
     template.globals['random_visacard_number'] = random_visacard_number
+    template.globals['random_text'] = random_text
     return template
 
 

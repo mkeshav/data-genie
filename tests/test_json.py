@@ -1,6 +1,4 @@
 import pytest
-import sys
-import os
 import json
 
 from genie_pkg.json_genie import generate, generate_with_custom_template_function
@@ -59,10 +57,11 @@ def test_almighty():
                 ]
             },
             "k16": {"type": "string"},
-            "k17": {"type": "string"}
+            "k17": {"type": "string"},
+            "k18": {"type": "string"}
         },
         "reauired": [
-            "k1", "k2", "k3"
+            "k1", "k2", "k3", "k18"
         ]
     }
 
@@ -91,7 +90,8 @@ def test_almighty():
             "k14": "{{random_ipv4()}}",
             "k15": {{random_geo(accuracy=4)}},
             "k16": "{{random_mastercard_number()}}",
-            "k17": "{{random_visacard_number()}}"
+            "k17": "{{random_visacard_number()}}",
+            "k18": "{{random_text()}}"
         }
     '''
     d = json.loads(generate(template))
