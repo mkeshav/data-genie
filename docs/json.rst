@@ -58,6 +58,8 @@ This module supports generation of Json data.
 - random_mastercard_number() (generates 16 digit valid mastercard number)
 - random_visacard_number(length=16|13) (generates 16 digit(default)
    valid visacard number)
+- random_text() generates 5 sentences from alice in wonderland
+
 
 **Inject Custom template functions**
 
