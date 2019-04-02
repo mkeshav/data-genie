@@ -177,7 +177,7 @@ def one_of(choices):
     return choice(choices)
 
 def random_wonderland_text(number_of_sentences=5) -> str:
-    text = resource_string(__name__, 'wonderland.txt')
+    text = resource_string(__name__, 'data/wonderland.txt')
     text_model = markovify.Text(text.decode())
     sentences = [text_model.make_sentence() for _ in range(number_of_sentences)]
     return ' '.join(sentences)
