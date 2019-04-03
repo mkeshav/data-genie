@@ -1,4 +1,4 @@
-from genie_pkg.utils import *
+from genie_pkg.generators import *
 import re
 import pytest
 
