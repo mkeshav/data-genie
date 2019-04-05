@@ -65,3 +65,4 @@ def test_random_wonderland_text():
 
 def test_random_dob():
     assert random_dob(year=2019, month=1, day=1) == '01/01/2019'
+    assert random_dob() is not None
