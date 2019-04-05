@@ -182,3 +182,17 @@ def random_wonderland_text(number_of_sentences=5) -> str:
     sentences = [text_model.make_sentence() for _ in range(number_of_sentences)]
     return ' '.join(sentences)
 
+
+def random_date(year=None, month=None, day=None, format_string='%Y/%m/%d'):
+    today = datetime.today()
+    if year is None:
+        year = today.year
+    if month is None:
+        month = randint(1, 12)
+    if day is None:
+        if month == 2:
+            day = randint(1, 28)
+        else:
+            day = randint(1, 30)
+
+    return datetime(year, month, day).strftime(format_string)

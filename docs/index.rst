@@ -15,3 +15,4 @@ so you don't make the mistake of using production data in test environments
    fixed-width
    json
    delimited
+   generators
