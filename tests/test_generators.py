@@ -62,3 +62,6 @@ def test_random_wonderland_text():
     text = random_wonderland_text(2)
     #funny regex may not work for all sentences. No use installing nltk for a test, hence no len assertion
     assert text is not None 
+
+def test_random_dob():
+    random_dob(year=2019, month=1, day=1) == datetime(2019, 1, 1)
