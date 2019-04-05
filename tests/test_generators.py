@@ -64,4 +64,4 @@ def test_random_wonderland_text():
     assert text is not None 
 
 def test_random_dob():
-    random_dob(year=2019, month=1, day=1) == datetime(2019, 1, 1)
+    assert random_dob(year=2019, month=1, day=1) == '01/01/2019'
