@@ -183,10 +183,11 @@ def random_wonderland_text(number_of_sentences=5) -> str:
     return ' '.join(sentences)
 
 
-def random_date(year=None, month=None, day=None, format_string='%Y/%m/%d'):
+def random_dob(year=None, month=None, day=None, format_string='%m/%d/%Y'):
     today = datetime.today()
     if year is None:
-        year = today.year
+        current_year = datetime.today().year
+        year = randint(current_year - 50, current_year)
     if month is None:
         month = randint(1, 12)
     if day is None:
