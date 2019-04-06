@@ -9,7 +9,7 @@ from typing import NewType
 from datetime import datetime, timedelta
 
 
-from genie_pkg.utils import *
+from genie_pkg.generators import *
 
 
 def random_string_list(list_size, item_length):

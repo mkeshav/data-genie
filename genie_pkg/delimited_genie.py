@@ -1,7 +1,7 @@
 
 import csv
 
-from genie_pkg.utils import *
+from genie_pkg.generators import *
 
 
 def _gen(data_type, optional):

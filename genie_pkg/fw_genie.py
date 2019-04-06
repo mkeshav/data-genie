@@ -4,7 +4,7 @@ import datetime
 from datetime import datetime, timedelta
 from typing import NewType
 
-from genie_pkg import utils
+from genie_pkg.generators import random_date_from_today, one_of, generate_email_id
 
 
 def _generate_int(width):
@@ -34,7 +34,7 @@ def _generate(width):
 
 
 def _generate_date(length, format_string='%Y/%m/%d', delta_days=0):
-    d = utils.random_date_from_today(format_string, delta_days)
+    d = random_date_from_today(format_string, delta_days)
     if len(d) > length:
         raise Exception(
             "Format {0}, does not produce date of length {1}".format(format_string, length))
@@ -48,7 +48,7 @@ def _gen(data_type, length, optional):
         'str': _generate,
     }
     if data_type == 'one_of':
-        val = str(utils.one_of(*optional))
+        val = str(one_of(*optional))
         if len(val) == length:
             data = val
         else:
@@ -59,7 +59,7 @@ def _gen(data_type, length, optional):
     elif data_type == 'float':
         data = _generate_float(length, *optional)
     elif data_type == 'email':
-        data = utils.generate_email_id(length, *optional)
+        data = generate_email_id(length, *optional)
     else:
         data = gen_fns.get(data_type, _generate)(length)
 
