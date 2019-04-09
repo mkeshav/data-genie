@@ -3,7 +3,7 @@ from collections import defaultdict
 import json
 
 def _process_post_codes():
-    d = defaultdict(lambda: defaultdict(list))
+    d = defaultdict(lambda: defaultdict(dict))
     with open('./scripts/oz_postcodes.csv') as csvfile:
         reader = csv.reader(csvfile)
         next(reader, None)  # skip the headers
@@ -11,11 +11,24 @@ def _process_post_codes():
             state = row[2]
             locality = row[1]
             postcode = row[0]
-            d[state][postcode].append(locality)
+            latitude = row[4]
+            longitude = row[3]
+            p = d[state][postcode]
+            if latitude != "NULL" and longitude != "NULL":
+                center = {
+                    "latitude": latitude,
+                    "longitude": longitude
+                }
+                p["center"] = center
+
+            ls = p.get("localities", [])
+            ls.append(locality)
+            p["localities"] = ls
 
     for k, v in d.items():
         for k1, v1 in v.items():
-            d[k][k1] = list(set(v1))
+            ls = d[k][k1]["localities"]
+            d[k][k1]["localities"] = list(set(ls))
     
     return d
 
