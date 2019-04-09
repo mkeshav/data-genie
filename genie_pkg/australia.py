@@ -18,7 +18,6 @@ class Australia(object):
         return (locality, pc)
 
     def get_city(self, state, postcode):
-        state_data = self.data[state]
         localities = self.data[state][postcode]["localities"]
         return one_of(localities)
         

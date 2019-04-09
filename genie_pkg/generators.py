@@ -184,7 +184,6 @@ def random_wonderland_text(number_of_sentences=5) -> str:
 
 
 def random_dob(year=None, month=None, day=None, format_string='%m/%d/%Y'):
-    today = datetime.today()
     if year is None:
         current_year = datetime.today().year
         year = randint(current_year - 50, current_year)
