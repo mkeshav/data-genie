@@ -10,12 +10,18 @@ class Australia(object):
     def get_random_state(self) -> str:
         return one_of(list(self.data.keys()))
 
-    def get_random_postcode(self, state) -> str:
+    def get_random_city_postcode(self, state) -> (str, str):
         state_data = self.data[state]
-        post_codes = list(state_data.keys())        
-        return one_of(post_codes)
+        post_codes = list(state_data.keys())      
+        pc = one_of(post_codes)
+        locality = state_data[pc]["localities"]
+        return (locality, pc)
 
-    
+    def get_city(self, state, postcode):
+        state_data = self.data[state]
+        localities = self.data[state][postcode]["localities"]
+        return one_of(localities)
+        
     def get_random_geo_coordinate(self, state, postcode):
         center = self.data[state][postcode].get("center", {})
         if center:

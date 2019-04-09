@@ -38,4 +38,4 @@ Australian postcode, city and state
    a = Australia()
    a.get_random_state() #Returns one of australian states
 
-   a.get_random_postcode(state="VIC") #Returns one of australian post codes
+   a.get_random_city_postcode(state="VIC") #Returns tuple(city, postcode)
