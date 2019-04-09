@@ -65,4 +65,8 @@ def test_random_wonderland_text():
 
 def test_random_dob():
     assert random_dob(year=2019, month=1, day=1) == '01/01/2019'
+    feb_born = random_dob(year=2019, month=2)
+    assert int(feb_born.split('/')[1]) <= 28
+    nonfeb_born = random_dob(year=2019, month=3)
+    assert int(nonfeb_born.split('/')[1]) <= 30
     assert random_dob() is not None

@@ -27,3 +27,15 @@ Available Generators
 
    # Geo coordinates around the center
    random_geo_coords(center=(-37.814, 144.963,), radius=10000, accuracy=3)
+
+
+Australian postcode, city and state
+
+.. code-block:: python
+
+   from genie_pkg.australia import Australia
+
+   a = Australia()
+   a.get_random_state() #Returns one of australian states
+
+   a.get_random_postcode(state="VIC") #Returns one of australian post codes
