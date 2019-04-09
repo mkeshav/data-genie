@@ -39,3 +39,5 @@ Australian postcode, city and state
    a.get_random_state() #Returns one of australian states
 
    a.get_random_city_postcode(state="VIC") #Returns tuple(city, postcode)
+
+   a.get_city(state="VIC", postcode="3000") #Returns MELBOURNE
