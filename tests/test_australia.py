@@ -7,7 +7,7 @@ def oz():
     return Australia()
 
 def test_state(oz):
-    assert oz.get_random_state() in ["VIC", "NSW", "ACT", "QLD", "SA", "NT"]
+    assert oz.get_random_state() in ["VIC", "NSW", "ACT", "QLD", "SA", "NT", "TAS"]
 
 def test_postcode(oz):
     p = oz.get_random_postcode("VIC")
