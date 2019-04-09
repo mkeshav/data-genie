@@ -22,4 +22,4 @@ class Australia(object):
             c = (float(center["latitude"]), float(center["longitude"]),)
             return random_geo_coords(center=c)
         else:
-            raise Exception("Postcode {0} in state {1} does not have geo center".format(postcode, center))
+            raise Exception("Postcode {0} in state {1} does not have geo center".format(postcode, state))
