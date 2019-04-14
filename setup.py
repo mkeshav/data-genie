@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from genie_pkg import __version__
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -8,7 +9,7 @@ with open("requirements.txt", "r") as fh:
 
 setup(
     name="data-genie-mkeshav",
-    version="0.4.3",
+    version=,
     author="Keshav Murthy",
     author_email="mkeshav@gmail.com",
     description="A small genie to generate test data",
