@@ -1,46 +1,23 @@
 version: 2.1
 jobs:
   test:
-    docker:
-      # specify the version you desire here
-      - image: circleci/python:3.7.2
-
+    machine: true
     working_directory: ~/data-genie
 
-    environment:
-      TERM: dumb
-    
     steps:
       - checkout
-      - setup_remote_docker
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "requirements.txt" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
       - run:
-          name: install dependencies
+          name: Install Docker Compose
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}      
+            curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
       - run:
           name: Run tests
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            python3 setup.py develop
-            pytest --cov=genie_pkg --cov-fail-under 95 --cov-report=html --html=report.html --self-contained-html
-      
+            docker-compose run --rm test bash -c "python3 setup.py develop && pytest --cov=genie_pkg --cov-fail-under 95 --cov-report=html --html=report.html --self-contained-html"
+
       - store_test_results:
           path: report.html
 
@@ -66,39 +43,27 @@ jobs:
       - run:
           name: Scan
           command: |
-            docker-compose run --rm test ./scan
+            docker-compose run --rm scan ./scan   
 
   package_pypi_upload:
-    
-    docker:
-      # specify the version you desire here
-      - image: circleci/python:3.7.2
-
-    working_directory: ~/data-genie
-    environment:
-      TERM: dumb
-    
+    machine: true
     steps:
       - checkout
-      # Download and cache dependencies
       - run:
-          name: Install pip package dependencies
+          name: Install Docker Compose
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            python3 -m pip install --upgrade pip setuptools wheel
-            python3 -m pip install twine
-            
+            curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+
       - run:
-          name: Upload pip to pypi
+          name: Upload to pypi
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            ./upload_pypi            
+            docker-compose run --rm test ./upload_pypi
 
 workflows:
   version: 2
-  build-test-and-approval-deploy:
+  scan-test-upload:
     jobs:
       - test  # your custom job from your config, that builds your code
       - sonar_scan
@@ -106,7 +71,6 @@ workflows:
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
           requires: # We only run the "hold" job when test2 has succeeded
             - test
-            - sonar_scan
           filters:
             branches:
               only:
