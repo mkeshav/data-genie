@@ -78,6 +78,7 @@ function will be useful for others
          "k1": {{random_integer(1000)}},
          "k2": "{{favourite_fruit()}}"
       }
+   '''
    t = Template(template)
    t.globals['favourite_fruit'] = favourite_fruit
 
