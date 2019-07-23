@@ -77,6 +77,8 @@ def random_bool():
 def now_epoch():
     return _current_milli_time()
 
+def utc_now_epoch():
+    return int(round(datetime.utcnow().timestamp() * 1000))
 
 def guid():
     return str(uuid.uuid4())
