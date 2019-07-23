@@ -7,6 +7,8 @@ import time
 import uuid
 import math
 import markovify
+import pytz
+from datetime import timedelta
 
 from pkg_resources import resource_string
 
@@ -78,6 +80,7 @@ def now_epoch():
 
 def guid():
     return str(uuid.uuid4())
+
 
 def random_geo_coords(center=(-37.814, 144.963,), radius=10000, accuracy=3):
     '''
@@ -196,3 +199,19 @@ def random_dob(year=None, month=None, day=None, format_string='%m/%d/%Y'):
             day = randint(1, 30)
 
     return datetime(year, month, day).strftime(format_string)
+
+
+def utc_epoch_start_and_end_ms_for(year, month, day):
+    """
+
+    :param year:
+    :param month:
+    :param day:
+    :return: Start and End of day in utc epoch millis. End is 11:59:59:990
+    """
+
+    start = datetime(year, month, day, 0, 0)
+    end = start + timedelta(1)
+    s_epoch_ms = int(start.replace(tzinfo=pytz.utc).timestamp() * 1000)
+    e_epoch_ms = int(end.replace(tzinfo=pytz.utc).timestamp() * 1000) - 10
+    return s_epoch_ms, e_epoch_ms

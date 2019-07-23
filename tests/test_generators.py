@@ -27,6 +27,7 @@ def test_random_geo():
         assert math.isclose(x0, -37.814, abs_tol=0.010)
         assert math.isclose(y0, 144.963, abs_tol=0.010)
 
+
 def test_check_digit_luhn_mod_10_mc():
     assert check_digit_luhn_mod_10('7992739871') == 3
     assert check_digit_luhn_mod_10('536990340067168') == 0
@@ -34,14 +35,17 @@ def test_check_digit_luhn_mod_10_mc():
     assert check_digit_luhn_mod_10('532420806394835') == 7
     assert check_digit_luhn_mod_10('532420499852544') == 4
 
+
 def test_check_digit_luhn_mod_10_visa():
     assert check_digit_luhn_mod_10('402400714020726') == 6
     assert check_digit_luhn_mod_10('433696811345131') == 9
     assert check_digit_luhn_mod_10('455604196816395') == 0
     assert check_digit_luhn_mod_10('453260352189118') == 4
-        
+
+
 def test_random_mastercard_number():
     assert random_mastercard_number() is not None
+
 
 def test_random_visacard_number():
     cc = random_visacard_number(13)
@@ -53,15 +57,18 @@ def test_one_of():
     v = one_of(choices)
     assert v in choices
 
+
 def test_one_of_throws_exception():
     with pytest.raises(Exception) as e_info:
         one_of('blah')
         assert False
 
+
 def test_random_wonderland_text():
     text = random_wonderland_text(2)
     #funny regex may not work for all sentences. No use installing nltk for a test, hence no len assertion
     assert text is not None 
+
 
 def test_random_dob():
     assert random_dob(year=2019, month=1, day=1) == '01/01/2019'
@@ -70,3 +77,9 @@ def test_random_dob():
     nonfeb_born = random_dob(year=2019, month=3)
     assert int(nonfeb_born.split('/')[1]) <= 30
     assert random_dob() is not None
+
+
+def test_utc_epoch_start_and_end_ms_for():
+    s, e = utc_epoch_start_and_end_ms_for(2019, 7, 22)
+    ms_in_day = e - s
+    assert ms_in_day + 10 == 24 * 60 * 60 * 1000
