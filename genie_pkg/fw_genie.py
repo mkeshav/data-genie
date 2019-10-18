@@ -34,7 +34,6 @@ def _get_encoding_special_chars(encoding='utf-8'):
 
 def _generate(width, encoding):
     special = _get_encoding_special_chars(encoding)
-    print(special)
     # random chars upto width - 1 to make sure there is atleast 1 special
     random_chars = [random.choice(
         f"{string.ascii_letters}{special}") for _ in range(0, width - 1)]
