@@ -25,11 +25,18 @@ def _generate_float(width, number_of_decimals=2):
     return f"{data:{float_format}}".zfill(width)
 
 
-def _generate(width):
-    special = ["¢", "£", "¥"]
+def _get_encoding_special_chars(encoding='utf-8'):
+    if encoding == 'ascii':
+        return string.ascii_letters
+    else:
+        return ''.join(["¢", "£", "¥"])
+
+
+def _generate(width, encoding):
+    special = _get_encoding_special_chars(encoding)
     # random chars upto width - 1 to make sure there is atleast 1 special
     random_chars = [random.choice(
-        string.ascii_letters + ''.join(special)) for _ in range(0, width - 1)]
+        f"{string.ascii_letters}{special}") for _ in range(0, width - 1)]
     return ''.join([random.choice(special)] + random_chars)
 
 
@@ -42,11 +49,7 @@ def _generate_date(length, format_string='%Y/%m/%d', delta_days=0):
     return d
 
 
-def _gen(data_type, length, optional):
-    gen_fns = {
-        'int': _generate_int,
-        'str': _generate,
-    }
+def _gen(data_type, length, optional, encoding):
     if data_type == 'one_of':
         val = str(one_of(*optional))
         if len(val) == length:
@@ -60,17 +63,19 @@ def _gen(data_type, length, optional):
         data = _generate_float(length, *optional)
     elif data_type == 'email':
         data = generate_email_id(length, *optional)
+    elif data_type == 'int':
+        data = _generate_int(length, *optional)
     else:
-        data = gen_fns.get(data_type, _generate)(length)
+        data = _generate(length, encoding)
 
     return data
 
 
-def _generate_columns(colspecs):
+def _generate_columns(colspecs, encoding):
     row_data = []
     for col in colspecs:
         length, data_type, *optional = col
-        row_data.append(_gen(data_type, length, optional))
+        row_data.append(_gen(data_type, length, optional, encoding))
 
     return row_data
 
@@ -88,7 +93,7 @@ def generate(colspecs, nrows, encoding='utf-8'):
             data: Iterator over nrows.
     '''
     for _ in range(nrows):
-        row_data = _generate_columns(colspecs)
+        row_data = _generate_columns(colspecs, encoding)
         yield ''.join(row_data).encode(encoding)
 
 
@@ -110,7 +115,7 @@ def anonymise_columns(row: bytes, anonymous_col_specs, encoding='utf-8') -> byte
         before = anonymised[:start]
         after = anonymised[end:]
         length = end - start
-        data = _gen(data_type, length, optional)
+        data = _gen(data_type, length, optional, encoding)
         anonymised = ''.join([before, data, after])
 
     return anonymised.encode(encoding)

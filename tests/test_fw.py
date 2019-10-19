@@ -30,24 +30,38 @@ def test_generate_bad_decode():
     ncols = random.randint(1, 10)
     colspecs = [(random.randint(min_width, 10), random.choice(type_choices),) for i in range(ncols)]
     #run the test more than once
-    for i in range(2, 5):
-        for d in generate(colspecs + [(8, 'str')], nrows=1, encoding='windows-1252'):
-            try:
-                print(d.decode('utf-8'))
-                assert False
-            except UnicodeDecodeError as e:
-                assert True
+    bad_decodes = [
+        ('windows-1252', 'utf-8'),
+        ('utf-8', 'ascii'),
+        ('utf-16', 'utf-8')
+    ]
+    
+    for encoding, decoding in bad_decodes:
+        for i in range(1, 3):
+            for d in generate(colspecs + [(8, 'str')], nrows=1, encoding=encoding):
+                try:
+                    print(d.decode(decoding))
+                    assert False
+                except UnicodeDecodeError as e:
+                    assert True
 
 
 def test_generate_good_decode():
     ncols = random.randint(1, 10)
     colspecs = [(random.randint(min_width, 10), random.choice(type_choices),) for i in range(ncols)]
-    for d in generate(colspecs + [(8, 'str')], nrows=1):
-        try:
-            print(d.decode())
-            assert True
-        except e:
-            assert False
+    good_decodes = [
+        ('windows-1252', 'windows-1252'),
+        ('utf-8', 'utf-8'),
+        ('ascii', 'utf-8'),
+    ]
+
+    for encoding, decoding in good_decodes:
+        for d in generate(colspecs + [(8, 'str')], nrows=1, encoding=encoding):
+            try:
+                print(d.decode(decoding))
+                assert True
+            except Exception as e:
+                assert False
 
 
 def test_anonymise():
@@ -88,3 +102,4 @@ def test_bad_one_of_throws_exception_bad_length():
         colspecs =  [(5, 'one_of', ['returnasis'])]
         for d in generate(colspecs, nrows=1):
             assert False
+
