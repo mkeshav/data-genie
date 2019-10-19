@@ -22,3 +22,8 @@ python3 -m pip install data-genie-mkeshav
 Gitignored .env file contains the SONAR_CLOUD_TOKEN variable (locally)
 
 - `docker-compose run --rm test ./scan`
+
+# Release
+increment version in init.py
+`./tag-master`
+`git push origin master`
