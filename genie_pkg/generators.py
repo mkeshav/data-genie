@@ -64,6 +64,9 @@ def random_string_with_special_chars(length=20):
 
 
 def random_date_from_today(format_string='%Y/%m/%d', delta_days=0):
+    if delta_days > 0:
+        return (datetime.today() + timedelta(days=delta_days)).strftime(format_string)
+
     return (datetime.today() - timedelta(days=delta_days)).strftime(format_string)
 
 
