@@ -1,13 +1,8 @@
 import json
+import random
+from typing import NewType
 
 from jinja2 import Template
-import random
-import string
-import json
-
-from typing import NewType
-from datetime import datetime, timedelta
-
 
 from genie_pkg.generators import *
 

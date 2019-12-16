@@ -1,16 +1,16 @@
+import math
 import string
-
-from random import getrandbits, choice, uniform, randint, Random
-from ipaddress import IPv4Address, IPv6Address, IPv4Network
-from datetime import datetime, timedelta
 import time
 import uuid
-import math
+from datetime import datetime
+from datetime import timedelta
+from ipaddress import IPv4Address, IPv6Address, IPv4Network
+from random import getrandbits, choice, uniform, randint, Random
+
 import markovify
 import pytz
-from datetime import timedelta
-
 from pkg_resources import resource_string
+
 
 def generate_email_id(width, domain='dummy.com'):
     actual_length = width - len(domain) - 1  # 1 for @

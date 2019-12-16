@@ -1,8 +1,5 @@
 import random
 import string
-import datetime
-from datetime import datetime, timedelta
-from typing import NewType
 
 from genie_pkg.generators import random_date_from_today, one_of, generate_email_id
 
