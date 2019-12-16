@@ -2,7 +2,7 @@ htmlcov/
 .history/
 dist/
 build/
-data_genie_*.egg-info/
+data_genie*.egg-info/
 .coverage
 **/__pycache__/**
 report.html
