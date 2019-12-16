@@ -4,13 +4,13 @@ import random
 from genie_pkg.fw_genie import generate, anonymise_columns
 
 type_choices = ['int', 'float', 'str']
-min_width = 5 #this is to make sure floats are valid
+min_width = 5  # this is to make sure floats are valid
+
 
 def test_fw():
     # Run all the tests in a loop to have better confidance of randomisation.
     for i in range(2, 5):
         ncols = random.randint(1, 10)
-        nrows = random.randint(1, 3)
         default_specs = [(random.randint(min_width, 10), random.choice(type_choices),) for i in range(ncols)]
         colspecs = default_specs + [(10, 'date', '%d/%m/%Y', 2),
                                     (10, 'float', 3), 
@@ -26,10 +26,10 @@ def test_fw():
             
 
 def test_generate_bad_decode():
-    #has to have atleast 1 special char for this test to work
+    # has to have atleast 1 special char for this test to work
     ncols = random.randint(1, 10)
     colspecs = [(random.randint(min_width, 10), random.choice(type_choices),) for i in range(ncols)]
-    #run the test more than once
+    # run the test more than once
     bad_decodes = [
         ('windows-1252', 'utf-8'),
         ('utf-8', 'ascii'),
