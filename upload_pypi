@@ -2,7 +2,7 @@
 
 set -eu
 
-# Repo by default on twine is pypi.org, TWINE_PASSWORD should be set
+# Repo by default on twine is pypi.org, TWINE_PASSWORD should be set as env variable on circle.ci
 echo "Building...."
 python3 setup.py sdist bdist_wheel
 echo "Uploading...."
