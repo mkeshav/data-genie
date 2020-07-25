@@ -16,7 +16,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/mkeshav/data-genie.git",
-    packages=find_packages(include=('genie_pkg',)),
+    packages=find_packages(include=('genie_pkg',), exclude=('tests',)),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

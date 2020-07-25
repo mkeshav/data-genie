@@ -7,9 +7,10 @@
 
 Genie that can satisfy your data wish.
 Supports generation of fixedwidth, csv and json content
+Allows data quality checks to be firstclass
 
 # Install
-python3 -m pip install data-genie-mkeshav
+python3 -m pip install data-genie
 
 # Run tests
 - All tests (`docker-compose run --rm test`)
@@ -26,4 +27,5 @@ Gitignored .env file contains the SONAR_CLOUD_TOKEN variable (locally)
 # Release
 increment version in init.py
 `./tag-master`
+
 `git push origin master`
