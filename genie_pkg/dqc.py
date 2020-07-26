@@ -31,7 +31,7 @@ class QualityChecker(object):
                 return c.data, self._obj[column_name].is_unique
             else:
                 return c.data, False
-        except KeyError as ke:
+        except KeyError:
             return "Key error: {0} for {1}".format(c.data, c.children[0]), False
 
     def _apply_predicates(self, predicates):
