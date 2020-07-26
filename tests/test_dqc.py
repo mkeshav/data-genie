@@ -55,11 +55,23 @@ def test_quantile():
     check_spec = """
                 apply checks {
                     column field_A quantile(0.5) == 55.0
-                    column field_A quantile(0.5) > 54.0
+                    column field_B quantile(0.1)>9.0
                     column field_A quantile(0.5) < 56.0
                 }
                 """
     _assert_success(df.dqc.run(check_spec))
+
+def test_parse_error():
+    df = pd.DataFrame([{'name': 'foo',
+                        'd': '1970-01-01'}])
+    check_spec = """
+                apply checks {
+                    foo
+                }
+                """
+
+    with pytest.raises(Exception) as _:
+        df.dqc.run(check_spec)
 
 def _assert_success(results):
     failures = list(filter(lambda x: not x[1], results))
