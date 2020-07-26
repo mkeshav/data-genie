@@ -16,3 +16,4 @@ so you don't make the mistake of using production data in test environments
    json
    delimited
    generators
+   dqc
