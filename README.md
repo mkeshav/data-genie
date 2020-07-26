@@ -32,5 +32,7 @@ increment version in init.py
 
 Unblock the step in circleci
 
+If you have updated the documentation, login to readthedocs and build latest
+
 
 
