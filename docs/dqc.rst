@@ -11,6 +11,7 @@ This module supports writing data quality checks on pandas dataframe.
                 size is 1
                 has columns ['name', 'dob']
                 column dob has unique values
+                column product is not null
             }
             """
     df = pd.DataFrame([{'name': 'foo',
@@ -25,3 +26,4 @@ This module supports writing data quality checks on pandas dataframe.
 - `size is <number>`
 - `has columns ['c1', 'c2'...]`
 - `column <column_name> has unique values`
+- `column <column_name> is not null`
