@@ -22,14 +22,10 @@ class QualityChecker(object):
         lhs = self._obj[column_name].quantile(q)
         if c == ">":
             return node.data, lhs > rhs
-        elif c == ">=":
-            return node.data, lhs >= rhs
         elif c == "==":
             return node.data, lhs == rhs
         elif c == "<":
             return node.data, lhs < rhs
-        elif c == "<=":
-            return node.data, lhs <= rhs
         else:
             return node.data, False
 
