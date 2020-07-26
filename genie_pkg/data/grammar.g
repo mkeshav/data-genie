@@ -6,6 +6,7 @@ checks: has_size
         | has_columns
         | is_unique
         | not_null
+        | is_positive
 
 code_block: "{" checks+ "}"
 
@@ -13,6 +14,7 @@ has_size: "size is " SIGNED_NUMBER
 has_columns: "has columns" array
 is_unique: "column" COLUMN_NAME "has unique values"
 not_null: "column" COLUMN_NAME "is not null"
+is_positive: "column" COLUMN_NAME "has positive values"
 
 array  : "[" [QUOTED_STRING ("," QUOTED_STRING)*] "]"
 

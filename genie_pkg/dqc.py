@@ -32,6 +32,9 @@ class QualityChecker(object):
             elif c.data == "not_null":
                 column_name = c.children[0]
                 return c.data, self._obj[column_name].isna().sum() == 0
+            elif c.data == "is_positive":
+                column_name = c.children[0]
+                return c.data, (self._obj[column_name] > 0).all()
             else:
                 return c.data, False
         except KeyError:
