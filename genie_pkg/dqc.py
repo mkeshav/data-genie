@@ -32,6 +32,18 @@ class QualityChecker(object):
             elif c.data == "not_null":
                 column_name = c.children[0]
                 return c.data, self._obj[column_name].isna().sum() == 0
+            elif c.data == "is_positive":
+                column_name = c.children[0]
+                return c.data, (self._obj[column_name] > 0).all()
+            elif c.data == "is_in":
+                column_name = c.children[0]
+                allowed_values = []
+                unique_values = self._obj[column_name].unique()
+                for ct in c.children[1].children:
+                    value = ct.value
+                    allowed_values.insert(0, value.replace("'", ""))
+
+                return c.data, all(elem in allowed_values  for elem in unique_values)
             else:
                 return c.data, False
         except KeyError:
