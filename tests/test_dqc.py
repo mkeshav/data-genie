@@ -20,10 +20,12 @@ def test_run_success():
                 size is 1
                 has columns ['name', 'dob']
                 column dob has unique values
+                column product is not null
             }
             """
     df = pd.DataFrame([{'name': 'foo',
-                        'dob': '1970-01-01'}])
+                        'dob': '1970-01-01',
+                        'product': "mask",}])
 
     check_results = df.dqc.run(check_spec)
     failures = list(filter(lambda x: not x[1], check_results))

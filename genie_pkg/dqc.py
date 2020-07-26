@@ -11,7 +11,7 @@ class QualityChecker(object):
 
     @staticmethod
     def _validate(obj):
-        if obj.dropna().empty:
+        if obj.dropna(axis='columns').empty:
             raise AttributeError("DataFrame is empty!!! What quality do you expect from emptiness")
 
     def _apply_check(self, check):
@@ -29,6 +29,9 @@ class QualityChecker(object):
             elif c.data == "is_unique":
                 column_name = c.children[0]
                 return c.data, self._obj[column_name].is_unique
+            elif c.data == "not_null":
+                column_name = c.children[0]
+                return c.data, self._obj[column_name].isna().sum() == 0
             else:
                 return c.data, False
         except KeyError:
