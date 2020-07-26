@@ -22,12 +22,13 @@ def test_run_success():
                 column dob has unique values
                 column product is not null
                 column age has positive values
+                column gender in ['male', 'female', 'other']
             }
             """
     df = pd.DataFrame([{'name': 'foo',
                         'dob': '1970-01-01',
                         'product': "mask",
-                        'age': 1}])
+                        'age': 1, 'gender': 'male'}])
 
     check_results = df.dqc.run(check_spec)
     failures = list(filter(lambda x: not x[1], check_results))
