@@ -42,7 +42,7 @@ class QualityChecker(object):
                     v = self._apply_check(check.children)
                     results.insert(0, v)
             else:
-                raise SyntaxError('Unknown instruction: %s' % preds.data)
+                raise SyntaxError('Unknown instruction: %s' % predicates.data)
         return results
 
 

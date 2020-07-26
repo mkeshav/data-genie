@@ -26,6 +26,11 @@ Gitignored .env file contains the SONAR_CLOUD_TOKEN variable (locally)
 
 # Release
 increment version in init.py
-`./tag-master`
 
-`git push origin master`
+- `./tag-master`
+- `git push origin master`
+
+Unblock the step in circleci
+
+
+
