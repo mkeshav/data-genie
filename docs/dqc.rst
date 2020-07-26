@@ -27,5 +27,6 @@ This module supports writing data quality checks on pandas dataframe.
 - `has columns ['c1', 'c2'...]`
 - `column <column_name> has unique values`
 - `column <column_name> is not null`
-- `column <column_name> has positive values`
 - `column <column_name> in ['c1', 'c2'...]`
+- `column <column_name> has positive values`
+- `column <column_name> quantile(<percentile>) (> | < | ==) <rhs>`

@@ -14,6 +14,27 @@ class QualityChecker(object):
         if obj.dropna(axis='columns').empty:
             raise AttributeError("DataFrame is empty!!! What quality do you expect from emptiness")
 
+    def _apply_quantile(self, node):
+        column_name = node.children[0]
+        q = float(node.children[1])
+        c = node.children[2]
+        rhs = float(node.children[3])
+        lhs = self._obj[column_name].quantile(q)
+        if c == ">":
+            return node.data, lhs > rhs
+        elif c == ">=":
+            return node.data, lhs >= rhs
+        elif c == "==":
+            return node.data, lhs == rhs
+        elif c == "<":
+            return node.data, lhs < rhs
+        elif c == "<=":
+            return node.data, lhs <= rhs
+        else:
+            return node.data, False
+
+
+
     def _apply_check(self, check):
         try:
             c = check[0]
@@ -44,6 +65,8 @@ class QualityChecker(object):
                     allowed_values.insert(0, value.replace("'", ""))
 
                 return c.data, all(elem in allowed_values  for elem in unique_values)
+            elif c.data == "quantile":
+                return self._apply_quantile(c)
             else:
                 return c.data, False
         except KeyError:

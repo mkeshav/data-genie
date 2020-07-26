@@ -30,9 +30,7 @@ def test_run_success():
                         'product': "mask",
                         'age': 1, 'gender': 'male'}])
 
-    check_results = df.dqc.run(check_spec)
-    failures = list(filter(lambda x: not x[1], check_results))
-    assert len(failures) == 0
+    _assert_success(df.dqc.run(check_spec))
 
 def test_columns_missing():
     check_spec = """
@@ -47,3 +45,22 @@ def test_columns_missing():
     check_results = df.dqc.run(check_spec)
     failures = list(filter(lambda x: not x[1], check_results))
     assert len(failures) == 2
+
+def test_quantile():
+    a = [80, 24, 74, 30, 72, 69, 27, 12, 84, 41]
+    b = [62, 8, 42, 59, 10, 28, 46, 65, 100, 40]
+
+    df = pd.DataFrame({'field_A': a, 'field_B': b})
+
+    check_spec = """
+                apply checks {
+                    column field_A quantile(0.5) == 55.0
+                    column field_A quantile(0.5) > 54.0
+                    column field_A quantile(0.5) < 56.0
+                }
+                """
+    _assert_success(df.dqc.run(check_spec))
+
+def _assert_success(results):
+    failures = list(filter(lambda x: not x[1], results))
+    assert len(failures) == 0
