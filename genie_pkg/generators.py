@@ -11,12 +11,13 @@ import markovify
 import pytz
 from pkg_resources import resource_string
 
+from genie_pkg import GenieException
 
 def generate_email_id(width, domain='dummy.com'):
     actual_length = width - len(domain) - 1  # 1 for @
     if actual_length < 1:
         minimum_expected_length = len(domain) + 2  # 1 for @ and 1 for .
-        raise Exception("With the domain {0}, Minimum length you should pass is {1}".format(
+        raise GenieException("With the domain {0}, Minimum length you should pass is {1}".format(
             domain, minimum_expected_length))
 
     local_part = [choice(string.ascii_letters)
@@ -122,7 +123,7 @@ def random_geo_coords(center=(-37.814, 144.963,), radius=10000, accuracy=3):
     
     x_latitude  = x + x0
     y_longitude = y + y0
-    return (round(x_latitude, accuracy), round(y_longitude, accuracy),)
+    return round(x_latitude, accuracy), round(y_longitude, accuracy)
 
 
 def _credit_card_digits(prefixes, length):
@@ -180,7 +181,7 @@ def random_visacard_number(length=16):
 
 def one_of(choices):
     if type(choices) is not list:
-        raise Exception("Provided value should be a list of choices")
+        raise GenieException("Provided value should be a list of choices")
         
     return choice(choices)
 

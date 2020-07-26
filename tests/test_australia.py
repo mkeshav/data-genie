@@ -1,6 +1,7 @@
 from genie_pkg.australia import Australia
 import pytest
 import math
+from genie_pkg import GenieException
 
 @pytest.fixture
 def oz():
@@ -31,6 +32,6 @@ def test_geo_coordinate(oz):
     assert y0 is not None
 
 def test_geo_coordinate_throws_exception_when_center_null(oz):
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(GenieException) as e_info:
         oz.get_random_geo_coordinate(state="WA", postcode="6452")
         

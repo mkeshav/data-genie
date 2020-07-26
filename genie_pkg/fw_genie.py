@@ -2,6 +2,7 @@ import random
 import string
 
 from genie_pkg.generators import random_date_from_today, one_of, generate_email_id
+from genie_pkg import GenieException
 
 
 def _generate_int(width):
@@ -13,7 +14,7 @@ def _generate_float(width, number_of_decimals=2):
     real_width = width - number_of_decimals - 1
     if real_width < 1:
         min_expected_length = number_of_decimals + 2
-        raise Exception(
+        raise GenieException(
             "With number of decimal places of {0}, Minimum length you should pass is {1}".format(number_of_decimals, min_expected_length))
 
     max_value = int(real_width * "9")
@@ -40,7 +41,7 @@ def _generate(width, encoding):
 def _generate_date(length, format_string='%Y/%m/%d', delta_days=0):
     d = random_date_from_today(format_string, delta_days)
     if len(d) > length:
-        raise Exception(
+        raise GenieException(
             "Format {0}, does not produce date of length {1}".format(format_string, length))
 
     return d
@@ -52,7 +53,7 @@ def _gen(data_type, length, optional, encoding):
         if len(val) == length:
             data = val
         else:
-            raise Exception(
+            raise GenieException(
                 "Provided value {0} is not of length {1}".format(val, length))
     elif data_type == 'date':
         data = _generate_date(length, *optional)  # not passing delta days yet

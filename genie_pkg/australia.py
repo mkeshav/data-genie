@@ -1,6 +1,7 @@
 from pkg_resources import resource_string
 import json
 from genie_pkg.generators import one_of, random_geo_coords
+from genie_pkg import GenieException
 
 class Australia(object):
     def __init__(self):
@@ -27,4 +28,4 @@ class Australia(object):
             c = (float(center["latitude"]), float(center["longitude"]),)
             return random_geo_coords(center=c)
         else:
-            raise Exception("Postcode {0} in state {1} does not have geo center".format(postcode, state))
+            raise GenieException("Postcode {0} in state {1} does not have geo center".format(postcode, state))
