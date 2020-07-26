@@ -5,7 +5,7 @@ from typing import NewType
 from jinja2 import Template
 
 from genie_pkg.generators import *
-
+import string
 
 def random_string_list(list_size, item_length):
     l = []
