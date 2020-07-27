@@ -34,5 +34,13 @@ Unblock the step in circleci
 
 If you have updated the documentation, login to readthedocs and build latest
 
+# Circle CI
+
+Builds happen on circle ci with github integration
+
+Following environment variables need to be set on circle
+
+- `SONAR_CLOUD_TOKEN`
+- `TWINE_PASSWORD` (pypi login password)
 
 
