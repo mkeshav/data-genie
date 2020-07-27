@@ -70,7 +70,7 @@ def _build_quantile(column: str, q:float, c:str, expected:float):
 @composite
 def generate_valid_checks(draw):
     size = draw(integers(min_value=20))
-    columns = draw(lists(text(alphabet=string.ascii_letters, min_size=1), min_size=1))
+    columns = draw(lists(text(alphabet=string.ascii_letters+string.digits+'-_', min_size=1), min_size=1))
     column = draw(text(alphabet=string.ascii_letters, min_size=1))
     genders = ['female', 'male', 'other']
     return [
