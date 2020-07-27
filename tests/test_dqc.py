@@ -32,6 +32,16 @@ def test_parse_error():
     with pytest.raises(Exception) as _:
         df.dqc.run(check_spec)
 
+def test_date_validation_error_returns_false():
+    df = pd.DataFrame([{'dob': 'foo'}])
+    check_spec = """
+                apply checks {
+                    column dob is date
+                }
+                """
+
+    failures = list(filter(lambda x: not x[1], df.dqc.run(check_spec)))
+    assert len(failures) == 1
 
 def _build_size_check(size):
     return "size is {}".format(size)
@@ -62,14 +72,13 @@ def generate_valid_checks(draw):
     size = draw(integers(min_value=20))
     columns = draw(lists(text(alphabet=string.ascii_letters, min_size=1), min_size=1))
     column = draw(text(alphabet=string.ascii_letters, min_size=1))
-    values = draw(lists(text(alphabet=string.ascii_letters, min_size=1), min_size=1))
-
+    genders = ['female', 'male', 'other']
     return [
         _build_size_check(size),
         _build_has_columns(columns),
         _build_column_is_date("dob"),
         _build_column_is_not_null(column),
-        _build_column_is_in(column, values),
+        _build_column_is_in("gender", genders),
         _build_column_has_positive_values(),
         _build_column_has_unique_values("dob"),
         _build_quantile("field_A", 0.5, "==", 55.0),
@@ -81,9 +90,10 @@ def generate_valid_checks(draw):
 @given(generate_valid_checks(),
        lists(dates(min_value=date(1970, 1, 1), max_value=date(2100, 1, 1)).map(str), min_size=10, max_size=10),
        lists(integers(min_value=10), min_size=10, max_size=10),
-       just([80, 24, 74, 30, 72, 69, 27, 12, 84, 41]))
+       just([80, 24, 74, 30, 72, 69, 27, 12, 84, 41]),
+       just(['female', 'male', 'other', 'female', 'male', 'other', 'female', 'male', 'other', 'other']))
 @settings(max_examples=101)
-def test_hypothesis(checks, dobs, ages, q_arr):
+def test_hypothesis(checks, dobs, ages, q_arr, genders):
     check_spec = """
                     apply checks {
                         %s
@@ -91,7 +101,7 @@ def test_hypothesis(checks, dobs, ages, q_arr):
                     """ % ('\n'.join(checks),)
 
     df = pd.DataFrame({'age': ages,
-                        'dob': dobs, 'field_A': q_arr})
+                        'dob': dobs, 'field_A': q_arr, 'gender': genders})
 
     successes = list(filter(lambda x: x[1], df.dqc.run(check_spec)))
     #just the is date

@@ -34,8 +34,7 @@ class QualityChecker(object):
         try:
             pd.to_datetime(self._obj[column_name])
             return node.data, True
-        except Exception as e:
-            print(e)
+        except Exception as _:
             return "Parse error: {0} for {1}".format(node.data, node.children[0]), False
 
     def _apply_is_in(self, node):
