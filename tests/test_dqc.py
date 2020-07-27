@@ -23,6 +23,7 @@ def test_run_success():
                 column product is not null
                 column age has positive values
                 column gender in ['male', 'female', 'other']
+                column dob is date
             }
             """
     df = pd.DataFrame([{'name': 'foo',

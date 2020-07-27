@@ -29,7 +29,23 @@ class QualityChecker(object):
         else:
             return node.data, False
 
+    def _apply_date_validation(self, node):
+        column_name = node.children[0]
+        try:
+            pd.to_datetime(self._obj[column_name])
+            return node.data, True
+        except ParseError:
+            return "Parse error: {0} for {1}".format(node.data, node.children[0]), False
 
+    def _apply_is_in(self, node):
+        column_name = node.children[0]
+        allowed_values = []
+        unique_values = self._obj[column_name].unique()
+        for ct in node.children[1].children:
+            value = ct.value
+            allowed_values.insert(0, value.replace("'", ""))
+
+        return node.data, all(elem in allowed_values for elem in unique_values)
 
     def _apply_check(self, check):
         try:
@@ -53,16 +69,11 @@ class QualityChecker(object):
                 column_name = c.children[0]
                 return c.data, (self._obj[column_name] > 0).all()
             elif c.data == "is_in":
-                column_name = c.children[0]
-                allowed_values = []
-                unique_values = self._obj[column_name].unique()
-                for ct in c.children[1].children:
-                    value = ct.value
-                    allowed_values.insert(0, value.replace("'", ""))
-
-                return c.data, all(elem in allowed_values  for elem in unique_values)
+                return self._apply_is_in(c)
             elif c.data == "quantile":
                 return self._apply_quantile(c)
+            elif c.data == "is_date":
+                return self._apply_date_validation(c)
             else:
                 return c.data, False
         except KeyError:
