@@ -24,7 +24,6 @@ is_date: "column" NAME "is date"
 
 array  : "[" [ESCAPED_STRING ("," ESCAPED_STRING)*] "]"
 
-QUOTED_STRING: "'" NAME "'"
 QUANTILE: "0." _INT
 LT: "<"
 GT: ">"
