@@ -39,12 +39,8 @@ class QualityChecker(object):
 
     def _apply_is_in(self, node):
         column_name = node.children[0]
-        allowed_values = []
+        allowed_values = [ct.value.replace("\"", "") for ct in node.children[1].children]
         unique_values = self._obj[column_name].unique()
-        for ct in node.children[1].children:
-            value = ct.value
-            allowed_values.insert(0, value.replace("\"", ""))
-
         return node.data, all(elem in allowed_values for elem in unique_values)
 
     def _apply_check(self, check):
@@ -54,10 +50,7 @@ class QualityChecker(object):
                 quantity = int(c.children[0])
                 return c.data, self._obj.shape[0] == quantity
             elif c.data == "has_columns":
-                column_names = []
-                for ct in c.children[0].children:
-                    name = ct.value
-                    column_names.insert(0, name.replace("\"", ""))
+                column_names = [ct.value.replace("\"", "") for ct in c.children[0].children]
                 return c.data, len(set(self._obj.columns).intersection(column_names)) == len(column_names)
             elif c.data == "is_unique":
                 column_name = c.children[0]
