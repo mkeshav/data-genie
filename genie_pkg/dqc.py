@@ -34,7 +34,8 @@ class QualityChecker(object):
         try:
             pd.to_datetime(self._obj[column_name])
             return node.data, True
-        except ParseError:
+        except Exception as e:
+            print(e)
             return "Parse error: {0} for {1}".format(node.data, node.children[0]), False
 
     def _apply_is_in(self, node):
@@ -43,7 +44,7 @@ class QualityChecker(object):
         unique_values = self._obj[column_name].unique()
         for ct in node.children[1].children:
             value = ct.value
-            allowed_values.insert(0, value.replace("'", ""))
+            allowed_values.insert(0, value.replace("\"", ""))
 
         return node.data, all(elem in allowed_values for elem in unique_values)
 
@@ -57,7 +58,7 @@ class QualityChecker(object):
                 column_names = []
                 for ct in c.children[0].children:
                     name = ct.value
-                    column_names.insert(0, name.replace("'", ""))
+                    column_names.insert(0, name.replace("\"", ""))
                 return c.data, len(set(self._obj.columns).intersection(column_names)) == len(column_names)
             elif c.data == "is_unique":
                 column_name = c.children[0]

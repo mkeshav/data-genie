@@ -22,7 +22,7 @@ is_in: "column" NAME "in" array
 quantile: "column" NAME "quantile(" QUANTILE ")" COMPARATOR SIGNED_NUMBER
 is_date: "column" NAME "is date"
 
-array  : "[" [QUOTED_STRING ("," QUOTED_STRING)*] "]"
+array  : "[" [ESCAPED_STRING ("," ESCAPED_STRING)*] "]"
 
 QUOTED_STRING: "'" NAME "'"
 QUANTILE: "0." _INT
