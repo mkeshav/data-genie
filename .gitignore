@@ -16,3 +16,4 @@ docs/_templates
 pytest-report.xml
 coverage.xml
 .idea
+.hypothesis/

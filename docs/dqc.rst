@@ -9,7 +9,7 @@ This module supports writing data quality checks on pandas dataframe.
     check_spec = """
             apply checks {
                 size is 1
-                has columns ['name', 'dob']
+                has columns ["name", "dob"]
                 column dob has unique values
                 column product is not null
             }

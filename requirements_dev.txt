@@ -5,3 +5,4 @@ pytest-cov
 pipdeptree
 jsonschema
 sphinx
+hypothesis[pandas]

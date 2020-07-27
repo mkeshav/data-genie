@@ -9,6 +9,7 @@ checks: has_size
         | is_positive
         | is_in
         | quantile
+        | is_date
 
 code_block: "{" checks+ "}"
 
@@ -19,10 +20,11 @@ not_null: "column" NAME "is not null"
 is_positive: "column" NAME "has positive values"
 is_in: "column" NAME "in" array
 quantile: "column" NAME "quantile(" QUANTILE ")" COMPARATOR SIGNED_NUMBER
+is_date: "column" NAME "is date"
 
-array  : "[" [QUOTED_STRING ("," QUOTED_STRING)*] "]"
+array  : "[" [ESCAPED_STRING ("," ESCAPED_STRING)*] "]"
 
-QUOTED_STRING: "'" LETTER+ "'"
+QUOTED_STRING: "'" NAME "'"
 QUANTILE: "0." _INT
 LT: "<"
 GT: ">"
