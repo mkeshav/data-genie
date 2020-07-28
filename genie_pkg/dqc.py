@@ -53,7 +53,7 @@ class QualityChecker(object):
         column_name = node.children[0]
         c = node.children[1]
         rhs = node.children[2]
-        unique_lengths = self._obj[column_name].map(len).unique()
+        unique_lengths = self._obj[column_name].astype(str).map(len).unique()
         compare_fn = self._comparator_to_fn(c, rhs)
         return node.data, len(unique_lengths) == 1 and compare_fn(unique_lengths[0])
 

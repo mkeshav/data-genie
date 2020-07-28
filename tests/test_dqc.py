@@ -97,7 +97,7 @@ def generate_valid_checks(draw):
        lists(integers(min_value=10), min_size=10, max_size=10),
        just([80, 24, 74, 30, 72, 69, 27, 12, 84, 41]),
        just(['female', 'male', 'other', 'female', 'male', 'other', 'female', 'male', 'other', 'other']),
-        lists(integers(min_value=1000, max_value=9999).map(str), min_size=10, max_size=10),
+        lists(integers(min_value=1000, max_value=9999), min_size=10, max_size=10),
        )
 @settings(max_examples=101)
 def test_hypothesis(checks, dobs, ages, q_arr, genders, post_codes):
