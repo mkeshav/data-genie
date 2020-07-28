@@ -41,7 +41,7 @@ class QualityChecker(object):
             pd.to_datetime(self._obj[column_name])
             return node.data, True
         except Exception as _:
-            return "Parse error: {0} for {1}".format(node.data, node.children[0]), False
+            return "Date parse error: {0} for {1}".format(node.data, node.children[0]), False
 
     def _apply_has_one_of(self, node) -> Tuple[str, bool]:
         column_name = node.children[0]
@@ -92,11 +92,14 @@ class QualityChecker(object):
 
 
     def _run(self, pt: Tree) -> List[Tuple[str, bool]]:
-        for instruction in pt.children:
-            if instruction.data == "predicates":
-                return self._apply_predicates(instruction.children)
-            else:
-                raise GenieException('Unknown instruction: %s' % instruction.data)
+        if len(pt.children) != 1:
+            raise GenieException('How is this possible: %s' % pt.children)
+
+        instruction = pt.children[0]
+        if instruction.data == "predicates":
+            return self._apply_predicates(instruction.children)
+        else:
+            raise GenieException('Unknown instruction: %s' % instruction.data)
 
 
     @staticmethod
