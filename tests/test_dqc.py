@@ -67,6 +67,9 @@ def _build_column_has_unique_values(column: str):
 def _build_quantile(column: str, q:float, c:str, rhs:float):
     return f"quantile({column}, {q}) {c} {rhs}"
 
+def _build_value_length(column: str, rhs:int):
+    return f"value_length({column}) == {rhs}"
+
 @composite
 def generate_valid_checks(draw):
     row_count = draw(integers(min_value=20))
@@ -85,6 +88,7 @@ def generate_valid_checks(draw):
         _build_quantile("field_A", 0.5, "==", 55.0),
         _build_quantile("field_A", 0.1, ">", 9.0),
         _build_quantile("field_A", 0.5, "<", 56.0),
+        _build_value_length("post_code", 4),
     ]
 
 
@@ -92,9 +96,11 @@ def generate_valid_checks(draw):
        lists(dates(min_value=date(1970, 1, 1), max_value=date(2100, 1, 1)).map(str), min_size=10, max_size=10),
        lists(integers(min_value=10), min_size=10, max_size=10),
        just([80, 24, 74, 30, 72, 69, 27, 12, 84, 41]),
-       just(['female', 'male', 'other', 'female', 'male', 'other', 'female', 'male', 'other', 'other']))
+       just(['female', 'male', 'other', 'female', 'male', 'other', 'female', 'male', 'other', 'other']),
+        lists(integers(min_value=1000, max_value=9999).map(str), min_size=10, max_size=10),
+       )
 @settings(max_examples=101)
-def test_hypothesis(checks, dobs, ages, q_arr, genders):
+def test_hypothesis(checks, dobs, ages, q_arr, genders, post_codes):
     check_spec = """
                     apply checks {
                         %s
@@ -102,7 +108,10 @@ def test_hypothesis(checks, dobs, ages, q_arr, genders):
                     """ % ('\n'.join(checks),)
 
     df = pd.DataFrame({'age': ages,
-                        'dob': dobs, 'field_A': q_arr, 'gender': genders})
+                        'dob': dobs,
+                       'field_A': q_arr,
+                       'gender': genders,
+                       'post_code': post_codes})
 
     successes = list(filter(lambda x: x[1], df.dqc.run(check_spec)))
     #is_date, is_positive, quantile, has_one_of

@@ -30,3 +30,4 @@ This module supports writing data quality checks on pandas dataframe.
 - `is_positive(<column_name>)`
 - `quantile(<column_name>, <percentile>) (> | < | ==) <rhs>`
 - `is_date(<column_name>)`
+- `value_length(<column_name>) == <rhs>`

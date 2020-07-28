@@ -10,6 +10,7 @@ checks: row_count
         | has_one_of
         | quantile
         | is_date
+        | value_length
 
 code_block: "{" checks+ "}"
 
@@ -21,6 +22,7 @@ is_positive: "is_positive(" NAME ")"
 has_one_of: "has_one_of(" NAME "," array ")"
 quantile: "quantile(" NAME "," QUANTILE ")" COMPARATOR SIGNED_NUMBER
 is_date: "is_date(" NAME ")"
+value_length: "value_length(" NAME ")" EQ SIGNED_NUMBER
 
 array  : "[" [ESCAPED_STRING ("," ESCAPED_STRING)*] "]"
 

@@ -49,6 +49,14 @@ class QualityChecker(object):
         unique_values = self._obj[column_name].unique()
         return node.data, all(elem in allowed_values for elem in unique_values)
 
+    def _apply_value_length(self, node) -> Tuple[str, bool]:
+        column_name = node.children[0]
+        c = node.children[1]
+        rhs = node.children[2]
+        unique_lengths = self._obj[column_name].map(len).unique()
+        compare_fn = self._comparator_to_fn(c, rhs)
+        return node.data, len(unique_lengths) == 1 and compare_fn(unique_lengths[0])
+
     def _apply_check(self, check) -> Tuple[str, bool]:
         try:
             c = check[0]
@@ -74,6 +82,8 @@ class QualityChecker(object):
                 return self._apply_quantile(c)
             elif c.data == "is_date":
                 return self._apply_date_validation(c)
+            elif c.data == "value_length":
+                return self._apply_value_length(c)
             else:
                 raise GenieException(f"{c.data} seems to be not implemented in the DSL")
         except KeyError:
