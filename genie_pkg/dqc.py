@@ -2,7 +2,7 @@ import pandas as pd
 import pandas_flavor as pf
 from lark import Lark, Tree
 from pkg_resources import resource_string
-
+from typing import Tuple, List
 @pf.register_dataframe_accessor('dqc')
 class QualityChecker(object):
     def __init__(self, pandas_obj):
@@ -14,22 +14,26 @@ class QualityChecker(object):
         if obj.dropna(axis='columns').empty:
             raise AttributeError("DataFrame is empty!!! What quality do you expect from emptiness")
 
-    def _apply_quantile(self, node):
+    @staticmethod
+    def _comparator_to_fn(comparator: str, rhs):
+        if comparator == ">":
+            return lambda lhs: lhs > rhs
+        if comparator == "==":
+            return lambda lhs: lhs == rhs
+        if comparator == "<":
+            return lambda lhs: lhs < rhs
+        else:
+            return lambda _: False
+
+    def _apply_quantile(self, node) -> Tuple[str, bool]:
         column_name = node.children[0]
         q = float(node.children[1])
         c = node.children[2]
         rhs = float(node.children[3])
         lhs = self._obj[column_name].quantile(q)
-        if c == ">":
-            return node.data, lhs > rhs
-        elif c == "==":
-            return node.data, lhs == rhs
-        elif c == "<":
-            return node.data, lhs < rhs
-        else:
-            return node.data, False
+        return node.data, self._comparator_to_fn(c, rhs)(lhs)
 
-    def _apply_date_validation(self, node):
+    def _apply_date_validation(self, node) -> Tuple[str, bool]:
         column_name = node.children[0]
         try:
             pd.to_datetime(self._obj[column_name])
@@ -37,13 +41,13 @@ class QualityChecker(object):
         except Exception as _:
             return "Parse error: {0} for {1}".format(node.data, node.children[0]), False
 
-    def _apply_is_in(self, node):
+    def _apply_is_in(self, node) -> Tuple[str, bool]:
         column_name = node.children[0]
         allowed_values = [ct.value.replace("\"", "") for ct in node.children[1].children]
         unique_values = self._obj[column_name].unique()
         return node.data, all(elem in allowed_values for elem in unique_values)
 
-    def _apply_check(self, check):
+    def _apply_check(self, check) -> Tuple[str, bool]:
         try:
             c = check[0]
             if c.data == "has_size":
@@ -72,7 +76,7 @@ class QualityChecker(object):
         except KeyError:
             return "Key error: {0} for {1}".format(c.data, c.children[0]), False
 
-    def _apply_predicates(self, predicates):
+    def _apply_predicates(self, predicates) -> List[Tuple[str, bool]]:
         results = []
         for predicate in predicates:
             if predicate.data == "code_block":
@@ -84,7 +88,7 @@ class QualityChecker(object):
         return results
 
 
-    def _run(self, pt: Tree):
+    def _run(self, pt: Tree) -> List[Tuple[str, bool]]:
         for instruction in pt.children:
             if instruction.data == "predicates":
                 return self._apply_predicates(instruction.children)
