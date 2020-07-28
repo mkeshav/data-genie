@@ -87,7 +87,7 @@ class QualityChecker(object):
                     v = self._apply_check(check.children)
                     results.insert(0, v)
             else:
-                raise SyntaxError('Unknown instruction: %s' % predicates.data)
+                raise GenieException('Unknown instruction: %s' % predicates.data)
         return results
 
 
@@ -96,7 +96,7 @@ class QualityChecker(object):
             if instruction.data == "predicates":
                 return self._apply_predicates(instruction.children)
             else:
-                raise SyntaxError('Unknown instruction: %s' % instruction.data)
+                raise GenieException('Unknown instruction: %s' % instruction.data)
 
 
     @staticmethod
