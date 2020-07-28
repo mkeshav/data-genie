@@ -14,13 +14,13 @@ checks: has_size
 code_block: "{" checks+ "}"
 
 has_size: "size is " SIGNED_NUMBER
-has_columns: "has columns" array
-is_unique: "column" NAME "has unique values"
-not_null: "column" NAME "is not null"
-is_positive: "column" NAME "has positive values"
-is_in: "column" NAME "in" array
-quantile: "column" NAME "quantile(" QUANTILE ")" COMPARATOR SIGNED_NUMBER
-is_date: "column" NAME "is date"
+has_columns: "has_columns(" array ")"
+is_unique: "is_unique(" NAME ")"
+not_null: "is_not_null(" NAME ")"
+is_positive: "is_positive(" NAME ")"
+is_in: "has_one_of(" NAME "," array ")"
+quantile: "quantile(" NAME "," QUANTILE ")" COMPARATOR SIGNED_NUMBER
+is_date: "is_date(" NAME ")"
 
 array  : "[" [ESCAPED_STRING ("," ESCAPED_STRING)*] "]"
 

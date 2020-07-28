@@ -6,8 +6,9 @@
 # Data Genie
 
 Genie that can satisfy your data wish.
-Supports generation of fixedwidth, csv and json content
-Allows data quality checks to be firstclass
+
+- Supports generation of fixedwidth, csv and json content
+- Allows data quality checks to be first class
 
 # Install
 python3 -m pip install data-genie

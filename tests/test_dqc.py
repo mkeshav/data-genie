@@ -36,7 +36,7 @@ def test_date_validation_error_returns_false():
     df = pd.DataFrame([{'dob': 'foo'}])
     check_spec = """
                 apply checks {
-                    column dob is date
+                    is_date(dob)
                 }
                 """
 
@@ -47,25 +47,25 @@ def _build_size_check(size):
     return "size is {}".format(size)
 
 def _build_has_columns(columns: List[str]):
-    return "has columns {}".format(json.dumps(columns))
+    return "has_columns({})".format(json.dumps(columns))
 
 def _build_column_is_date(column: str):
-    return "column {} is date".format(column)
+    return "is_date({})".format(column)
 
 def _build_column_is_not_null(column: str):
-    return "column {} is not null".format(column)
+    return "is_not_null({})".format(column)
 
 def _build_column_is_in(column: str, values: List[str]):
-    return "column {} in {}".format(column, json.dumps(values))
+    return "has_one_of({}, {})".format(column, json.dumps(values))
 
-def _build_column_has_positive_values():
-    return "column age has positive values"
+def _build_column_has_positive_values(column: str):
+    return "is_positive({})".format(column)
 
 def _build_column_has_unique_values(column: str):
-    return "column {} has unique values".format(column)
+    return "is_unique({})".format(column)
 
-def _build_quantile(column: str, q:float, c:str, expected:float):
-    return f"column {column} quantile({q}) {c} {expected}"
+def _build_quantile(column: str, q:float, c:str, rhs:float):
+    return f"quantile({column}, {q}) {c} {rhs}"
 
 @composite
 def generate_valid_checks(draw):
@@ -79,7 +79,7 @@ def generate_valid_checks(draw):
         _build_column_is_date("dob"),
         _build_column_is_not_null(column),
         _build_column_is_in("gender", genders),
-        _build_column_has_positive_values(),
+        _build_column_has_positive_values("age"),
         _build_column_has_unique_values("dob"),
         _build_quantile("field_A", 0.5, "==", 55.0),
         _build_quantile("field_A", 0.1, ">", 9.0),

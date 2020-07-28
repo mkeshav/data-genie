@@ -9,9 +9,7 @@ This module supports writing data quality checks on pandas dataframe.
     check_spec = """
             apply checks {
                 size is 1
-                has columns ["name", "dob"]
-                column dob has unique values
-                column product is not null
+                has_columns(["name", "dob"])
             }
             """
     df = pd.DataFrame([{'name': 'foo',
@@ -24,9 +22,10 @@ This module supports writing data quality checks on pandas dataframe.
 **Available checks**
 
 - `size is <number>`
-- `has columns ['c1', 'c2'...]`
-- `column <column_name> has unique values`
-- `column <column_name> is not null`
-- `column <column_name> in ['c1', 'c2'...]`
-- `column <column_name> has positive values`
-- `column <column_name> quantile(<percentile>) (> | < | ==) <rhs>`
+- `has_columns(['c1', 'c2'...])`
+- `is_unique(<column_name>)`
+- `is_not_null(<column_name>)`
+- `has_one_of(<column_name>, ['c1', 'c2'...])`
+- `is_positive(<column_name>)`
+- `quantile(<column_name>, <percentile>) (> | < | ==) <rhs>`
+- `is_date(<column_name>)`
