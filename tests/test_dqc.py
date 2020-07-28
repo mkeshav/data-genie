@@ -3,7 +3,7 @@ import pandas as pd
 
 from genie_pkg.dqc import QualityChecker
 from hypothesis import given, settings
-from hypothesis.strategies import composite, integers, lists, text, dates, just
+from hypothesis.strategies import composite, integers, lists, text, dates, just, one_of
 import string
 from typing import List
 import json
@@ -43,8 +43,8 @@ def test_date_validation_error_returns_false():
     failures = list(filter(lambda x: not x[1], df.dqc.run(check_spec)))
     assert len(failures) == 1
 
-def _build_size_check(size):
-    return "size is {}".format(size)
+def _build_row_count(c:str, rhs: int):
+    return f"row_count {c} {rhs}"
 
 def _build_has_columns(columns: List[str]):
     return "has_columns({})".format(json.dumps(columns))
@@ -69,12 +69,13 @@ def _build_quantile(column: str, q:float, c:str, rhs:float):
 
 @composite
 def generate_valid_checks(draw):
-    size = draw(integers(min_value=20))
+    row_count = draw(integers(min_value=20))
     columns = draw(lists(text(alphabet=string.ascii_letters+string.digits+'-_', min_size=1), min_size=1))
     column = draw(text(alphabet=string.ascii_letters, min_size=1))
+    comparator = draw(one_of(just(">"), just("=="), just("<")))
     genders = ['female', 'male', 'other']
     return [
-        _build_size_check(size),
+        _build_row_count(comparator, row_count),
         _build_has_columns(columns),
         _build_column_is_date("dob"),
         _build_column_is_not_null(column),

@@ -2,7 +2,7 @@ start: instruction+
 
 instruction: "apply checks" code_block -> predicates
 
-checks: has_size
+checks: row_count
         | has_columns
         | is_unique
         | not_null
@@ -13,7 +13,7 @@ checks: has_size
 
 code_block: "{" checks+ "}"
 
-has_size: "size is " SIGNED_NUMBER
+row_count: "row_count" COMPARATOR SIGNED_NUMBER
 has_columns: "has_columns(" array ")"
 is_unique: "is_unique(" NAME ")"
 not_null: "is_not_null(" NAME ")"

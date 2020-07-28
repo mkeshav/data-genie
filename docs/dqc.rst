@@ -8,7 +8,7 @@ This module supports writing data quality checks on pandas dataframe.
    from genie_pkg.dqc import QualityChecker
     check_spec = """
             apply checks {
-                size is 1
+                row_count > 10
                 has_columns(["name", "dob"])
             }
             """
@@ -22,6 +22,7 @@ This module supports writing data quality checks on pandas dataframe.
 **Available checks**
 
 - `size is <number>`
+- `row_count (> | < | ==) <rhs>`
 - `has_columns(['c1', 'c2'...])`
 - `is_unique(<column_name>)`
 - `is_not_null(<column_name>)`

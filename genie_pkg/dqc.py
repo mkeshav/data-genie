@@ -52,9 +52,10 @@ class QualityChecker(object):
     def _apply_check(self, check) -> Tuple[str, bool]:
         try:
             c = check[0]
-            if c.data == "has_size":
-                quantity = int(c.children[0])
-                return c.data, self._obj.shape[0] == quantity
+            if c.data == "row_count":
+                comparator = c.children[0]
+                quantity = int(c.children[1])
+                return c.data, self._comparator_to_fn(comparator, quantity)(self._obj.shape[0])
             elif c.data == "has_columns":
                 column_names = [ct.value.replace("\"", "") for ct in c.children[0].children]
                 return c.data, len(set(self._obj.columns).intersection(column_names)) == len(column_names)
