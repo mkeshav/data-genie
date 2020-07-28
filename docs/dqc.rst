@@ -21,7 +21,6 @@ This module supports writing data quality checks on pandas dataframe.
 
 **Available checks**
 
-- `size is <number>`
 - `row_count (> | < | ==) <rhs>`
 - `has_columns(["c1", "c2"...])`
 - `is_unique(<column_name>)`
