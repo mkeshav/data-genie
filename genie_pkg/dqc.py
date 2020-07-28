@@ -3,6 +3,8 @@ import pandas_flavor as pf
 from lark import Lark, Tree
 from pkg_resources import resource_string
 from typing import Tuple, List
+from genie_pkg import GenieException
+
 @pf.register_dataframe_accessor('dqc')
 class QualityChecker(object):
     def __init__(self, pandas_obj):
@@ -41,7 +43,7 @@ class QualityChecker(object):
         except Exception as _:
             return "Parse error: {0} for {1}".format(node.data, node.children[0]), False
 
-    def _apply_is_in(self, node) -> Tuple[str, bool]:
+    def _apply_has_one_of(self, node) -> Tuple[str, bool]:
         column_name = node.children[0]
         allowed_values = [ct.value.replace("\"", "") for ct in node.children[1].children]
         unique_values = self._obj[column_name].unique()
@@ -65,14 +67,14 @@ class QualityChecker(object):
             elif c.data == "is_positive":
                 column_name = c.children[0]
                 return c.data, (self._obj[column_name] > 0).all()
-            elif c.data == "is_in":
-                return self._apply_is_in(c)
+            elif c.data == "has_one_of":
+                return self._apply_has_one_of(c)
             elif c.data == "quantile":
                 return self._apply_quantile(c)
             elif c.data == "is_date":
                 return self._apply_date_validation(c)
             else:
-                return c.data, False
+                raise GenieException(f"{c.data} seems to be not implemented in the DSL")
         except KeyError:
             return "Key error: {0} for {1}".format(c.data, c.children[0]), False
 
