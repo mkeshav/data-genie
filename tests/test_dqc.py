@@ -55,7 +55,7 @@ def _build_column_is_date(column: str):
 def _build_column_is_not_null(column: str):
     return "is_not_null({})".format(column)
 
-def _build_column_is_in(column: str, values: List[str]):
+def _build_column_has_one_of(column: str, values: List[str]):
     return "has_one_of({}, {})".format(column, json.dumps(values))
 
 def _build_column_has_positive_values(column: str):
@@ -78,7 +78,7 @@ def generate_valid_checks(draw):
         _build_has_columns(columns),
         _build_column_is_date("dob"),
         _build_column_is_not_null(column),
-        _build_column_is_in("gender", genders),
+        _build_column_has_one_of("gender", genders),
         _build_column_has_positive_values("age"),
         _build_column_has_unique_values("dob"),
         _build_quantile("field_A", 0.5, "==", 55.0),
@@ -104,5 +104,5 @@ def test_hypothesis(checks, dobs, ages, q_arr, genders):
                         'dob': dobs, 'field_A': q_arr, 'gender': genders})
 
     successes = list(filter(lambda x: x[1], df.dqc.run(check_spec)))
-    #just the is date
+    #is_date, is_positive, quantile, has_one_of
     assert len(successes) > 0

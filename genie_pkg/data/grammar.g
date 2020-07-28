@@ -7,7 +7,7 @@ checks: has_size
         | is_unique
         | not_null
         | is_positive
-        | is_in
+        | has_one_of
         | quantile
         | is_date
 
@@ -18,7 +18,7 @@ has_columns: "has_columns(" array ")"
 is_unique: "is_unique(" NAME ")"
 not_null: "is_not_null(" NAME ")"
 is_positive: "is_positive(" NAME ")"
-is_in: "has_one_of(" NAME "," array ")"
+has_one_of: "has_one_of(" NAME "," array ")"
 quantile: "quantile(" NAME "," QUANTILE ")" COMPARATOR SIGNED_NUMBER
 is_date: "is_date(" NAME ")"
 
