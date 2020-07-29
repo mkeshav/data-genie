@@ -22,7 +22,7 @@ is_positive: "is_positive(" NAME ")"
 has_one_of: "has_one_of(" NAME "," array ")"
 quantile: "quantile(" NAME "," QUANTILE ")" COMPARATOR SIGNED_NUMBER
 is_date: "is_date(" NAME ")"
-value_length: "value_length(" NAME ")" EQ SIGNED_NUMBER
+value_length: "value_length(" NAME ","? "ignore_nulls="? BOOL? ")" EQ SIGNED_NUMBER
 
 array  : "[" [ESCAPED_STRING ("," ESCAPED_STRING)*] "]"
 
@@ -31,6 +31,7 @@ LT: "<"
 GT: ">"
 EQ: "=="
 COMPARATOR: (LT | GT | EQ )
+BOOL: ("False" | "True")
 
 WHITESPACE: (" " | "\\n")+
 %ignore WHITESPACE

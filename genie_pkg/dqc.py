@@ -4,6 +4,8 @@ from lark import Lark, Tree
 from pkg_resources import resource_string
 from typing import Tuple, List
 from genie_pkg import GenieException
+import numpy as np
+
 
 @pf.register_dataframe_accessor('dqc')
 class QualityChecker(object):
@@ -13,7 +15,7 @@ class QualityChecker(object):
 
     @staticmethod
     def _validate(obj):
-        if obj.dropna(axis='columns').empty:
+        if obj.dropna(axis='columns', how='all').empty:
             raise AttributeError("DataFrame is empty!!! What quality do you expect from emptiness")
 
     @staticmethod
@@ -51,10 +53,22 @@ class QualityChecker(object):
 
     def _apply_value_length(self, node) -> Tuple[str, bool]:
         column_name = node.children[0]
-        c = node.children[1]
-        rhs = node.children[2]
-        unique_lengths = self._obj[column_name].astype(str).map(len).unique()
-        compare_fn = self._comparator_to_fn(c, rhs)
+        if len(node.children) == 3:
+            ignore_nulls = 'False'
+            comparator = node.children[1]
+            rhs = int(node.children[2])
+        else:
+            ignore_nulls = node.children[1]
+            comparator = node.children[2]
+            rhs = int(node.children[3])
+
+        print(ignore_nulls)
+        if ignore_nulls == 'False':
+            unique_lengths = self._obj[column_name].astype(str).map(len).unique()
+        else:
+            not_na_df = self._obj.replace(r'^\s*$', np.NaN, regex=True)[column_name].dropna().reset_index()
+            unique_lengths = not_na_df[column_name].astype(str).map(len).unique()
+        compare_fn = self._comparator_to_fn(comparator, rhs)
         return node.data, len(unique_lengths) == 1 and compare_fn(unique_lengths[0])
 
     def _apply_check(self, check) -> Tuple[str, bool]:
@@ -100,7 +114,6 @@ class QualityChecker(object):
                 raise GenieException('Unknown instruction: %s' % predicates.data)
         return results
 
-
     def _run(self, pt: Tree) -> List[Tuple[str, bool]]:
         if len(pt.children) != 1:
             raise GenieException('How is this possible: %s' % pt.children)
@@ -111,12 +124,10 @@ class QualityChecker(object):
         else:
             raise GenieException('Unknown instruction: %s' % instruction.data)
 
-
     @staticmethod
     def _parse(check_spec) -> Tree:
         p = Lark(resource_string(__name__, 'data/grammar.g').decode('utf-8'))
         return p.parse(check_spec)
-
 
     def run(self, check_spec):
         ast = self._parse(check_spec)

@@ -29,4 +29,4 @@ This module supports writing data quality checks on pandas dataframe.
 - `is_positive(<column_name>)`
 - `quantile(<column_name>, <percentile>) (> | < | ==) <rhs>`
 - `is_date(<column_name>)`
-- `value_length(<column_name>) == <rhs>` (handy for data like post_code or ipv4)
+- `value_length(<column_name>, ignore_nulls=False|True default is False) == <rhs>` (handy for data like post_code or ipv4)
