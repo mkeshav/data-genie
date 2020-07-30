@@ -11,6 +11,7 @@ checks: row_count
         | quantile
         | is_date
         | value_length
+        | percent_value_length
 
 code_block: "{" checks+ "}"
 
@@ -23,6 +24,7 @@ has_one_of: "has_one_of(" NAME "," array ")"
 quantile: "quantile(" NAME "," QUANTILE ")" COMPARATOR SIGNED_NUMBER
 is_date: "is_date(" NAME ")"
 value_length: "value_length(" NAME ","? "ignore_nulls="? BOOL? ")" EQ SIGNED_NUMBER
+percent_value_length: "percent_of_values_have_length(" NAME  "," "pass_percent_threshold=" SIGNED_NUMBER ","? "ignore_nulls="? BOOL? ")" EQ SIGNED_NUMBER
 
 array  : "[" [ESCAPED_STRING ("," ESCAPED_STRING)*] "]"
 

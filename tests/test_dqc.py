@@ -86,6 +86,12 @@ def _build_value_length(column: str, rhs: int, ignore_nulls=None):
         return f"value_length({column}) == {rhs}"
 
 
+def _build_percent_value_length(column: str, pass_percent_threshold: int, rhs: int, ignore_nulls=None):
+    if ignore_nulls is not None:
+        return f"percent_of_values_have_length({column}, pass_percent_threshold={pass_percent_threshold}, ignore_nulls={ignore_nulls}) == {rhs}"
+    else:
+        return f"percent_of_values_have_length({column}, pass_percent_threshold={pass_percent_threshold}) == {rhs}"
+
 @composite
 def generate_valid_checks(draw):
     row_count = draw(integers(min_value=20))
@@ -107,6 +113,7 @@ def generate_valid_checks(draw):
         _build_quantile("field_A", 0.5, "<", 56.0),
         _build_value_length("post_code", 4),
         _build_value_length("post_code", 4, ignore_nulls=bool),
+        _build_percent_value_length("post_code", 50, 4, ignore_nulls=bool),
     ]
 
 
@@ -141,9 +148,10 @@ def test_value_length():
                 apply checks {
                     value_length(post_code, ignore_nulls=True) == 4
                     value_length(post_code, ignore_nulls=False) == 4
+                    percent_of_values_have_length(post_code, pass_percent_threshold=50) == 4
                 }
                 """
     successes = list(filter(lambda x: x[1], df.dqc.run(check_spec)))
-    assert len(successes) == 1
+    assert len(successes) == 2
     failures = list(filter(lambda x: not x[1], df.dqc.run(check_spec)))
     assert len(failures) == 1

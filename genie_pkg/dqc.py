@@ -62,7 +62,6 @@ class QualityChecker(object):
             comparator = node.children[2]
             rhs = int(node.children[3])
 
-        print(ignore_nulls)
         if ignore_nulls == 'False':
             unique_lengths = self._obj[column_name].astype(str).map(len).unique()
         else:
@@ -70,6 +69,26 @@ class QualityChecker(object):
             unique_lengths = not_na_df[column_name].astype(str).map(len).unique()
         compare_fn = self._comparator_to_fn(comparator, rhs)
         return node.data, len(unique_lengths) == 1 and compare_fn(unique_lengths[0])
+
+    def _apply_percent_value_length(self, node) -> Tuple[str, bool]:
+        column_name = node.children[0]
+        if len(node.children) == 4:
+            ignore_nulls = 'False'
+            percent = int(node.children[1])
+            rhs = int(node.children[3])
+        else:
+            percent = int(node.children[1])
+            ignore_nulls = node.children[2]
+            rhs = int(node.children[4])
+
+        self._obj['length'] = self._obj[column_name].fillna('').astype(str).map(len)
+        if ignore_nulls == 'True':
+            not_na_df = self._obj.replace(r'^\s*$', np.NaN, regex=True).dropna()
+        else:
+            not_na_df = self._obj
+
+        passing = not_na_df[not_na_df['length'] == rhs]
+        return node.data, (passing.shape[0]/self._obj.shape[0])*100 >= percent
 
     def _apply_check(self, check) -> Tuple[str, bool]:
         try:
@@ -98,6 +117,8 @@ class QualityChecker(object):
                 return self._apply_date_validation(c)
             elif c.data == "value_length":
                 return self._apply_value_length(c)
+            elif c.data == "percent_value_length":
+                return self._apply_percent_value_length(c)
             else:
                 raise GenieException(f"{c.data} seems to be not implemented in the DSL")
         except KeyError:
