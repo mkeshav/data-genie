@@ -92,6 +92,7 @@ def _build_percent_value_length(column: str, pass_percent_threshold: int, rhs: i
     else:
         return f"percent_of_values_have_length({column}, pass_percent_threshold={pass_percent_threshold}) == {rhs}"
 
+
 @composite
 def generate_valid_checks(draw):
     row_count = draw(integers(min_value=20))

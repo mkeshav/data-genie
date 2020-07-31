@@ -13,6 +13,7 @@ from pkg_resources import resource_string
 
 from genie_pkg import GenieException
 
+
 def generate_email_id(width, domain='dummy.com'):
     actual_length = width - len(domain) - 1  # 1 for @
     if actual_length < 1:
@@ -81,8 +82,10 @@ def random_bool():
 def now_epoch():
     return _current_milli_time()
 
+
 def utc_now_epoch():
     return int(round(datetime.utcnow().timestamp() * 1000))
+
 
 def guid():
     return str(uuid.uuid4())
@@ -135,6 +138,7 @@ def _credit_card_digits(prefixes, length):
 
     return prefix + digits
 
+
 def check_digit_luhn_mod_10(digits):
     '''
         https://en.wikipedia.org/wiki/Luhn_algorithm
@@ -155,15 +159,18 @@ def check_digit_luhn_mod_10(digits):
     sum_of_digs = sum(calibrated_digits)
     return (sum_of_digs * 9) % 10
 
-def _random_cc(prefixes, type, length):
+
+def _random_cc(prefixes, length):
     digs = _credit_card_digits(prefixes, length)
     cd = check_digit_luhn_mod_10(digs)
     return ''.join(digs + [str(cd)])
 
+
 def random_mastercard_number():
     mastercard_prefixes = [
         ['5', '1'], ['5', '2'], ['5', '3'], ['5', '4'], ['5', '5']]
-    return _random_cc(mastercard_prefixes, type='mastercard', length=16)
+    return _random_cc(mastercard_prefixes, length=16)
+
 
 def random_visacard_number(length=16):
     visa_prefixes = [
@@ -177,13 +184,15 @@ def random_visacard_number(length=16):
         ['4', '7', '1', '6'],
         ['4']]
     
-    return _random_cc(visa_prefixes, type='visa', length=length)
+    return _random_cc(visa_prefixes, length=length)
+
 
 def one_of(choices):
     if type(choices) is not list:
         raise GenieException("Provided value should be a list of choices")
         
     return choice(choices)
+
 
 def random_wonderland_text(number_of_sentences=5) -> str:
     text = resource_string(__name__, 'data/wonderland.txt')
