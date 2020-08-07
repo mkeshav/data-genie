@@ -19,6 +19,10 @@ This module supports writing data quality checks on pandas dataframe.
     failures = list(filter(lambda x: not x[1], check_results))
     assert len(failures) == 0
 
+    # To check if your spec is valid or not. If it is bad, will return (error, False) else (None, True)
+    QualityChecker.validate_spec(check_spec)
+
+
 **Available checks**
 
 - `row_count (> | < | ==) <rhs>`

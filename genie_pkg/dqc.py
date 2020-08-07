@@ -146,12 +146,20 @@ class QualityChecker(object):
             raise GenieException('Unknown instruction: %s' % instruction.data)
 
     @staticmethod
-    def _parse(check_spec) -> Tree:
+    def _parse_spec(check_spec) -> Tree:
         p = Lark(resource_string(__name__, 'data/grammar.g').decode('utf-8'))
         return p.parse(check_spec)
 
+    @staticmethod
+    def validate_spec(check_spec) -> str:
+        try:
+            QualityChecker._parse_spec(check_spec)
+            return "Spec looks spotless", True
+        except Exception as e:
+            return str(e), False
+
     def run(self, check_spec):
-        ast = self._parse(check_spec)
+        ast = self._parse_spec(check_spec)
         return self._run(ast)
 
 

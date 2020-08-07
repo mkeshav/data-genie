@@ -159,3 +159,15 @@ def test_value_length(postcodes):
     assert len(successes) > 0
     failures = list(filter(lambda x: not x[1], df.dqc.run(check_spec)))
     assert len(failures) >= 0
+
+
+def test_validate_spec_returns_false():
+    check_spec = """
+                apply checks {
+                }
+                """
+    err, res = QualityChecker.validate_spec(check_spec)
+    assert err is not None
+    assert res == False
+
+
