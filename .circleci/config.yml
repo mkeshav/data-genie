@@ -45,6 +45,22 @@ jobs:
           command: |
             docker-compose run --rm scan ./scan   
 
+  smoke_test:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Install Docker Compose
+          command: |
+            curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+
+      - run:
+          name: Smoke Test Package
+          command: |
+            docker-compose run --rm smoke_test ./smoke_test.py
+
   package_pypi_upload:
     machine: true
     steps:
@@ -80,6 +96,13 @@ workflows:
       - package_pypi_upload:
           requires:
             - hold
+          filters:
+            branches:
+              only:
+                - master
+      - smoke_test:
+          requires:
+            - package_pypi_upload
           filters:
             branches:
               only:

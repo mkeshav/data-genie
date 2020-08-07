@@ -20,3 +20,11 @@ services:
       - SONAR_CLOUD_TOKEN
       - CIRCLE_BRANCH
       - CIRCLE_PULL_REQUEST
+  smoke_test:
+    build:
+      context: .
+      target: smoketest
+    volumes:
+      - ./smoke_test.py:/app/smoke_test.py
+    command: >
+      bash -c "/app/smoke_test.py"

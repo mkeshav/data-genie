@@ -1,4 +1,4 @@
-FROM python:3.8-slim as dev
+FROM python:3.8-slim as base
 
 LABEL Author="Keshav Murthy"
 
@@ -6,9 +6,14 @@ ENV SONAR_SCANNER_VERSION 3.3.0.1492
 RUN python3 -m pip install --upgrade pip setuptools wheel
 RUN python3 -m pip install --user --upgrade twine
 
+FROM base as smoketest
+RUN python3 -m pip install data-genie
+
 RUN mkdir -p /app
 WORKDIR /app
+COPY smoke_test.py /app/
 
+FROM base as dev
 COPY requirements* /app/
 
 RUN python3 -m pip install -r requirements.txt
