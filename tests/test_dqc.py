@@ -171,6 +171,17 @@ def test_validate_spec_returns_false():
     assert not res
 
 
+def test_validate_spec_returns_true():
+    check_spec = """
+                apply checks {
+                    row_count > 0
+                }
+                """
+    err, res = QualityChecker.validate_spec(check_spec)
+    assert err is None
+    assert res
+
+
 @given(
     sets(text(alphabet=string.ascii_letters + '-_', min_size=1), min_size=5, max_size=5),
     lists(integers(min_value=1000, max_value=9999), min_size=5, max_size=5)

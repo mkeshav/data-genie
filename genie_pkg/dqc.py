@@ -190,7 +190,7 @@ class QualityChecker(object):
     def validate_spec(check_spec) -> str:
         try:
             QualityChecker._parse_spec(check_spec)
-            return "Spec looks spotless", True
+            return None, True
         except Exception as e:
             return str(e), False
 
