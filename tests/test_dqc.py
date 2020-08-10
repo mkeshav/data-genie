@@ -64,7 +64,7 @@ def _build_column_is_not_null(column: str):
 
 
 def _build_column_has_one_of(column: str, values: List[str], ignore_case=False):
-    return "has_one_of({}, {}, {})".format(column, json.dumps(values), ignore_case)
+    return "has_one_of({}, {}, ignore_case={})".format(column, json.dumps(values), ignore_case)
 
 
 def _build_column_has_positive_values(column: str):
@@ -225,7 +225,7 @@ def test_has_one_of():
 
     df = pd.DataFrame(data)
     check_spec_case_sensitive = check_spec_template % (_build_column_has_one_of('gender', gender),)
-    result_case_sensitive = df.dqc.run(check_spec_case_sensitive, ignore_column_case=True)
+    result_case_sensitive = df.dqc.run(check_spec_case_sensitive)
     failures = list(filter(lambda x: not x[1], result_case_sensitive))
     assert len(failures) == 1
     successes = list(filter(lambda x: x[1], result_case_sensitive))

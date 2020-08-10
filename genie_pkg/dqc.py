@@ -53,6 +53,9 @@ class QualityChecker(object):
 
     def _apply_has_one_of(self, node) -> Tuple[str, bool]:
         column_name = self._treat_column_name(node.children[0])
+        allowed_values = [ct.value.replace("\"", "") for ct in node.children[1].children]
+        unique_values = self._obj[column_name].unique()
+
         if len(node.children) == 2:
             ignore_case = False
         else:
@@ -61,11 +64,8 @@ class QualityChecker(object):
             else:
                 ignore_case = False
         if ignore_case:
-            allowed_values = [ct.value.replace("\"", "").lower() for ct in node.children[1].children]
-            unique_values = [v.lower() for v in self._obj[column_name].unique()]
-        else:
-            allowed_values = [ct.value.replace("\"", "") for ct in node.children[1].children]
-            unique_values = self._obj[column_name].unique()
+            allowed_values = [v.lower() for v in allowed_values]
+            unique_values = [v.lower() for v in unique_values]
 
         return node.data, all(elem in allowed_values for elem in unique_values)
 
