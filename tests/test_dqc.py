@@ -51,11 +51,8 @@ def _build_row_count(c: str, rhs: int):
     return f"row_count {c} {rhs}"
 
 
-def _build_has_columns(columns: List[str], ignore_case=None):
-    if not ignore_case:
-        return "has_columns({})".format(json.dumps(columns))
-    else:
-        return "has_columns({}, ignore_case={})".format(json.dumps(columns), ignore_case)
+def _build_has_columns(columns: List[str], ignore_case=False):
+    return "has_columns({}, ignore_case={})".format(json.dumps(columns), ignore_case)
 
 
 def _build_column_is_date(column: str):
@@ -66,8 +63,8 @@ def _build_column_is_not_null(column: str):
     return "is_not_null({})".format(column)
 
 
-def _build_column_has_one_of(column: str, values: List[str]):
-    return "has_one_of({}, {})".format(column, json.dumps(values))
+def _build_column_has_one_of(column: str, values: List[str], ignore_case=False):
+    return "has_one_of({}, {}, {})".format(column, json.dumps(values), ignore_case)
 
 
 def _build_column_has_positive_values(column: str):
@@ -199,6 +196,30 @@ def test_has_columns(columns, values):
     successes = list(filter(lambda x: x[1], result_case_sensitive))
     assert len(successes) == 0
     check_spec_ignore_case = check_spec_template % (_build_has_columns(list(columns), ignore_case=True),)
+    result_ignore_case = df.dqc.run(check_spec_ignore_case)
+    failures = list(filter(lambda x: not x[1], result_ignore_case))
+    assert len(failures) == 0
+    successes = list(filter(lambda x: x[1], result_ignore_case))
+    assert len(successes) == 1
+
+
+def test_has_one_of():
+    gender = ['female', 'male', 'other']
+    data = {'gender': ['Male', 'Female']}
+    df = pd.DataFrame(data)
+    check_spec_template = """
+                    apply checks {
+                        %s
+                    }
+                    """
+
+    check_spec_case_sensitive = check_spec_template % (_build_column_has_one_of('gender', gender),)
+    result_case_sensitive = df.dqc.run(check_spec_case_sensitive)
+    failures = list(filter(lambda x: not x[1], result_case_sensitive))
+    assert len(failures) == 1
+    successes = list(filter(lambda x: x[1], result_case_sensitive))
+    assert len(successes) == 0
+    check_spec_ignore_case = check_spec_template % (_build_column_has_one_of('gender', gender, ignore_case=True),)
     result_ignore_case = df.dqc.run(check_spec_ignore_case)
     failures = list(filter(lambda x: not x[1], result_ignore_case))
     assert len(failures) == 0
