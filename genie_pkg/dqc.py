@@ -90,6 +90,25 @@ class QualityChecker(object):
         passing = not_na_df[not_na_df['length'] == rhs]
         return node.data, (passing.shape[0]/self._obj.shape[0])*100 >= percent
 
+    def _apply_has_columns(self, node) -> Tuple[str, bool]:
+        column_names = [ct.value.replace("\"", "") for ct in node.children[0].children]
+        if len(node.children) == 1:
+            ignore_case = False
+        else:
+            if node.children[1] == 'True':
+                ignore_case = True
+            else:
+                ignore_case = False
+
+        if ignore_case:
+            expected_columns = [c.lower() for c in column_names]
+            columns_in_df = list(map(str.lower, self._obj.columns))
+        else:
+            expected_columns = column_names
+            columns_in_df = self._obj.columns
+
+        return node.data, len(set(columns_in_df).intersection(expected_columns)) == len(set(expected_columns))
+
     def _apply_check(self, check) -> Tuple[str, bool]:
         try:
             c = check[0]
@@ -98,8 +117,7 @@ class QualityChecker(object):
                 quantity = int(c.children[1])
                 return c.data, self._comparator_to_fn(comparator, quantity)(self._obj.shape[0])
             elif c.data == "has_columns":
-                column_names = [ct.value.replace("\"", "") for ct in c.children[0].children]
-                return c.data, len(set(self._obj.columns).intersection(column_names)) == len(column_names)
+                return self._apply_has_columns(c)
             elif c.data == "is_unique":
                 column_name = c.children[0]
                 return c.data, self._obj[column_name].is_unique

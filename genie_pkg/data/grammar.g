@@ -16,7 +16,7 @@ checks: row_count
 code_block: "{" checks+ "}"
 
 row_count: "row_count" COMPARATOR SIGNED_NUMBER
-has_columns: "has_columns(" array ")"
+has_columns: "has_columns(" array ","? "ignore_case="? BOOL? ")"
 is_unique: "is_unique(" NAME ")"
 not_null: "is_not_null(" NAME ")"
 is_positive: "is_positive(" NAME ")"
@@ -34,7 +34,6 @@ GT: ">"
 EQ: "=="
 COMPARATOR: (LT | GT | EQ )
 BOOL: ("False" | "True")
-
 WHITESPACE: (" " | "\\n")+
 %ignore WHITESPACE
 

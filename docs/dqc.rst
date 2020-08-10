@@ -26,7 +26,7 @@ This module supports writing data quality checks on pandas dataframe.
 **Available checks**
 
 - `row_count (> | < | ==) <rhs>`
-- `has_columns(["c1", "c2"...])`
+- `has_columns(["c1", "c2"...], ignore_case=False|True default is False)`
 - `is_unique(<column_name>)`
 - `is_not_null(<column_name>)`
 - `has_one_of(<column_name>, ["c1", "c2"...])`
