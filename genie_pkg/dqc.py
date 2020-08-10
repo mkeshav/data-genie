@@ -12,6 +12,7 @@ class QualityChecker(object):
     def __init__(self, pandas_obj):
         self._validate(pandas_obj)
         self._obj = pandas_obj
+        self.ignore_column_case = False
 
     @staticmethod
     def _validate(obj):
@@ -29,8 +30,13 @@ class QualityChecker(object):
         else:
             return lambda _: False
 
+    def _treat_column_name(self, column_name: str) -> str:
+        if self.ignore_column_case:
+            return column_name.lower()
+        return column_name
+
     def _apply_quantile(self, node) -> Tuple[str, bool]:
-        column_name = node.children[0]
+        column_name = self._treat_column_name(node.children[0])
         q = float(node.children[1])
         c = node.children[2]
         rhs = float(node.children[3])
@@ -38,7 +44,7 @@ class QualityChecker(object):
         return node.data, self._comparator_to_fn(c, rhs)(lhs)
 
     def _apply_date_validation(self, node) -> Tuple[str, bool]:
-        column_name = node.children[0]
+        column_name = self._treat_column_name(node.children[0])
         try:
             pd.to_datetime(self._obj[column_name])
             return node.data, True
@@ -46,13 +52,25 @@ class QualityChecker(object):
             return "Date parse error: {0} for {1}".format(node.data, node.children[0]), False
 
     def _apply_has_one_of(self, node) -> Tuple[str, bool]:
-        column_name = node.children[0]
-        allowed_values = [ct.value.replace("\"", "") for ct in node.children[1].children]
-        unique_values = self._obj[column_name].unique()
+        column_name = self._treat_column_name(node.children[0])
+        if len(node.children) == 2:
+            ignore_case = False
+        else:
+            if node.children[2] == 'True':
+                ignore_case = True
+            else:
+                ignore_case = False
+        if ignore_case:
+            allowed_values = [ct.value.replace("\"", "").lower() for ct in node.children[1].children]
+            unique_values = [v.lower() for v in self._obj[column_name].unique()]
+        else:
+            allowed_values = [ct.value.replace("\"", "") for ct in node.children[1].children]
+            unique_values = self._obj[column_name].unique()
+
         return node.data, all(elem in allowed_values for elem in unique_values)
 
     def _apply_value_length(self, node) -> Tuple[str, bool]:
-        column_name = node.children[0]
+        column_name = self._treat_column_name(node.children[0])
         if len(node.children) == 3:
             ignore_nulls = 'False'
             comparator = node.children[1]
@@ -71,7 +89,7 @@ class QualityChecker(object):
         return node.data, len(unique_lengths) == 1 and compare_fn(unique_lengths[0])
 
     def _apply_percent_value_length(self, node) -> Tuple[str, bool]:
-        column_name = node.children[0]
+        column_name = self._treat_column_name(node.children[0])
         if len(node.children) == 4:
             ignore_nulls = 'False'
             percent = int(node.children[1])
@@ -90,6 +108,25 @@ class QualityChecker(object):
         passing = not_na_df[not_na_df['length'] == rhs]
         return node.data, (passing.shape[0]/self._obj.shape[0])*100 >= percent
 
+    def _apply_has_columns(self, node) -> Tuple[str, bool]:
+        column_names = [ct.value.replace("\"", "") for ct in node.children[0].children]
+        if len(node.children) == 1:
+            ignore_case = False
+        else:
+            if node.children[1] == 'True':
+                ignore_case = True
+            else:
+                ignore_case = False
+
+        if ignore_case:
+            expected_columns = [c.lower() for c in column_names]
+            columns_in_df = list(map(str.lower, self._obj.columns))
+        else:
+            expected_columns = column_names
+            columns_in_df = self._obj.columns
+
+        return node.data, len(set(columns_in_df).intersection(expected_columns)) == len(set(expected_columns))
+
     def _apply_check(self, check) -> Tuple[str, bool]:
         try:
             c = check[0]
@@ -98,16 +135,15 @@ class QualityChecker(object):
                 quantity = int(c.children[1])
                 return c.data, self._comparator_to_fn(comparator, quantity)(self._obj.shape[0])
             elif c.data == "has_columns":
-                column_names = [ct.value.replace("\"", "") for ct in c.children[0].children]
-                return c.data, len(set(self._obj.columns).intersection(column_names)) == len(column_names)
+                return self._apply_has_columns(c)
             elif c.data == "is_unique":
-                column_name = c.children[0]
+                column_name = self._treat_column_name(c.children[0])
                 return c.data, self._obj[column_name].is_unique
             elif c.data == "not_null":
-                column_name = c.children[0]
+                column_name = self._treat_column_name(c.children[0])
                 return c.data, self._obj[column_name].isna().sum() == 0
             elif c.data == "is_positive":
-                column_name = c.children[0]
+                column_name = self._treat_column_name(c.children[0])
                 return c.data, (self._obj[column_name] > 0).all()
             elif c.data == "has_one_of":
                 return self._apply_has_one_of(c)
@@ -158,8 +194,12 @@ class QualityChecker(object):
         except Exception as e:
             return str(e), False
 
-    def run(self, check_spec):
+    def run(self, check_spec, ignore_column_case=False):
         ast = self._parse_spec(check_spec)
+        self.ignore_column_case = ignore_column_case
+        if self.ignore_column_case:
+            self._obj.columns = map(str.lower, self._obj.columns)
+
         return self._run(ast)
 
 

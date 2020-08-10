@@ -15,7 +15,8 @@ This module supports writing data quality checks on pandas dataframe.
     df = pd.DataFrame([{'name': 'foo',
                         'dob': '1970-01-01'}])
 
-    check_results = df.dqc.run(check_spec)
+    # if you pass ignore_column_case=True, column names in dataframe will be case insensitive
+    check_results = df.dqc.run(check_spec, ignore_column_case=False(default))
     failures = list(filter(lambda x: not x[1], check_results))
     assert len(failures) == 0
 
@@ -26,10 +27,10 @@ This module supports writing data quality checks on pandas dataframe.
 **Available checks**
 
 - `row_count (> | < | ==) <rhs>`
-- `has_columns(["c1", "c2"...])`
+- `has_columns(["c1", "c2"...], ignore_case=False|True default is False)`
 - `is_unique(<column_name>)`
 - `is_not_null(<column_name>)`
-- `has_one_of(<column_name>, ["c1", "c2"...])`
+- `has_one_of(<column_name>, ["c1", "c2"...], ignore_case=False|True default is False))`
 - `is_positive(<column_name>)`
 - `quantile(<column_name>, <percentile>) (> | < | ==) <rhs>`
 - `is_date(<column_name>)`

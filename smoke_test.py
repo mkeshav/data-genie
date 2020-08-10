@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 from genie_pkg.dqc import QualityChecker
+from genie_pkg.australia import Australia
+
 import pandas as pd
 
 if __name__ == '__main__':
@@ -19,4 +21,6 @@ if __name__ == '__main__':
     if len(failures) > 0:
         raise Exception("WTF!!!")
     else:
+        a = Australia()
+        a.get_random_state()
         print("everything is awesome...")

@@ -3,7 +3,7 @@ import pandas as pd
 
 from genie_pkg.dqc import QualityChecker
 from hypothesis import given, settings, example
-from hypothesis.strategies import composite, integers, lists, text, dates, just, one_of
+from hypothesis.strategies import composite, integers, lists, text, dates, just, one_of, sets
 import string
 from typing import List
 import json
@@ -12,12 +12,12 @@ from datetime import date
 
 def test_validate_successful():
     df = pd.DataFrame([{'name': 'foo',
-                       'dob': '1970-01-01'}])
+                        'dob': '1970-01-01'}])
     QualityChecker(df)
 
 
 def test_validate_throws_exception():
-    df = pd.DataFrame({'P' : []})
+    df = pd.DataFrame({'P': []})
     with pytest.raises(Exception) as _:
         QualityChecker(df)
 
@@ -47,12 +47,12 @@ def test_date_validation_error_returns_false():
     assert len(failures) == 1
 
 
-def _build_row_count(c:str, rhs: int):
+def _build_row_count(c: str, rhs: int):
     return f"row_count {c} {rhs}"
 
 
-def _build_has_columns(columns: List[str]):
-    return "has_columns({})".format(json.dumps(columns))
+def _build_has_columns(columns: List[str], ignore_case=False):
+    return "has_columns({}, ignore_case={})".format(json.dumps(columns), ignore_case)
 
 
 def _build_column_is_date(column: str):
@@ -63,8 +63,8 @@ def _build_column_is_not_null(column: str):
     return "is_not_null({})".format(column)
 
 
-def _build_column_has_one_of(column: str, values: List[str]):
-    return "has_one_of({}, {})".format(column, json.dumps(values))
+def _build_column_has_one_of(column: str, values: List[str], ignore_case=False):
+    return "has_one_of({}, {}, {})".format(column, json.dumps(values), ignore_case)
 
 
 def _build_column_has_positive_values(column: str):
@@ -75,7 +75,7 @@ def _build_column_has_unique_values(column: str):
     return "is_unique({})".format(column)
 
 
-def _build_quantile(column: str, q:float, c:str, rhs:float):
+def _build_quantile(column: str, q: float, c: str, rhs: float):
     return f"quantile({column}, {q}) {c} {rhs}"
 
 
@@ -96,14 +96,14 @@ def _build_percent_value_length(column: str, pass_percent_threshold: int, rhs: i
 @composite
 def generate_valid_checks(draw):
     row_count = draw(integers(min_value=20))
-    columns = draw(lists(text(alphabet=string.ascii_letters+string.digits+'-_', min_size=1), min_size=1))
+    columns = draw(lists(text(alphabet=string.ascii_letters + string.digits + '-_', min_size=1), min_size=1))
     column = draw(text(alphabet=string.ascii_letters, min_size=1))
     comparator = draw(one_of(just(">"), just("=="), just("<")))
     genders = ['female', 'male', 'other']
     bool = draw(one_of(just(False), just(True)))
     return [
         _build_row_count(comparator, row_count),
-        _build_has_columns(columns),
+        _build_has_columns(columns, ignore_case=bool),
         _build_column_is_date("dob"),
         _build_column_is_not_null(column),
         _build_column_has_one_of("gender", genders),
@@ -123,7 +123,7 @@ def generate_valid_checks(draw):
        lists(integers(min_value=10), min_size=10, max_size=10),
        just([80, 24, 74, 30, 72, 69, 27, 12, 84, 41]),
        just(['female', 'male', 'other', 'female', 'male', 'other', 'female', 'male', 'other', 'other']),
-       lists(integers(min_value=1000, max_value=9999), min_size=10, max_size=10),)
+       lists(integers(min_value=1000, max_value=9999), min_size=10, max_size=10), )
 @settings(max_examples=101, deadline=500)
 def test_hypothesis(checks, dobs, ages, q_arr, genders, post_codes):
     check_spec = """
@@ -133,13 +133,13 @@ def test_hypothesis(checks, dobs, ages, q_arr, genders, post_codes):
                     """ % ('\n'.join(checks),)
 
     df = pd.DataFrame({'age': ages,
-                        'dob': dobs,
+                       'dob': dobs,
                        'field_A': q_arr,
                        'gender': genders,
                        'post_code': post_codes})
 
     successes = list(filter(lambda x: x[1], df.dqc.run(check_spec)))
-    #is_date, is_positive, quantile, has_one_of
+    # is_date, is_positive, quantile, has_one_of
     assert len(successes) > 0
 
 
@@ -168,6 +168,62 @@ def test_validate_spec_returns_false():
                 """
     err, res = QualityChecker.validate_spec(check_spec)
     assert err is not None
-    assert res == False
+    assert not res
 
 
+@given(
+    sets(text(alphabet=string.ascii_letters + '-_', min_size=1), min_size=5, max_size=5),
+    lists(integers(min_value=1000, max_value=9999), min_size=5, max_size=5)
+)
+@settings(deadline=300)
+def test_has_columns(columns, values):
+    data = {}
+    for c in columns:
+        data[c] = values
+
+    df = pd.DataFrame(data)
+    check_spec_template = """
+                    apply checks {
+                        %s
+                    }
+                    """
+
+    columns_lower_cased = [c.lower() for c in columns]
+    check_spec_case_sensitive = check_spec_template % (_build_has_columns(columns_lower_cased, ignore_case=False),)
+    result_case_sensitive = df.dqc.run(check_spec_case_sensitive)
+    failures = list(filter(lambda x: not x[1], result_case_sensitive))
+    assert len(failures) == 1
+    successes = list(filter(lambda x: x[1], result_case_sensitive))
+    assert len(successes) == 0
+    check_spec_ignore_case = check_spec_template % (_build_has_columns(list(columns), ignore_case=True),)
+    result_ignore_case = df.dqc.run(check_spec_ignore_case)
+    failures = list(filter(lambda x: not x[1], result_ignore_case))
+    assert len(failures) == 0
+    successes = list(filter(lambda x: x[1], result_ignore_case))
+    assert len(successes) == 1
+
+
+def test_has_one_of():
+    gender = ['female', 'male', 'other']
+    data = {'Gender': ['Male', 'Female']}
+    check_spec_template = """
+                    apply checks {
+                        %s
+                    }
+                    """
+
+    df = pd.DataFrame(data)
+    check_spec_case_sensitive = check_spec_template % (_build_column_has_one_of('gender', gender),)
+    result_case_sensitive = df.dqc.run(check_spec_case_sensitive, ignore_column_case=True)
+    failures = list(filter(lambda x: not x[1], result_case_sensitive))
+    assert len(failures) == 1
+    successes = list(filter(lambda x: x[1], result_case_sensitive))
+    assert len(successes) == 0
+    # previous test would have mutated the column name, hence recreate the df
+    df = pd.DataFrame(data)
+    check_spec_ignore_case = check_spec_template % (_build_column_has_one_of('gender', gender, ignore_case=True),)
+    result_ignore_case = df.dqc.run(check_spec_ignore_case, ignore_column_case=True)
+    failures = list(filter(lambda x: not x[1], result_ignore_case))
+    assert len(failures) == 0
+    successes = list(filter(lambda x: x[1], result_ignore_case))
+    assert len(successes) == 1
