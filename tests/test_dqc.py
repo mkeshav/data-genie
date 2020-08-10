@@ -205,22 +205,24 @@ def test_has_columns(columns, values):
 
 def test_has_one_of():
     gender = ['female', 'male', 'other']
-    data = {'gender': ['Male', 'Female']}
-    df = pd.DataFrame(data)
+    data = {'Gender': ['Male', 'Female']}
     check_spec_template = """
                     apply checks {
                         %s
                     }
                     """
 
+    df = pd.DataFrame(data)
     check_spec_case_sensitive = check_spec_template % (_build_column_has_one_of('gender', gender),)
-    result_case_sensitive = df.dqc.run(check_spec_case_sensitive)
+    result_case_sensitive = df.dqc.run(check_spec_case_sensitive, ignore_column_case=True)
     failures = list(filter(lambda x: not x[1], result_case_sensitive))
     assert len(failures) == 1
     successes = list(filter(lambda x: x[1], result_case_sensitive))
     assert len(successes) == 0
+    # previous test would have mutated the column name, hence recreate the df
+    df = pd.DataFrame(data)
     check_spec_ignore_case = check_spec_template % (_build_column_has_one_of('gender', gender, ignore_case=True),)
-    result_ignore_case = df.dqc.run(check_spec_ignore_case)
+    result_ignore_case = df.dqc.run(check_spec_ignore_case, ignore_column_case=True)
     failures = list(filter(lambda x: not x[1], result_ignore_case))
     assert len(failures) == 0
     successes = list(filter(lambda x: x[1], result_ignore_case))
