@@ -9,7 +9,8 @@ services:
     command: >
       bash -c "python3 setup.py develop && pytest -vv"
     environment:
-      - TWINE_PASSWORD
+      - PYPI_API_TOKEN
+
   scan:
     build:
       context: .
@@ -20,6 +21,7 @@ services:
       - SONAR_CLOUD_TOKEN
       - CIRCLE_BRANCH
       - CIRCLE_PULL_REQUEST
+
   smoke_test:
     build:
       context: .

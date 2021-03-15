@@ -42,6 +42,6 @@ Builds happen on circle ci with github integration
 Following environment variables need to be set on circle
 
 - `SONAR_CLOUD_TOKEN`
-- `TWINE_PASSWORD` (pypi login password)
+- `PYPI_API_TOKEN` (Pypi project token to allow publishing)
 
 

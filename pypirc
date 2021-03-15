@@ -1,0 +1,7 @@
+[distutils]
+  index-servers =
+    data-genie
+
+[data-genie]
+  repository = https://upload.pypi.org/legacy/
+  username = __token__
