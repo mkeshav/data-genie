@@ -1,4 +1,4 @@
-FROM python:3.8-slim as base
+FROM python:3.8 as base
 
 LABEL Author="Keshav Murthy"
 
@@ -23,12 +23,9 @@ COPY smoke_test.py /app/
 RUN python3 -m pip install data-genie
 
 FROM dev AS sonar
-RUN apt-get update
-RUN apt-get install -y software-properties-common
-RUN add-apt-repository ppa:openjdk-r/ppa
-RUN apt-get update
-RUN apt-get install -y software-properties-common
-RUN apt install -y openjdk-11-jdk wget bsdtar
+RUN apt update
+RUN apt purge --auto-remove openjdk*
+RUN apt install -y default-jdk wget bsdtar
 RUN wget -qO- https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip | bsdtar -xvf - -C /root/.local/
 RUN chmod +x /root/.local/sonar-scanner-${SONAR_SCANNER_VERSION}-linux/bin/sonar-scanner
 RUN chmod +x /root/.local/sonar-scanner-${SONAR_SCANNER_VERSION}-linux/jre/bin/java
