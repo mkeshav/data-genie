@@ -2,7 +2,7 @@ FROM python:3.8-slim as base
 
 LABEL Author="Keshav Murthy"
 
-ENV SONAR_SCANNER_VERSION 3.3.0.1492
+ENV SONAR_SCANNER_VERSION 4.6.0.2311
 RUN python3 -m pip install --upgrade pip setuptools wheel
 RUN python3 -m pip install --user --upgrade twine
 
@@ -10,6 +10,8 @@ RUN mkdir -p /app
 WORKDIR /app
 
 FROM base as dev
+# For sonar scanning
+RUN apt-get install -y openjdk-11-jdk
 COPY requirements* /app/
 
 RUN python3 -m pip install -r /app/requirements.txt
