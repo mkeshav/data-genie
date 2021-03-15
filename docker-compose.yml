@@ -12,8 +12,7 @@ services:
       - TWINE_PASSWORD
   scan:
     build:
-      context: .
-      target: sonar
+      context: ./containers/sonar-scan
     volumes:
       - .:/app:cached
     environment:
