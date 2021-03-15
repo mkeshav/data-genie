@@ -17,6 +17,9 @@ RUN python3 -m pip install -r /app/requirements_dev.txt
 ADD . /app
 ENV PATH="/root/.local/bin:${PATH}"
 
+FROM dev as smoketest
+RUN python3 -m pip install data-genie
+
 FROM dev AS sonar
 RUN apt update
 RUN apt purge --auto-remove openjdk*
