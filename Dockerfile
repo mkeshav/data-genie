@@ -23,6 +23,7 @@ COPY smoke_test.py /app/
 RUN python3 -m pip install data-genie
 
 FROM dev AS sonar
+RUN apt-get install -y software-properties-common
 RUN add-apt-repository ppa:openjdk-r/ppa
 RUN apt-get update
 RUN apt install -y openjdk-11-jdk wget bsdtar
