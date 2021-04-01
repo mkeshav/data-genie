@@ -183,7 +183,7 @@ class QualityChecker(object):
 
     @staticmethod
     def _parse_spec(check_spec) -> Tree:
-        p = Lark(resource_string(__name__, 'data/grammar.g').decode('utf-8'))
+        p = Lark(resource_string(__name__, 'data/grammar.lark').decode('utf-8'))
         return p.parse(check_spec)
 
     @staticmethod
