@@ -127,6 +127,25 @@ class QualityChecker(object):
 
         return node.data, len(set(columns_in_df).intersection(expected_columns)) == len(set(expected_columns))
 
+    @staticmethod
+    def _build_query(key_value_node):
+        splits = [ct.value.split(":") for ct in key_value_node.children]
+        cleansed = [(s[0].replace("\"", "").strip(), s[1].replace("\"", "").strip()) for s in splits]
+        return ' & '.join([f'{c[0]} == "{c[1]}"' for c in cleansed])
+
+    def _apply_when_row(self, node) -> Tuple[str, bool]:
+        q = self._build_query(node.children[0]) # key value pairs
+        qualifying_rows = self._obj.query(q)
+        target_columns = node.children[1]
+        target_columns_values = [ct.value.split("==") for ct in target_columns.children]
+        cleansed_target_columns_values = [(s[0].replace("\"", "").strip(), s[1].replace("\"", "").strip()) for s in target_columns_values]
+        
+        for c in cleansed_target_columns_values:
+            unique_values = qualifying_rows[c[0]].unique()
+            if not (len(unique_values) == 1 and unique_values[0] == c[1]):
+                return (f'{node.data}: Column {c[0]} does not pass', False)
+        return (node.data, True)
+
     def _apply_check(self, check) -> Tuple[str, bool]:
         try:
             c = check[0]
@@ -155,10 +174,14 @@ class QualityChecker(object):
                 return self._apply_value_length(c)
             elif c.data == "percent_value_length":
                 return self._apply_percent_value_length(c)
+            elif c.data == "when_row_identified_by":
+                return self._apply_when_row(c)
             else:
                 raise GenieException(f"{c.data} seems to be not implemented in the DSL")
         except KeyError:
             return "Key error: {0} for {1}".format(c.data, c.children[0]), False
+        except Exception as e:
+            raise GenieException(f"{c.data} has errors: {e}")    
 
     def _apply_predicates(self, predicates) -> List[Tuple[str, bool]]:
         results = []
@@ -183,7 +206,7 @@ class QualityChecker(object):
 
     @staticmethod
     def _parse_spec(check_spec) -> Tree:
-        p = Lark(resource_string(__name__, 'data/grammar.lark').decode('utf-8'))
+        p = Lark(resource_string(__name__, 'data/grammar.lark').decode('utf-8'), parser='lalr')
         return p.parse(check_spec)
 
     @staticmethod

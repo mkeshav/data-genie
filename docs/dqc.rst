@@ -24,7 +24,7 @@ This module supports writing data quality checks on pandas dataframe.
     QualityChecker.validate_spec(check_spec)
 
 
-**Available checks**
+**Available simple checks**
 
 - `row_count (> | < | ==) <rhs>`
 - `has_columns(["c1", "c2"...], ignore_case=False|True default is False)`
@@ -36,3 +36,23 @@ This module supports writing data quality checks on pandas dataframe.
 - `is_date(<column_name>)`
 - `value_length(<column_name>, ignore_nulls=False|True default is False) == <rhs>` (handy for data like post_code or ipv4)
 - `percent_of_values_have_length(<column_name>, pass_percent_threshold=<1..100>, ignore_nulls=False|True default is False) == <rhs>` (handy for data like post_code or ipv4)
+
+**Available complex checks**
+
+.. code-block:: python
+
+    # Check column values using row identification. c1, c2, c3 and c4 are column names
+    check_spec = """
+                    apply checks {
+                        when row_identified_by {
+                            "c1": "v1", 
+                            "c2": "2"
+                        } then {
+                            "c3" == "v3",
+                            "c4" == "v4"
+                        }
+                    }
+                    """
+    
+    df = pd.DataFrame({"c1": "v1", "c2": "2", "c3": "v3"}, index=[0])
+    result = df.dqc.run(check_spec)

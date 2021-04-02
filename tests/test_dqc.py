@@ -92,6 +92,9 @@ def _build_percent_value_length(column: str, pass_percent_threshold: int, rhs: i
     else:
         return f"percent_of_values_have_length({column}, pass_percent_threshold={pass_percent_threshold}) == {rhs}"
 
+def _build_when_row(row_identifier, then_column, then_value):
+    return f'when row_identified_by {json.dumps(row_identifier)} then {{"{then_column}" == "{then_value}"}}'
+
 
 @composite
 def generate_valid_checks(draw):
@@ -101,6 +104,7 @@ def generate_valid_checks(draw):
     comparator = draw(one_of(just(">"), just("=="), just("<")))
     genders = ['female', 'male', 'other']
     bool = draw(one_of(just(False), just(True)))
+    row_identifier = {"c1": "v1", "c2": "2"}
     return [
         _build_row_count(comparator, row_count),
         _build_has_columns(columns, ignore_case=bool),
@@ -115,6 +119,7 @@ def generate_valid_checks(draw):
         _build_value_length("post_code", 4),
         _build_value_length("post_code", 4, ignore_nulls=bool),
         _build_percent_value_length("post_code", 50, 4, ignore_nulls=bool),
+        _build_when_row(row_identifier, "c3", "v3"),
     ]
 
 
@@ -136,7 +141,8 @@ def test_hypothesis(checks, dobs, ages, q_arr, genders, post_codes):
                        'dob': dobs,
                        'field_A': q_arr,
                        'gender': genders,
-                       'post_code': post_codes})
+                       'post_code': post_codes,
+                       'c1': 'v1', 'c2': "2", 'c3': 'v3'})
 
     successes = list(filter(lambda x: x[1], df.dqc.run(check_spec)))
     # is_date, is_positive, quantile, has_one_of
@@ -238,3 +244,43 @@ def test_has_one_of():
     assert len(failures) == 0
     successes = list(filter(lambda x: x[1], result_ignore_case))
     assert len(successes) == 1
+
+def test_when_success():
+    check_spec = """
+                    apply checks {
+                        when row_identified_by {
+                            "c1": "v1", 
+                            "c2": "2"
+                        } then {
+                            "c3" == "v3",
+                            "c4" == "v4"
+                        }
+                    }
+                    """
+    
+    df = pd.DataFrame({"c1": "v1", "c2": "2", "c3": "v3", "c4": "v4"}, index=[0])
+    result = df.dqc.run(check_spec)    
+    assert result[0][1]
+
+def test_when_row_identifier_column_missing():
+    check_spec = """
+                    apply checks {
+                        when row_identified_by {"c1": "v1", "c4": "2"} then {"c3" == "v3"}
+                    }
+                    """
+    
+    df = pd.DataFrame({"c1": "v1", "c2": "2", "c3": "v3"}, index=[0])
+    with pytest.raises(Exception) as _:
+        df.dqc.run(check_spec)   
+
+def test_when_target_column_missing():
+    check_spec = """
+                    apply checks {
+                        when row_identified_by {"c1": "v1", "c2": "2"} then {"c3" == "v3"}
+                    }
+                    """
+    
+    df = pd.DataFrame({"c1": "v1", "c2": "2", "c4": "v3"}, index=[0])
+    result = df.dqc.run(check_spec)
+    assert result[0][1] == False
+           

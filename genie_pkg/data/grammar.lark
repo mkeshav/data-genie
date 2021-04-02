@@ -12,6 +12,7 @@ checks: row_count
         | is_date
         | value_length
         | percent_value_length
+        | when_row_identified_by
 
 code_block: "{" checks+ "}"
 
@@ -25,8 +26,11 @@ quantile: "quantile(" NAME "," QUANTILE ")" COMPARATOR SIGNED_NUMBER
 is_date: "is_date(" NAME ")"
 value_length: "value_length(" NAME ","? "ignore_nulls="? BOOL? ")" EQ SIGNED_NUMBER
 percent_value_length: "percent_of_values_have_length(" NAME  "," "pass_percent_threshold=" SIGNED_NUMBER ","? "ignore_nulls="? BOOL? ")" EQ SIGNED_NUMBER
+when_row_identified_by: "when row_identified_by" row_identifier "then" column_equals_values
 
 array  : "[" [ESCAPED_STRING ("," ESCAPED_STRING)*] "]"
+row_identifier: "{" [KEY_VALUE ("," KEY_VALUE)*] "}"
+column_equals_values: "{" [COLUMN_EQUALS_VALUE ("," COLUMN_EQUALS_VALUE)*] "}"
 
 QUANTILE: "0." _INT
 LT: "<"
@@ -35,6 +39,8 @@ EQ: "=="
 COMPARATOR: (LT | GT | EQ )
 BOOL: ("False" | "True")
 WHITESPACE: (" " | "\\n")+
+KEY_VALUE: ESCAPED_STRING ":" WS* ESCAPED_STRING
+COLUMN_EQUALS_VALUE: ESCAPED_STRING WS* "==" WS* ESCAPED_STRING
 %ignore WHITESPACE
 
 %import common.LETTER
