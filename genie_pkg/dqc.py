@@ -128,7 +128,7 @@ class QualityChecker(object):
         return node.data, len(set(columns_in_df).intersection(expected_columns)) == len(set(expected_columns))
 
     @staticmethod
-    def _build_query(key_value_node):
+    def _build_query(key_value_node: Tree):
         splits = [ct.value.split(":") for ct in key_value_node.children]
         cleansed = [(s[0].replace("\"", "").strip(), s[1].replace("\"", "").strip()) for s in splits]
         return ' & '.join([f'{c[0]} == "{c[1]}"' for c in cleansed])
