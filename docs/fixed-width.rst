@@ -1,7 +1,7 @@
 Fixed Width
 ============
 
-This module supports generation of fixed width data.Mostly needed when
+This module supports generation of fixed width data. Mostly needed when
 dealing with output from legacy Mainframe systems
 
 
