@@ -38,6 +38,8 @@ This module supports writing data quality checks on pandas dataframe.
 
 **Available complex checks**
 
+- Apply checks on multiple columns of rows identified by the condition (supports strings only)
+  
 .. code-block:: python
 
     # Check column values using row identification. c1, c2, c3 and c4 are column names
