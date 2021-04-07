@@ -36,7 +36,7 @@ def test_parse_error():
 
 
 def test_date_validation_error_returns_false():
-    df = pd.DataFrame([{'dob': 'foo'}])
+    df = pd.DataFrame({'dob': ['foo', '1970-01-01']})
     check_spec = """
                 apply checks {
                     is_date(dob)

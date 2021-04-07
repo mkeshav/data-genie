@@ -5,6 +5,7 @@ from pkg_resources import resource_string
 from typing import Tuple, List
 from genie_pkg import GenieException
 import numpy as np
+from dateutil.parser import parse
 
 
 @pf.register_dataframe_accessor('dqc')
@@ -43,13 +44,23 @@ class QualityChecker(object):
         lhs = self._obj[column_name].quantile(q)
         return node.data, self._comparator_to_fn(c, rhs)(lhs)
 
+    @staticmethod
+    def _is_date(datestr):
+        try:
+            parse(datestr)
+            return True
+        except ValueError:
+            return False
+
     def _apply_date_validation(self, node) -> Tuple[str, bool]:
         column_name = self._treat_column_name(node.children[0])
-        try:
-            pd.to_datetime(self._obj[column_name])
-            return node.data, True
-        except Exception as _:
-            return "Date parse error: {0} for {1}".format(node.data, node.children[0]), False
+        if len(node.children) == 1:
+            pass_percent = 100
+        else:
+            pass_percent = int(node.children[1])
+
+        valid_dates = self._obj.loc[self._obj[column_name].apply(self._is_date)]
+        return node.data, (valid_dates.shape[0]/self._obj.shape[0])*100 >= pass_percent
 
     def _apply_has_one_of(self, node) -> Tuple[str, bool]:
         column_name = self._treat_column_name(node.children[0])
