@@ -271,4 +271,15 @@ def test_when_target_column_missing():
     
     df = pd.DataFrame({"c1": "v1", "c2": "2", "c4": "v3"}, index=[0])
     result = df.dqc.run(check_spec)
-    assert result[0][1] == False
+    assert not result[0][1]
+
+def test_is_date_with_none():
+    df = pd.DataFrame({'dob': ['1970-01-01', 'foo', None]})
+    check_spec = """
+                apply checks {
+                    is_date(dob, pass_percent_threshold=100)
+                }
+                """
+
+    result = df.dqc.run(check_spec)
+    assert not result[0][1]

@@ -46,12 +46,15 @@ class QualityChecker(object):
 
     @staticmethod
     def _is_date(datestr):
-        try:
-            parse(datestr)
-            return True
-        except ValueError:
-            return False
+        if datestr:
+            try:
+                parse(datestr)
+                return True
+            except ValueError:
+                return False
 
+        return False
+        
     def _apply_date_validation(self, node) -> Tuple[str, bool]:
         column_name = self._treat_column_name(node.children[0])
         if len(node.children) == 1:
