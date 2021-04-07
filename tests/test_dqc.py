@@ -283,4 +283,3 @@ def test_when_target_column_missing():
     df = pd.DataFrame({"c1": "v1", "c2": "2", "c4": "v3"}, index=[0])
     result = df.dqc.run(check_spec)
     assert result[0][1] == False
-           

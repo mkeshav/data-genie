@@ -23,9 +23,9 @@ not_null: "is_not_null(" NAME ")"
 is_positive: "is_positive(" NAME ")"
 has_one_of: "has_one_of(" NAME "," array ","? "ignore_case="? BOOL? ")"
 quantile: "quantile(" NAME "," QUANTILE ")" COMPARATOR SIGNED_NUMBER
-is_date: "is_date(" NAME ")"
+is_date: "is_date(" NAME ","? "pass_percent_threshold="? PERCENT? ")"
 value_length: "value_length(" NAME ","? "ignore_nulls="? BOOL? ")" EQ SIGNED_NUMBER
-percent_value_length: "percent_of_values_have_length(" NAME  "," "pass_percent_threshold=" SIGNED_NUMBER ","? "ignore_nulls="? BOOL? ")" EQ SIGNED_NUMBER
+percent_value_length: "percent_of_values_have_length(" NAME  "," "pass_percent_threshold=" PERCENT ","? "ignore_nulls="? BOOL? ")" EQ SIGNED_NUMBER
 when_row_identified_by: "when row_identified_by" row_identifier "then" column_equals_values
 
 array  : "[" [ESCAPED_STRING ("," ESCAPED_STRING)*] "]"
@@ -41,6 +41,7 @@ BOOL: ("False" | "True")
 WHITESPACE: (" " | "\\n")+
 KEY_VALUE: ESCAPED_STRING ":" WS* ESCAPED_STRING
 COLUMN_EQUALS_VALUE: ESCAPED_STRING WS* "==" WS* ESCAPED_STRING
+PERCENT: /[1-9]//[0-9]/?/0/?
 %ignore WHITESPACE
 
 %import common.LETTER
