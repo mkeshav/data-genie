@@ -79,13 +79,6 @@ def _build_quantile(column: str, q: float, c: str, rhs: float):
     return f"quantile({column}, {q}) {c} {rhs}"
 
 
-def _build_value_length(column: str, rhs: int, ignore_nulls=None):
-    if ignore_nulls is not None:
-        return f"value_length({column}, ignore_nulls={ignore_nulls}) == {rhs}"
-    else:
-        return f"value_length({column}) == {rhs}"
-
-
 def _build_percent_value_length(column: str, pass_percent_threshold: int, rhs: int, ignore_nulls=None):
     if ignore_nulls is not None:
         return f"percent_of_values_have_length({column}, pass_percent_threshold={pass_percent_threshold}, ignore_nulls={ignore_nulls}) == {rhs}"
@@ -116,8 +109,6 @@ def generate_valid_checks(draw):
         _build_quantile("field_A", 0.5, "==", 55.0),
         _build_quantile("field_A", 0.1, ">", 9.0),
         _build_quantile("field_A", 0.5, "<", 56.0),
-        _build_value_length("post_code", 4),
-        _build_value_length("post_code", 4, ignore_nulls=bool),
         _build_percent_value_length("post_code", 50, 4, ignore_nulls=bool),
         _build_when_row(row_identifier, "c3", "v3"),
     ]
@@ -152,12 +143,10 @@ def test_hypothesis(checks, dobs, ages, q_arr, genders, post_codes):
 @given(lists(integers(min_value=1000, max_value=9999), min_size=4, max_size=4))
 @example(["3000", "0800", None, ""])
 @settings(deadline=500)
-def test_value_length(postcodes):
+def test_percent_value_length(postcodes):
     df = pd.DataFrame({'post_code': postcodes})
     check_spec = """
                 apply checks {
-                    value_length(post_code, ignore_nulls=True) == 4
-                    value_length(post_code, ignore_nulls=False) == 4
                     percent_of_values_have_length(post_code, pass_percent_threshold=50) == 4
                 }
                 """

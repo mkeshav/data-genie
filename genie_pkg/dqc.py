@@ -69,25 +69,6 @@ class QualityChecker(object):
 
         return node.data, all(elem in allowed_values for elem in unique_values)
 
-    def _apply_value_length(self, node) -> Tuple[str, bool]:
-        column_name = self._treat_column_name(node.children[0])
-        if len(node.children) == 3:
-            ignore_nulls = 'False'
-            comparator = node.children[1]
-            rhs = int(node.children[2])
-        else:
-            ignore_nulls = node.children[1]
-            comparator = node.children[2]
-            rhs = int(node.children[3])
-
-        if ignore_nulls == 'False':
-            unique_lengths = self._obj[column_name].astype(str).map(len).unique()
-        else:
-            not_na_df = self._obj.replace(r'^\s*$', np.NaN, regex=True)[column_name].dropna().reset_index()
-            unique_lengths = not_na_df[column_name].astype(str).map(len).unique()
-        compare_fn = self._comparator_to_fn(comparator, rhs)
-        return node.data, len(unique_lengths) == 1 and compare_fn(unique_lengths[0])
-
     def _apply_percent_value_length(self, node) -> Tuple[str, bool]:
         column_name = self._treat_column_name(node.children[0])
         if len(node.children) == 4:
@@ -170,8 +151,6 @@ class QualityChecker(object):
                 return self._apply_quantile(c)
             elif c.data == "is_date":
                 return self._apply_date_validation(c)
-            elif c.data == "value_length":
-                return self._apply_value_length(c)
             elif c.data == "percent_value_length":
                 return self._apply_percent_value_length(c)
             elif c.data == "when_row_identified_by":
