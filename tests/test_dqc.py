@@ -8,7 +8,7 @@ import string
 from typing import List
 import json
 from datetime import date
-
+import numpy as np
 
 def test_validate_successful():
     df = pd.DataFrame([{'name': 'foo',
@@ -274,7 +274,7 @@ def test_when_target_column_missing():
     assert not result[0][1]
 
 def test_is_date_with_none():
-    df = pd.DataFrame({'dob': ['1970-01-01', 'foo', None]})
+    df = pd.DataFrame({'dob': ['1970-01-01', 'foo', None, np.nan]})
     check_spec = """
                 apply checks {
                     is_date(dob, pass_percent_threshold=100)

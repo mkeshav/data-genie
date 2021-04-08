@@ -46,14 +46,12 @@ class QualityChecker(object):
 
     @staticmethod
     def _is_date(datestr):
-        if datestr:
-            try:
-                parse(datestr)
-                return True
-            except ValueError:
-                return False
-
-        return False
+        try:
+            parse(datestr)
+            return True
+        except ValueError:
+            return False
+        
         
     def _apply_date_validation(self, node) -> Tuple[str, bool]:
         column_name = self._treat_column_name(node.children[0])
@@ -62,7 +60,8 @@ class QualityChecker(object):
         else:
             pass_percent = int(node.children[1])
 
-        valid_dates = self._obj.loc[self._obj[column_name].apply(self._is_date)]
+        non_null_date_rows = self._obj[self._obj[column_name].notnull()]
+        valid_dates = non_null_date_rows[column_name].apply(self._is_date)
         return node.data, (valid_dates.shape[0]/self._obj.shape[0])*100 >= pass_percent
 
     def _apply_has_one_of(self, node) -> Tuple[str, bool]:
