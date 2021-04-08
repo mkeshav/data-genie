@@ -52,17 +52,36 @@ class QualityChecker(object):
         except ValueError:
             return False
         
-        
+    
+    @staticmethod
+    def _str_to_bool(boolstr):
+        if boolstr == 'True':
+            return True
+        return False
+
     def _apply_date_validation(self, node) -> Tuple[str, bool]:
         column_name = self._treat_column_name(node.children[0])
-        if len(node.children) == 1:
-            pass_percent = 100
-        else:
+        pass_percent = 100
+        ignore_nulls = False
+        if len(node.children) == 3:
             pass_percent = int(node.children[1])
+            ignore_nulls = self._str_to_bool(node.children[2])
+
+        if len(node.children) == 2:
+            c = node.children[1]
+            if c.type == 'PERCENT':
+                pass_percent = int(c.value)
+            if c.type == 'BOOL':
+                ignore_nulls = self._str_to_bool(c.value)
+
 
         non_null_date_rows = self._obj[self._obj[column_name].notnull()]
         valid_dates = non_null_date_rows[column_name].apply(self._is_date)
-        return node.data, (valid_dates.shape[0]/self._obj.shape[0])*100 >= pass_percent
+        print(ignore_nulls)
+        if not ignore_nulls:
+            return node.data, (valid_dates.shape[0]/self._obj.shape[0])*100 >= pass_percent
+        else:
+            return node.data, (valid_dates.shape[0]/non_null_date_rows.shape[0])*100 >= pass_percent
 
     def _apply_has_one_of(self, node) -> Tuple[str, bool]:
         column_name = self._treat_column_name(node.children[0])
