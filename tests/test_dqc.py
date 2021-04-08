@@ -35,18 +35,6 @@ def test_parse_error():
         df.dqc.run(check_spec)
 
 
-def test_date_validation_error_returns_false():
-    df = pd.DataFrame({'dob': ['foo', '1970-01-01']})
-    check_spec = """
-                apply checks {
-                    is_date(dob)
-                }
-                """
-
-    failures = list(filter(lambda x: not x[1], df.dqc.run(check_spec)))
-    assert len(failures) == 1
-
-
 def _build_row_count(c: str, rhs: int):
     return f"row_count {c} {rhs}"
 
@@ -282,7 +270,7 @@ def test_is_date_with_none_ignore_nulls():
                 """
 
     result = df.dqc.run(check_spec)
-    assert result[0][1]
+    assert not result[0][1]
 
 def test_is_date_with_none_donot_ignore_nulls():
     df = pd.DataFrame({'dob': ['1970-01-01', 'foo', None, np.nan]})
@@ -294,3 +282,14 @@ def test_is_date_with_none_donot_ignore_nulls():
 
     result = df.dqc.run(check_spec)
     assert not result[0][1]
+
+def test_is_date_success():
+    df = pd.DataFrame({'dob': ['1970-01-01', 'foo', None, np.nan]})
+    check_spec = """
+                apply checks {
+                    is_date(dob, pass_percent_threshold=50, ignore_nulls=True)
+                }
+                """
+
+    result = df.dqc.run(check_spec)
+    assert  result[0][1]

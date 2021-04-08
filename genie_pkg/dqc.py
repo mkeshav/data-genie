@@ -75,13 +75,12 @@ class QualityChecker(object):
                 ignore_nulls = self._str_to_bool(c.value)
 
 
-        non_null_date_rows = self._obj[self._obj[column_name].notnull()]
-        valid_dates = non_null_date_rows[column_name].apply(self._is_date)
-        print(ignore_nulls)
+        non_null_rows = self._obj[self._obj[column_name].notnull()]
+        valid_dates = non_null_rows[non_null_rows[column_name].apply(self._is_date)]
         if not ignore_nulls:
             return node.data, (valid_dates.shape[0]/self._obj.shape[0])*100 >= pass_percent
         else:
-            return node.data, (valid_dates.shape[0]/non_null_date_rows.shape[0])*100 >= pass_percent
+            return node.data, (valid_dates.shape[0]/non_null_rows.shape[0])*100 >= pass_percent
 
     def _apply_has_one_of(self, node) -> Tuple[str, bool]:
         column_name = self._treat_column_name(node.children[0])
