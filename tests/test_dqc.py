@@ -169,7 +169,7 @@ def test_validate_spec_returns_true():
     sets(text(alphabet=string.ascii_letters + '-_', min_size=3), min_size=5, max_size=5),
     lists(integers(min_value=1000, max_value=9999), min_size=5, max_size=5)
 )
-@settings(deadline=300)
+@settings(deadline=500)
 def test_has_columns(columns, values):
     data = {}
     for c in columns:
