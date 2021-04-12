@@ -80,7 +80,10 @@ class QualityChecker(object):
         if not ignore_nulls:
             return node.data, (valid_dates.shape[0]/self._obj.shape[0])*100 >= pass_percent
         else:
-            return node.data, (valid_dates.shape[0]/non_null_rows.shape[0])*100 >= pass_percent
+            if (non_null_rows.shape[0] > 0):
+                return node.data, (valid_dates.shape[0]/non_null_rows.shape[0])*100 >= pass_percent
+
+        return node.data, False
 
     def _apply_has_one_of(self, node) -> Tuple[str, bool]:
         column_name = self._treat_column_name(node.children[0])

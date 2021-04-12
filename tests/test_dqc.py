@@ -293,3 +293,14 @@ def test_is_date_success():
 
     result = df.dqc.run(check_spec)
     assert  result[0][1]
+
+def test_is_date_division_by_zero():
+    df = pd.DataFrame({'dob': [None, np.nan], 'bar': 'foo'})
+    check_spec = """
+                apply checks {
+                    is_date(dob, ignore_nulls=True)
+                }
+                """
+
+    result = df.dqc.run(check_spec)
+    assert not result[0][1]
