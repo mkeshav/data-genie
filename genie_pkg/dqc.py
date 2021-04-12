@@ -121,7 +121,13 @@ class QualityChecker(object):
             not_na_df = self._obj
 
         passing = not_na_df[not_na_df['length'] == rhs]
-        return node.data, (passing.shape[0]/self._obj.shape[0])*100 >= percent
+        if not ignore_nulls:
+            return node.data, (passing.shape[0]/self._obj.shape[0])*100 >= percent
+        else:
+            if (not_na_df.shape[0] > 0):
+                return node.data, (passing.shape[0]/not_na_df.shape[0])*100 >= percent
+        
+        return node.data, False
 
     def _apply_has_columns(self, node) -> Tuple[str, bool]:
         column_names = [ct.value.replace("\"", "") for ct in node.children[0].children]
