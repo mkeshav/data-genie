@@ -240,7 +240,7 @@ class QualityChecker(object):
         return p.parse(check_spec)
 
     @staticmethod
-    def validate_spec(check_spec) -> str:
+    def validate_spec(check_spec) -> Tuple[str, bool]:
         try:
             QualityChecker._parse_spec(check_spec)
             return None, True

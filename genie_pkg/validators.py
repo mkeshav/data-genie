@@ -1,4 +1,4 @@
-from genie_pkg.generators import *
+from genie_pkg.generators import check_digit_luhn_mod_10
 
 def is_valid_cc(cc):
     first_15_digits = cc[:-1]
