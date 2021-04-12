@@ -105,13 +105,24 @@ class QualityChecker(object):
 
     def _apply_percent_value_length(self, node) -> Tuple[str, bool]:
         column_name = self._treat_column_name(node.children[0])
+        pass_percent = 100
+        ignore_nulls = False
         if len(node.children) == 4:
-            ignore_nulls = 'False'
-            percent = int(node.children[1])
+            # index 2 is "=="
+            c = node.children[1]
+            if c.type == 'PERCENT':
+                pass_percent = int(c.value)
+            if c.type == 'BOOL':
+                ignore_nulls = self._str_to_bool(c.value)
+            print('here...')                
             rhs = int(node.children[3])
+        elif len(node.children) == 3:
+            # index 1 is "=="
+            rhs = int(node.children[2])
         else:
-            percent = int(node.children[1])
+            pass_percent = int(node.children[1])
             ignore_nulls = node.children[2]
+            # index 3 is "=="
             rhs = int(node.children[4])
 
         self._obj['length'] = self._obj[column_name].fillna('').astype(str).map(len)
@@ -122,10 +133,10 @@ class QualityChecker(object):
 
         passing = not_na_df[not_na_df['length'] == rhs]
         if not ignore_nulls:
-            return node.data, (passing.shape[0]/self._obj.shape[0])*100 >= percent
+            return node.data, (passing.shape[0]/self._obj.shape[0])*100 >= pass_percent
         else:
             if (not_na_df.shape[0] > 0):
-                return node.data, (passing.shape[0]/not_na_df.shape[0])*100 >= percent
+                return node.data, (passing.shape[0]/not_na_df.shape[0])*100 >= pass_percent
         
         return node.data, False
 

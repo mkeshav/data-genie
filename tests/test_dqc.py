@@ -166,7 +166,7 @@ def test_validate_spec_returns_true():
 
 
 @given(
-    sets(text(alphabet=string.ascii_letters + '-_', min_size=1), min_size=5, max_size=5),
+    sets(text(alphabet=string.ascii_letters + '-_', min_size=3), min_size=5, max_size=5),
     lists(integers(min_value=1000, max_value=9999), min_size=5, max_size=5)
 )
 @settings(deadline=300)
@@ -304,3 +304,18 @@ def test_is_date_division_by_zero():
 
     result = df.dqc.run(check_spec)
     assert not result[0][1]
+
+def test_percent_values_have_length_param_combinations():
+    df = pd.DataFrame([{'name': 'foo',
+                        'd': '1970-01-01'}])
+    check_spec = """
+                apply checks {
+                    percent_of_values_have_length(foo, pass_percent_threshold=50, ignore_nulls=True) == 2
+                    percent_of_values_have_length(bar, ignore_nulls=True) == 2
+                    percent_of_values_have_length(foobar, pass_percent_threshold=50) == 2
+                    percent_of_values_have_length(foo) == 2
+                }
+                """
+    
+    result = df.dqc.run(check_spec)
+    assert True
