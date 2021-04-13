@@ -18,7 +18,7 @@ Gitignored .env file contains the SONAR_CLOUD_TOKEN variable (locally)
 
 ## Release
 
-After cloning deploy prepush hook by copying `prepush` script to `.git/hooks/`
+After cloning deploy pre-push hook by copying `pre-push` script to `.git/hooks/pre-push`
 
 
 - Increment version in init.py
