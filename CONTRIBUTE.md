@@ -17,8 +17,11 @@ Gitignored .env file contains the SONAR_CLOUD_TOKEN variable (locally)
 - `docker-compose run --rm test ./scan`
 
 ## Release
-increment version in init.py
 
+After cloning deploy prepush hook by copying `prepush` script to `.git/hooks/`
+
+
+- Increment version in init.py
 - `./tag-master`
 - `git push origin master`
 
