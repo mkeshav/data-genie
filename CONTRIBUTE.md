@@ -8,6 +8,7 @@
 - All tests (`docker-compose run --rm test`)
 - Single test in a file(`docker-compose run --rm test bash -c "python setup.py develop &&  pytest tests/test_fw.py -k 'test_float'"`)
 - `docker inspect --format='{{.Id}} {{.Parent}}'     $(docker images --filter since=<image_id> --quiet)` to check dependent child images
+- If yo are inside the container just run `python setup.py develop &&  pytest`
 
 
 ## Sonar Scan
