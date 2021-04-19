@@ -2,6 +2,7 @@ from pkg_resources import resource_string
 import json
 from genie_pkg.generators import one_of, random_geo_coords
 from genie_pkg import GenieException
+from typing import Tuple
 
 class Australia(object):
     def __init__(self):
@@ -11,7 +12,7 @@ class Australia(object):
     def get_random_state(self) -> str:
         return one_of(list(self.data.keys()))
 
-    def get_random_city_postcode(self, state) -> (str, str):
+    def get_random_city_postcode(self, state) -> Tuple[str, str]:
         state_data = self.data[state]
         post_codes = list(state_data.keys())      
         pc = one_of(post_codes)
