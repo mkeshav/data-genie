@@ -6,3 +6,4 @@ pipdeptree
 jsonschema
 sphinx
 hypothesis[pandas]
+mypy
