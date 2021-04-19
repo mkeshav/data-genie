@@ -123,7 +123,7 @@ def test_hypothesis(checks, dobs, ages, q_arr, genders, post_codes):
                        'post_code': post_codes,
                        'c1': 'v1', 'c2': "2", 'c3': 'v3'})
 
-    successes = list(filter(lambda x: x[1], df.dqc.run(check_spec)))
+    successes = list(filter(lambda x: x[2], df.dqc.run(check_spec)))
     # is_date, is_positive, quantile, has_one_of
     assert len(successes) > 0
 
@@ -138,9 +138,9 @@ def test_percent_value_length(postcodes):
                     percent_of_values_have_length(post_code, pass_percent_threshold=50) == 4
                 }
                 """
-    successes = list(filter(lambda x: x[1], df.dqc.run(check_spec)))
+    successes = list(filter(lambda x: x[2], df.dqc.run(check_spec)))
     assert len(successes) > 0
-    failures = list(filter(lambda x: not x[1], df.dqc.run(check_spec)))
+    failures = list(filter(lambda x: not x[2], df.dqc.run(check_spec)))
     assert len(failures) >= 0
 
 
@@ -185,15 +185,15 @@ def test_has_columns(columns, values):
     columns_lower_cased = [c.lower() for c in columns]
     check_spec_case_sensitive = check_spec_template % (_build_has_columns(columns_lower_cased, ignore_case=False),)
     result_case_sensitive = df.dqc.run(check_spec_case_sensitive)
-    failures = list(filter(lambda x: not x[1], result_case_sensitive))
+    failures = list(filter(lambda x: not x[2], result_case_sensitive))
     assert len(failures) == 1
-    successes = list(filter(lambda x: x[1], result_case_sensitive))
+    successes = list(filter(lambda x: x[2], result_case_sensitive))
     assert len(successes) == 0
     check_spec_ignore_case = check_spec_template % (_build_has_columns(list(columns), ignore_case=True),)
     result_ignore_case = df.dqc.run(check_spec_ignore_case)
-    failures = list(filter(lambda x: not x[1], result_ignore_case))
+    failures = list(filter(lambda x: not x[2], result_ignore_case))
     assert len(failures) == 0
-    successes = list(filter(lambda x: x[1], result_ignore_case))
+    successes = list(filter(lambda x: x[2], result_ignore_case))
     assert len(successes) == 1
 
 
@@ -209,17 +209,17 @@ def test_has_one_of():
     df = pd.DataFrame(data)
     check_spec_case_sensitive = check_spec_template % (_build_column_has_one_of('gender', gender),)
     result_case_sensitive = df.dqc.run(check_spec_case_sensitive)
-    failures = list(filter(lambda x: not x[1], result_case_sensitive))
+    failures = list(filter(lambda x: not x[2], result_case_sensitive))
     assert len(failures) == 1
-    successes = list(filter(lambda x: x[1], result_case_sensitive))
+    successes = list(filter(lambda x: x[2], result_case_sensitive))
     assert len(successes) == 0
     # previous test would have mutated the column name, hence recreate the df
     df = pd.DataFrame(data)
     check_spec_ignore_case = check_spec_template % (_build_column_has_one_of('gender', gender, ignore_case=True),)
     result_ignore_case = df.dqc.run(check_spec_ignore_case, ignore_column_case=True)
-    failures = list(filter(lambda x: not x[1], result_ignore_case))
+    failures = list(filter(lambda x: not x[2], result_ignore_case))
     assert len(failures) == 0
-    successes = list(filter(lambda x: x[1], result_ignore_case))
+    successes = list(filter(lambda x: x[2], result_ignore_case))
     assert len(successes) == 1
 
 def test_when_success():
@@ -237,7 +237,7 @@ def test_when_success():
     
     df = pd.DataFrame({"c1": "v1", "c2": "2", "c3": "v3", "c4": "v4"}, index=[0])
     result = df.dqc.run(check_spec)    
-    assert result[0][1]
+    assert result[0][2]
 
 def test_when_row_identifier_column_missing():
     check_spec = """
@@ -259,7 +259,7 @@ def test_when_target_column_missing():
     
     df = pd.DataFrame({"c1": "v1", "c2": "2", "c4": "v3"}, index=[0])
     result = df.dqc.run(check_spec)
-    assert not result[0][1]
+    assert not result[0][2]
 
 def test_is_date_with_none_ignore_nulls():
     df = pd.DataFrame({'dob': ['1970-01-01', 'foo', None, np.nan]})
@@ -270,7 +270,7 @@ def test_is_date_with_none_ignore_nulls():
                 """
 
     result = df.dqc.run(check_spec)
-    assert not result[0][1]
+    assert not result[0][2]
 
 def test_is_date_with_none_donot_ignore_nulls():
     df = pd.DataFrame({'dob': ['1970-01-01', 'foo', None, np.nan]})
@@ -281,7 +281,7 @@ def test_is_date_with_none_donot_ignore_nulls():
                 """
 
     result = df.dqc.run(check_spec)
-    assert not result[0][1]
+    assert not result[0][2]
 
 def test_is_date_success():
     df = pd.DataFrame({'dob': ['1970-01-01', 'foo', None, np.nan]})
@@ -292,7 +292,7 @@ def test_is_date_success():
                 """
 
     result = df.dqc.run(check_spec)
-    assert  result[0][1]
+    assert  result[0][2]
 
 def test_is_date_division_by_zero():
     df = pd.DataFrame({'dob': [None, np.nan], 'bar': 'foo'})
@@ -303,7 +303,7 @@ def test_is_date_division_by_zero():
                 """
 
     result = df.dqc.run(check_spec)
-    assert not result[0][1]
+    assert not result[0][2]
 
 def test_percent_values_have_length_param_combinations():
     df = pd.DataFrame([{'name': 'foo',

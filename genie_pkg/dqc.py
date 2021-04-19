@@ -1,8 +1,8 @@
 import pandas as pd
 import pandas_flavor as pf
-from lark import Lark, Tree
+from lark import Lark, Tree, Token
 from pkg_resources import resource_string
-from typing import Tuple, List
+from typing import Tuple, List, Any
 from genie_pkg import GenieException
 import numpy as np
 from dateutil.parser import parse
@@ -31,18 +31,18 @@ class QualityChecker(object):
         else:
             return lambda _: False
 
-    def _treat_column_name(self, column_name: str) -> str:
+    def _treat_column_name(self, column_name: Token) -> str:
         if self.ignore_column_case:
-            return column_name.lower()
-        return column_name
+            return column_name.value.lower()
+        return column_name.value
 
-    def _apply_quantile(self, node) -> Tuple[str, bool]:
+    def _apply_quantile(self, node) -> Tuple[str, Any, bool]:
         column_name = self._treat_column_name(node.children[0])
         q = float(node.children[1])
         c = node.children[2]
         rhs = float(node.children[3])
         lhs = self._obj[column_name].quantile(q)
-        return node.data, self._comparator_to_fn(c, rhs)(lhs)
+        return node.data, column_name, self._comparator_to_fn(c, rhs)(lhs)
 
     @staticmethod
     def _is_date(datestr):
@@ -59,7 +59,7 @@ class QualityChecker(object):
             return True
         return False
 
-    def _apply_date_validation(self, node) -> Tuple[str, bool]:
+    def _apply_date_validation(self, node) -> Tuple[str, Any, bool]:
         column_name = self._treat_column_name(node.children[0])
         pass_percent = 100
         ignore_nulls = False
@@ -78,14 +78,15 @@ class QualityChecker(object):
         non_null_rows = self._obj[self._obj[column_name].notnull()]
         valid_dates = non_null_rows[non_null_rows[column_name].apply(self._is_date)]
         if not ignore_nulls:
-            return node.data, (valid_dates.shape[0]/self._obj.shape[0])*100 >= pass_percent
+            return node.data, column_name, (valid_dates.shape[0]/self._obj.shape[0])*100 >= pass_percent
         else:
             if (non_null_rows.shape[0] > 0):
-                return node.data, (valid_dates.shape[0]/non_null_rows.shape[0])*100 >= pass_percent
+                return node.data, column_name, (valid_dates.shape[0]/non_null_rows.shape[0])*100 >= pass_percent
 
-        return node.data, False
+        return node.data, column_name, False
 
-    def _apply_has_one_of(self, node) -> Tuple[str, bool]:
+
+    def _apply_has_one_of(self, node) -> Tuple[str, Any, bool]:
         column_name = self._treat_column_name(node.children[0])
         allowed_values = [ct.value.replace("\"", "") for ct in node.children[1].children]
         unique_values = self._obj[column_name].unique()
@@ -101,9 +102,9 @@ class QualityChecker(object):
             allowed_values = [v.lower() for v in allowed_values]
             unique_values = [v.lower() for v in unique_values]
 
-        return node.data, all(elem in allowed_values for elem in unique_values)
+        return node.data, column_name, all(elem in allowed_values for elem in unique_values)
 
-    def _apply_percent_value_length(self, node) -> Tuple[str, bool]:
+    def _apply_percent_value_length(self, node) -> Tuple[str, Any, bool]:
         column_name = self._treat_column_name(node.children[0])
         pass_percent = 100
         ignore_nulls = False
@@ -133,14 +134,14 @@ class QualityChecker(object):
 
         passing = not_na_df[not_na_df['length'] == rhs]
         if not ignore_nulls:
-            return node.data, (passing.shape[0]/self._obj.shape[0])*100 >= pass_percent
+            return node.data, column_name, (passing.shape[0]/self._obj.shape[0])*100 >= pass_percent
         else:
             if (not_na_df.shape[0] > 0):
-                return node.data, (passing.shape[0]/not_na_df.shape[0])*100 >= pass_percent
+                return node.data, column_name, (passing.shape[0]/not_na_df.shape[0])*100 >= pass_percent
         
-        return node.data, False
+        return node.data, column_name, False
 
-    def _apply_has_columns(self, node) -> Tuple[str, bool]:
+    def _apply_has_columns(self, node) -> Tuple[str, Any, bool]:
         column_names = [ct.value.replace("\"", "") for ct in node.children[0].children]
         if len(node.children) == 1:
             ignore_case = False
@@ -157,7 +158,7 @@ class QualityChecker(object):
             expected_columns = column_names
             columns_in_df = self._obj.columns
 
-        return node.data, len(set(columns_in_df).intersection(expected_columns)) == len(set(expected_columns))
+        return node.data, ','.join(columns_in_df), len(set(columns_in_df).intersection(expected_columns)) == len(set(expected_columns))
 
     @staticmethod
     def _build_query(key_value_node: Tree):
@@ -165,7 +166,7 @@ class QualityChecker(object):
         cleansed = [(s[0].replace("\"", "").strip(), s[1].replace("\"", "").strip()) for s in splits]
         return ' & '.join([f'{c[0]} == "{c[1]}"' for c in cleansed])
 
-    def _apply_when_row(self, node) -> Tuple[str, bool]:
+    def _apply_when_row(self, node) -> Tuple[str, Any, bool]:
         q = self._build_query(node.children[0]) # key value pairs
         qualifying_rows = self._obj.query(q)
         target_columns = node.children[1]
@@ -175,27 +176,27 @@ class QualityChecker(object):
         for c in cleansed_target_columns_values:
             unique_values = qualifying_rows[c[0]].unique()
             if not (len(unique_values) == 1 and unique_values[0] == c[1]):
-                return (f'{node.data}: Column {c[0]} does not pass', False)
-        return (node.data, True)
+                return (f'{node.data}: Column {c[0]} does not pass', 'None', False)
+        return node.data, None, True
 
-    def _apply_check(self, check) -> Tuple[str, bool]:
+    def _apply_check(self, check) -> Tuple[str, Any, bool]:
         try:
             c = check[0]
             if c.data == "row_count":
                 comparator = c.children[0]
                 quantity = int(c.children[1])
-                return c.data, self._comparator_to_fn(comparator, quantity)(self._obj.shape[0])
+                return c.data, None, self._comparator_to_fn(comparator, quantity)(self._obj.shape[0])
             elif c.data == "has_columns":
                 return self._apply_has_columns(c)
             elif c.data == "is_unique":
                 column_name = self._treat_column_name(c.children[0])
-                return c.data, self._obj[column_name].is_unique
+                return c.data, None, self._obj[column_name].is_unique
             elif c.data == "not_null":
                 column_name = self._treat_column_name(c.children[0])
-                return c.data, self._obj[column_name].isna().sum() == 0
+                return c.data, None, self._obj[column_name].isna().sum() == 0
             elif c.data == "is_positive":
                 column_name = self._treat_column_name(c.children[0])
-                return c.data, (self._obj[column_name] > 0).all()
+                return c.data, column_name, (self._obj[column_name] > 0).all()
             elif c.data == "has_one_of":
                 return self._apply_has_one_of(c)
             elif c.data == "quantile":
@@ -209,12 +210,12 @@ class QualityChecker(object):
             else:
                 raise GenieException(f"{c.data} seems to be not implemented in the DSL")
         except KeyError:
-            return "Key error: {0} for {1}".format(c.data, c.children[0]), False
+            return "Key error: {0} for {1}".format(c.data, c.children[0]), None, False
         except Exception as e:
             raise GenieException(f"{c.data} has errors: {e}")    
 
-    def _apply_predicates(self, predicates) -> List[Tuple[str, bool]]:
-        results = []
+    def _apply_predicates(self, predicates) -> List[Tuple[str, Any, bool]]:
+        results:List[Tuple[str, Any, bool]] = []
         for predicate in predicates:
             if predicate.data == "code_block":
                 for check in predicate.children:
@@ -224,7 +225,7 @@ class QualityChecker(object):
                 raise GenieException('Unknown instruction: %s' % predicates.data)
         return results
 
-    def _run(self, pt: Tree) -> List[Tuple[str, bool]]:
+    def _run(self, pt: Tree) -> List[Tuple[str, Any, bool]]:
         if len(pt.children) != 1:
             raise GenieException('How is this possible: %s' % pt.children)
 
@@ -240,7 +241,7 @@ class QualityChecker(object):
         return p.parse(check_spec)
 
     @staticmethod
-    def validate_spec(check_spec) -> Tuple[str, bool]:
+    def validate_spec(check_spec) -> Tuple[Any, bool]:
         try:
             QualityChecker._parse_spec(check_spec)
             return None, True
