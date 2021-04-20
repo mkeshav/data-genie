@@ -1,11 +1,19 @@
 import json
 import random
+import string
 from typing import NewType
 
 from jinja2 import Template
 
-from genie_pkg.generators import *
-import string
+from genie_pkg.generators import (generate_email_id, generate_ip, guid,
+                                  now_epoch, one_of, random_bool,
+                                  random_date_from_today, random_float,
+                                  random_geo_coords, random_integer,
+                                  random_mastercard_number, random_string,
+                                  random_string_with_special_chars,
+                                  random_visacard_number,
+                                  random_wonderland_text)
+
 
 def random_string_list(list_size, item_length):
     l = []
