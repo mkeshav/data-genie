@@ -4,19 +4,20 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mkeshav_data-genie&metric=alert_status)](https://sonarcloud.io/dashboard?id=mkeshav_data-genie)
 
 # Data Genie
+
 Genie that can satisfy your data wish.
 
-### QuickStart
+## QuickStart
 
 - `python3 -m pip install data-genie`
 - Detailed [Documentation](https://data-genie.readthedocs.io)
 
-### Supported Formats
+## Supported Formats
 
 - Fixed Width
 - Delimited (CSV)
 - JSON
 
-### Data quality
+## Data quality
 
 `dqc` module allows to write data quality checks on pandas data frame.
