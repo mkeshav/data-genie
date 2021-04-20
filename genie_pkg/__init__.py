@@ -1,7 +1,8 @@
 # coding:utf-8
 
 """
-    Genie that fulfils your data dreams
+    Genie that fulfils your data dreams.
+    Look at https://data-genie.readthedocs.io for documentation
 """
 
 __version__ = '1.2.9'
