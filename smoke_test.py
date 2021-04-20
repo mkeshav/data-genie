@@ -17,7 +17,7 @@ if __name__ == '__main__':
                         'dob': '1970-01-01'}])
 
     check_results = df.dqc.run(check_spec)
-    failures = list(filter(lambda x: not x[1], check_results))
+    failures = list(filter(lambda x: not x[2], check_results))
     if len(failures) > 0:
         raise Exception("WTF!!!")
     else:
