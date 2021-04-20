@@ -26,13 +26,13 @@ def _process_post_codes():
             p["localities"] = ls
 
     for k, v in d.items():
-        for k1, v1 in v.items():
+        for k1, _ in v.items():
             ls = d[k][k1]["localities"]
             d[k][k1]["localities"] = list(set(ls))
-    
+
     return d
 
 
 if __name__ == "__main__":
-    with open('./genie_pkg/data/oz_postcodes.json', 'w') as f:        
+    with open('./genie_pkg/data/oz_postcodes.json', 'w') as f:
         json.dump(_process_post_codes(), f, sort_keys=True, indent=4)
