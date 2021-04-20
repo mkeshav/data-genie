@@ -1,4 +1,4 @@
-[![CircleCI branch](https://img.shields.io/circleci/project/github/mkeshav/data-genie/master.svg)](https://circleci.com/gh/mkeshav/data-genie/tree/master)
+[![CircleCI](https://circleci.com/gh/mkeshav/data-genie.svg?style=shield)](https://circleci.com/gh/mkeshav/data-genie)
 [![PyPI version](https://badge.fury.io/py/data-genie.svg)](https://badge.fury.io/py/data-genie)
 [![Documentation Status](https://readthedocs.org/projects/data-genie/badge/?version=latest)](https://data-genie.readthedocs.io/en/latest/?badge=latest)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mkeshav_data-genie&metric=alert_status)](https://sonarcloud.io/dashboard?id=mkeshav_data-genie)
