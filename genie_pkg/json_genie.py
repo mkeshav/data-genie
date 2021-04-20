@@ -24,10 +24,10 @@ def random_string_list(list_size, item_length):
     return json.dumps(l)
 
 
-def random_integer_list(list_size, start, max):
+def random_integer_list(list_size, start, end):
     l = []
     for _ in range(0, list_size):
-        l.insert(0, random_integer(start, max))
+        l.insert(0, random_integer(start, end))
     return l
 
 
@@ -80,6 +80,7 @@ def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
 
 
 def generate(template_string) -> str:
+
     '''
         Generate json data for the provided specification
 
