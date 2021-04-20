@@ -14,7 +14,7 @@ COPY pypirc /root/.pypirc
 
 RUN python3 -m pip install -r /app/requirements_dev.txt
 
-ADD . /app
+COPY . /app
 ENV PATH="/root/.local/bin:${PATH}"
 
 FROM dev as smoketest
@@ -24,7 +24,7 @@ FROM dev AS sonar
 RUN apt update
 RUN apt purge --auto-remove openjdk*
 RUN apt install -y default-jdk wget bsdtar
-RUN wget -qO- https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip | bsdtar -xvf - -C /root/.local/
-RUN chmod +x /root/.local/sonar-scanner-${SONAR_SCANNER_VERSION}-linux/bin/sonar-scanner
-RUN chmod +x /root/.local/sonar-scanner-${SONAR_SCANNER_VERSION}-linux/jre/bin/java
-RUN ln -s /root/.local/sonar-scanner-${SONAR_SCANNER_VERSION}-linux/bin/sonar-scanner /root/.local/bin/sonar-scanner
+RUN wget -qO- "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip" | bsdtar -xvf - -C /root/.local/
+RUN chmod +x "/root/.local/sonar-scanner-${SONAR_SCANNER_VERSION}-linux/bin/sonar-scanner"
+RUN chmod +x "/root/.local/sonar-scanner-${SONAR_SCANNER_VERSION}-linux/jre/bin/java"
+RUN ln -s "/root/.local/sonar-scanner-${SONAR_SCANNER_VERSION}-linux/bin/sonar-scanner" /root/.local/bin/sonar-scanner
