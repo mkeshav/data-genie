@@ -101,29 +101,28 @@ def random_geo_coords(center=(-37.814, 144.963,), radius=10000, accuracy=3):
             accuracy (int): Coordinate accuracy (3 decimals means upto 110m)
             https://gis.stackexchange.com/questions/8650/measuring-accuracy-of-latitude-and-longitude
 
-            When using geographic (lat,lon) coordinates, 
-            then x0 (longitude) and y0 (latitude) will be in degrees but r will most 
-            likely be in meters (or feet or miles or some other linear measurement). 
-            First, convert the radius r into degrees as if you were located near the 
+            When using geographic (lat,lon) coordinates,
+            then x0 (longitude) and y0 (latitude) will be in degrees but r will most
+            likely be in meters (or feet or miles or some other linear measurement).
+            First, convert the radius r into degrees as if you were located near the
             equator. Here, there are about 111,300 meters in a degree.
 
-            Second, after generating x and y as in step (1), 
+            Second, after generating x and y as in step (1),
             adjust the x-coordinate for the shrinking of the east-west distances:
 
 
         Returns:
             data: (float, float)
     '''
-
     r = radius/111300 #about 111300 meters in one degree
     x0,y0 = center
     u = float(uniform(0.0,1.0))
     v = float(uniform(0.0,1.0))
     w = r * math.sqrt(u)
     t = 2 * math.pi * v
-    x = w * math.cos(t) 
+    x = w * math.cos(t)
     y = w * math.sin(t)
-    
+
     x_latitude  = x + x0
     y_longitude = y + y0
     return round(x_latitude, accuracy), round(y_longitude, accuracy)
@@ -143,7 +142,6 @@ def check_digit_luhn_mod_10(digits):
     '''
         https://en.wikipedia.org/wiki/Luhn_algorithm
     '''
-    
     reversed_digits = digits[::-1]
     calibrated_digits = []
     for i, d in enumerate(reversed_digits):
@@ -155,7 +153,7 @@ def check_digit_luhn_mod_10(digits):
                 calibrated_digits.append(m)
         else:
             calibrated_digits.append(int(d))
-    
+
     sum_of_digs = sum(calibrated_digits)
     return (sum_of_digs * 9) % 10
 
@@ -183,14 +181,14 @@ def random_visacard_number(length=16):
         ['4', '4', '8', '6'],
         ['4', '7', '1', '6'],
         ['4']]
-    
+
     return _random_cc(visa_prefixes, length=length)
 
 
 def one_of(choices):
     if not isinstance(choices, list):
         raise GenieException("Provided value should be a list of choices")
-        
+
     return choice(choices)
 
 
@@ -223,7 +221,6 @@ def utc_epoch_start_and_end_ms_for(year, month, day):
     :param day:
     :return: Start and End of day in utc epoch millis. End is 11:59:59:990
     """
-
     start = datetime(year, month, day, 0, 0)
     end = start + timedelta(1)
     s_epoch_ms = int(start.replace(tzinfo=pytz.utc).timestamp() * 1000)

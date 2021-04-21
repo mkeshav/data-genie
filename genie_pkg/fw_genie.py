@@ -79,7 +79,8 @@ def _generate_columns(colspecs, encoding):
 
 
 def generate(colspecs, nrows, encoding='utf-8'):
-    '''Generate fixedwidth data for the provided specification
+    '''
+        Generate fixedwidth data for the provided specification
 
         Args:
             colspecs (tuple-> (length, type, optional)): List of column specifications (similar to pandas)
@@ -95,7 +96,8 @@ def generate(colspecs, nrows, encoding='utf-8'):
 
 
 def anonymise_columns(row: bytes, anonymous_col_specs, encoding='utf-8') -> bytes:
-    '''Generate fixedwidth data for the provided specification
+    '''
+        Generate fixedwidth data for the provided specification
 
         Args:
             row (bytes): Encoded bytes of the row data
