@@ -1,4 +1,3 @@
-import pandas as pd
 import pandas_flavor as pf
 from lark import Lark, Tree, Token
 from pkg_resources import resource_string
@@ -10,9 +9,12 @@ from dateutil.parser import parse
 
 @pf.register_dataframe_accessor('dqc')
 class QualityChecker(object):
-    
+
     """Monkey patches pandas dataframe to run data quality checks"""
+
     def __init__(self, pandas_obj):
+        '''Pandas dataframe to work on'''
+
         self._validate(pandas_obj)
         self._obj = pandas_obj
         self.ignore_column_case = False
@@ -53,8 +55,8 @@ class QualityChecker(object):
             return True
         except ValueError:
             return False
-        
-    
+
+
     @staticmethod
     def _str_to_bool(boolstr):
         if boolstr == 'True':
@@ -117,7 +119,7 @@ class QualityChecker(object):
                 pass_percent = int(c.value)
             if c.type == 'BOOL':
                 ignore_nulls = self._str_to_bool(c.value)
-            print('here...')                
+            print('here...')
             rhs = int(node.children[3])
         elif len(node.children) == 3:
             # index 1 is "=="
@@ -140,7 +142,7 @@ class QualityChecker(object):
         else:
             if (not_na_df.shape[0] > 0):
                 return node.data, column_name, (passing.shape[0]/not_na_df.shape[0])*100 >= pass_percent
-        
+
         return node.data, column_name, False
 
     def _apply_has_columns(self, node) -> Tuple[str, Any, bool]:
@@ -174,7 +176,7 @@ class QualityChecker(object):
         target_columns = node.children[1]
         target_columns_values = [ct.value.split("==") for ct in target_columns.children]
         cleansed_target_columns_values = [(s[0].replace("\"", "").strip(), s[1].replace("\"", "").strip()) for s in target_columns_values]
-        
+
         for c in cleansed_target_columns_values:
             unique_values = qualifying_rows[c[0]].unique()
             if not (len(unique_values) == 1 and unique_values[0] == c[1]):
@@ -214,7 +216,7 @@ class QualityChecker(object):
         except KeyError:
             return "Key error: {0} for {1}".format(c.data, c.children[0]), None, False
         except Exception as e:
-            raise GenieException(f"{c.data} has errors: {e}")    
+            raise GenieException(f"{c.data} has errors: {e}")
 
     def _apply_predicates(self, predicates) -> List[Tuple[str, Any, bool]]:
         results:List[Tuple[str, Any, bool]] = []

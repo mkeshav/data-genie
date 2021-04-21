@@ -5,9 +5,12 @@ from genie_pkg import GenieException
 from typing import Tuple
 
 class Australia(object):
+
     """Provides random addresses from australia"""
 
     def __init__(self):
+        '''No arguments'''
+
         self.data = json.loads(resource_string(__name__, 'data/oz_postcodes.json'))
 
     def get_random_state(self) -> str:
