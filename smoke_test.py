@@ -16,6 +16,8 @@ if __name__ == '__main__':
     df = pd.DataFrame([{'name': 'foo',
                         'dob': '1970-01-01'}])
 
+    # Below line is to remove codacy from saying Quality checker is not used as it does not understand monkey patching
+    QualityChecker(df)
     check_results = df.dqc.run(check_spec)
     failures = list(filter(lambda x: not x[2], check_results))
     if len(failures) > 0:
