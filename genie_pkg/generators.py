@@ -188,7 +188,7 @@ def random_visacard_number(length=16):
 
 
 def one_of(choices):
-    if type(choices) is not list:
+    if not isinstance(choices, list):
         raise GenieException("Provided value should be a list of choices")
         
     return choice(choices)
