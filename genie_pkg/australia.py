@@ -4,8 +4,7 @@ from genie_pkg.generators import one_of, random_geo_coords
 from genie_pkg import GenieException
 from typing import Tuple
 
-class Australia(object):
-    
+class Australia(object):    
     """Provides random addresses from australia"""
 
     def __init__(self):

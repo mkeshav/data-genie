@@ -50,8 +50,7 @@ def _generate_columns(colspecs):
 
 
 def anonymise_columns(row: bytes, anonymous_col_specs, encoding='utf-8', delimiter=',') -> bytes:
-    '''
-        Generate delimited data for the provided specification
+    '''Generate delimited data for the provided specification
 
         Args:
             row (bytes): Encoded bytes of the row data
