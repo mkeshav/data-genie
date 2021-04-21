@@ -12,17 +12,6 @@ services:
       - PYPI_API_TOKEN
       - CODACY_PROJECT_TOKEN
 
-  scan:
-    build:
-      context: .
-      target: sonar
-    volumes:
-      - .:/app:cached
-    environment:
-      - SONAR_CLOUD_TOKEN
-      - CIRCLE_BRANCH
-      - CIRCLE_PULL_REQUEST
-
   smoke_test:
     build:
       context: .

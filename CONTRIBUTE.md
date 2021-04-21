@@ -11,12 +11,6 @@
 - `docker inspect --format='{{.Id}} {{.Parent}}'     $(docker images --filter since=<image_id> --quiet)` to check dependent child images
 - If yo are inside the container just run `python setup.py develop &&  pytest`
 
-## Sonar Scan
-
-Gitignored .env file contains the SONAR_CLOUD_TOKEN variable (locally)
-
-- `docker-compose run --rm test ./scan`
-
 ## Release
 
 After cloning deploy pre-push hook by copying `pre-push` script to `.git/hooks/pre-push`
@@ -35,5 +29,6 @@ Builds happen on circle ci with github integration
 
 Following environment variables need to be set on circle
 
-- `SONAR_CLOUD_TOKEN`
 - `PYPI_API_TOKEN` (Pypi project token to allow publishing)
+
+- `CODACY_PROJECT_TOKEN` (Only during builds) 
