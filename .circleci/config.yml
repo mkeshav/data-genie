@@ -45,7 +45,7 @@ jobs:
           command: |
             docker-compose run --rm test bash -c "mypy genie_pkg"
 
-  sonar_scan:
+  code_quality:
     machine: true
     steps:
       - checkout
@@ -98,7 +98,7 @@ workflows:
   scan-test-upload:
     jobs:
       - test  # your custom job from your config, that builds your code
-      - sonar_scan
+      - code_quality
       - type_check
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
