@@ -5,7 +5,6 @@ from genie_pkg import GenieException
 from typing import Tuple
 
 class Australia(object):
-
     """Provides random addresses from australia"""
 
     def __init__(self):
