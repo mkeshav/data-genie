@@ -40,14 +40,14 @@ This module supports writing data quality checks on pandas dataframe.
 **Available complex checks**
 
 - Apply checks on multiple columns of rows identified by the condition (supports strings only)
-  
+
 .. code-block:: python
 
     # Check column values using row identification. c1, c2, c3 and c4 are column names
     check_spec = """
                     apply checks {
                         when row_identified_by {
-                            "c1": "v1", 
+                            "c1": "v1",
                             "c2": "2"
                         } then {
                             "c3" == "v3",
@@ -55,6 +55,7 @@ This module supports writing data quality checks on pandas dataframe.
                         }
                     }
                     """
-    
+
     df = pd.DataFrame({"c1": "v1", "c2": "2", "c3": "v3"}, index=[0])
+    # Returns [(check_name, None|column_name, True|False)]
     result = df.dqc.run(check_spec)

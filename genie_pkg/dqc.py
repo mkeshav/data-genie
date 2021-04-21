@@ -251,7 +251,7 @@ class QualityChecker(object):
         except Exception as e:
             return str(e), False
 
-    def run(self, check_spec, ignore_column_case=False):
+    def run(self, check_spec, ignore_column_case=False) -> List[Tuple[str, Any, bool]]:
         ast = self._parse_spec(check_spec)
         self.ignore_column_case = ignore_column_case
         if self.ignore_column_case:
