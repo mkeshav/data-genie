@@ -57,9 +57,9 @@ jobs:
             sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
       - run:
-          name: Scan
+          name: Codacy
           command: |
-            docker-compose run --rm scan ./scan   
+            docker-compose run --rm test ./codacy.sh   
 
   smoke_test:
     machine: true

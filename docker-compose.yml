@@ -10,6 +10,7 @@ services:
       bash -c "python3 setup.py develop && pytest -vv"
     environment:
       - PYPI_API_TOKEN
+      - CODACY_PROJECT_TOKEN
 
   scan:
     build:
