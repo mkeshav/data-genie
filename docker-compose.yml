@@ -11,6 +11,7 @@ services:
     environment:
       - PYPI_API_TOKEN
       - CODACY_PROJECT_TOKEN
+      - CIRCLE_WORKFLOW_ID
 
   smoke_test:
     build:
