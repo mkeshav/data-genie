@@ -17,7 +17,7 @@ This module supports writing data quality checks on pandas dataframe.
 
     # if you pass ignore_column_case=True, column names in dataframe will be case insensitive
     check_results = df.dqc.run(check_spec, ignore_column_case=False(default))
-    failures = list(filter(lambda x: not x[1], check_results))
+    failures = list(filter(lambda x: not x[2], check_results))
     assert len(failures) == 0
 
     # To check if your spec is valid or not. If it is bad, will return (error, False) else (None, True)
