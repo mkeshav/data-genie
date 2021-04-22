@@ -10,10 +10,10 @@ from dateutil.parser import parse
 @pf.register_dataframe_accessor('dqc')
 class QualityChecker(object):
 
-    """Monkey patches pandas dataframe to run data quality checks"""
+    """Monkey patches pandas dataframe to run data quality checks."""
 
     def __init__(self, pandas_obj):
-        '''Pandas dataframe to work on'''
+        """Pandas dataframe to work on."""
         self._validate(pandas_obj)
         self._obj = pandas_obj
         self.ignore_column_case = False

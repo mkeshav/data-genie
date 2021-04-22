@@ -50,8 +50,7 @@ def _generate_columns(colspecs):
 
 
 def anonymise_columns(row: bytes, anonymous_col_specs, encoding='utf-8', delimiter=',') -> bytes:
-    '''
-        Generate delimited data for the provided specification
+    """Generate delimited data for the provided specification
 
         Args:
             row (bytes): Encoded bytes of the row data
@@ -61,7 +60,7 @@ def anonymise_columns(row: bytes, anonymous_col_specs, encoding='utf-8', delimit
 
         Returns:
             data: Mutated row.
-    '''
+    """
     lines = row.decode(encoding).splitlines()
     anonymised_csv = list(csv.reader(lines, delimiter=delimiter))[0]
     for ac in anonymous_col_specs:
@@ -80,8 +79,7 @@ def anonymise_columns(row: bytes, anonymous_col_specs, encoding='utf-8', delimit
 
 
 def generate(colspecs, nrows, encoding='utf-8', delimiter=','):
-    '''
-        Generate fixedwidth data for the provided specification
+    """Generate fixedwidth data for the provided specification
 
         Args:
             colspecs (tuple-> (length, type, optional)): List of column specifications (similar to pandas)
@@ -91,7 +89,7 @@ def generate(colspecs, nrows, encoding='utf-8', delimiter=','):
 
         Returns:
             data: Iterator over nrows.
-    '''
+    """
     for _ in range(nrows):
         row_data = _generate_columns(colspecs)
         yield delimiter.join(row_data).encode(encoding)
