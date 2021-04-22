@@ -9,5 +9,5 @@ bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml \
     --project-token "$CODACY_PROJECT_TOKEN" \
     --organization-provider gh \
     --username mkeshav \
-    --commit-uuid "$CIRCLE_WORKFLOW_ID" \
+    --commit-uuid "$CIRCLE_SHA1" \
     --project-name data-genie
