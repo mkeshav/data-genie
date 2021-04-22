@@ -5,7 +5,7 @@ import pytest
 
 def test_ipv4():
     ipv4 = generate_ip()
-    assert re.match('\d+\.\d+\.\d+\.\d+', ipv4)
+    assert re.match(r'\d+\.\d+\.\d+\.\d+', ipv4)
 
 
 def test_ipv6():
@@ -67,7 +67,7 @@ def test_one_of_throws_exception():
 def test_random_wonderland_text():
     text = random_wonderland_text(2)
     #funny regex may not work for all sentences. No use installing nltk for a test, hence no len assertion
-    assert text is not None 
+    assert text is not None
 
 
 def test_random_dob():
