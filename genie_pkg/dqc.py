@@ -9,7 +9,6 @@ from dateutil.parser import parse
 
 @pf.register_dataframe_accessor('dqc')
 class QualityChecker(object):
-
     """Monkey patches pandas dataframe to run data quality checks."""
 
     def __init__(self, pandas_obj):

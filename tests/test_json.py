@@ -65,7 +65,7 @@ def test_almighty():
         ]
     }
 
-    template = '''
+    template = """
         {
             "k1": {{random_integer(1, 1000)}},
             "k2": "{{random_string_with_special_chars(5)}}",
@@ -93,7 +93,7 @@ def test_almighty():
             "k17": "{{random_visacard_number()}}",
             "k18": "{{random_text()}}"
         }
-    '''
+    """
     d = json.loads(generate(template))
     validate(instance=d, schema=schema)
 
@@ -106,12 +106,12 @@ def favourite_fruit():
 
 
 def test_generate_with_custom_template_function():
-    template = '''
+    template = """
         {
             "k1": {{random_integer(1, 1000)}},
             "k2": "{{favourite_fruit()}}"
         }
-    '''
+    """
 
     schema = {
         "type": "object",

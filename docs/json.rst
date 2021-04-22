@@ -6,7 +6,7 @@ This module supports generation of Json data.
 .. code-block:: python
 
    from genie_pkg import json_genie
-   template = '''
+   template = """
         {
             "k1": {{random_integer(1, 1000)}},
             "k2": "{{random_string_with_special_chars(5)}}",
@@ -33,7 +33,7 @@ This module supports generation of Json data.
             "k16": "{{random_mastercard_number()}}",
             "k17": "{{random_visacard_number()}}"
         }
-    '''
+    """
    d = json.loads(json_genie.generate(template))
    do_something(d)
 
@@ -73,12 +73,12 @@ function will be useful for others
    def favourite_fruit():
       return random.choice(fruit_choices)
 
-   template = '''
+   template = """
       {
          "k1": {{random_integer(1000)}},
          "k2": "{{favourite_fruit()}}"
       }
-   '''
+   """
    t = Template(template)
    t.globals['favourite_fruit'] = favourite_fruit
 

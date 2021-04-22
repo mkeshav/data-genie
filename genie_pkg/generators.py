@@ -92,7 +92,7 @@ def guid():
 
 
 def random_geo_coords(center=(-37.814, 144.963,), radius=10000, accuracy=3):
-    '''
+    """
         Generate random geo co ordinates
 
         Args:
@@ -113,7 +113,7 @@ def random_geo_coords(center=(-37.814, 144.963,), radius=10000, accuracy=3):
 
         Returns:
             data: (float, float)
-    '''
+    """
     r = radius/111300 #about 111300 meters in one degree
     x0,y0 = center
     u = float(uniform(0.0,1.0))
@@ -139,9 +139,9 @@ def _credit_card_digits(prefixes, length):
 
 
 def check_digit_luhn_mod_10(digits):
-    '''
+    """Luhn check verifies if 16 digits are a valid credit card or not.
         https://en.wikipedia.org/wiki/Luhn_algorithm
-    '''
+    """
     reversed_digits = digits[::-1]
     calibrated_digits = []
     for i, d in enumerate(reversed_digits):

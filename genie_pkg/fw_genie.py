@@ -79,7 +79,7 @@ def _generate_columns(colspecs, encoding):
 
 
 def generate(colspecs, nrows, encoding='utf-8'):
-    '''
+    """
         Generate fixedwidth data for the provided specification
 
         Args:
@@ -89,14 +89,14 @@ def generate(colspecs, nrows, encoding='utf-8'):
 
         Returns:
             data: Iterator over nrows.
-    '''
+    """
     for _ in range(nrows):
         row_data = _generate_columns(colspecs, encoding)
         yield ''.join(row_data).encode(encoding)
 
 
 def anonymise_columns(row: bytes, anonymous_col_specs, encoding='utf-8') -> bytes:
-    '''
+    """
         Generate fixedwidth data for the provided specification
 
         Args:
@@ -106,7 +106,7 @@ def anonymise_columns(row: bytes, anonymous_col_specs, encoding='utf-8') -> byte
 
         Returns:
             data: Mutated row.
-    '''
+    """
     anonymised = row.decode(encoding)
     for ac in anonymous_col_specs:
         start, end, data_type, *optional = ac
