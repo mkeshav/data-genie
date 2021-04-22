@@ -140,6 +140,7 @@ def _credit_card_digits(prefixes, length):
 
 def check_digit_luhn_mod_10(digits):
     """Luhn check verifies if 16 digits are a valid credit card or not.
+
         https://en.wikipedia.org/wiki/Luhn_algorithm
     """
     reversed_digits = digits[::-1]
