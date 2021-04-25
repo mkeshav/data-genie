@@ -137,11 +137,15 @@ def _credit_card_digits(prefixes, length):
 
     return prefix + digits
 
-
-def check_digit_luhn_mod_10(digits):
+# https://en.wikipedia.org/wiki/Luhn_algorithm
+def check_digit_luhn_mod_10(digits) -> int:
     """Luhn check verifies if 16 digits are a valid credit card or not.
 
-        https://en.wikipedia.org/wiki/Luhn_algorithm
+    Args:
+        digits ([str]): Credit card number
+
+    Returns:
+        [int]: Check digit
     """
     reversed_digits = digits[::-1]
     calibrated_digits = []
@@ -216,11 +220,15 @@ def random_dob(year=None, month=None, day=None, format_string='%m/%d/%Y'):
 
 
 def utc_epoch_start_and_end_ms_for(year, month, day):
-    """
-    :param year:
-    :param month:
-    :param day:
-    :return: Start and End of day in utc epoch millis. End is 11:59:59:990
+    """utc start and end of day.
+
+    Args:
+        year ([int]): year
+        month ([int]): month
+        day ([int]): day
+
+    Returns:
+        [int]: utc epoch timestamp in millis
     """
     start = datetime(year, month, day, 0, 0)
     end = start + timedelta(1)
