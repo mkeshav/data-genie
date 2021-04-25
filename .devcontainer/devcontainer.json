@@ -28,7 +28,8 @@
 	"extensions": [
 		"ms-python.python",
 		"ms-python.vscode-pylance",
-		"shardulm94.trailing-spaces"
+		"shardulm94.trailing-spaces",
+		"njpwerner.autodocstring"
 	]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
