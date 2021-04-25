@@ -80,7 +80,8 @@ def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
 
 
 def generate(template_string) -> str:
-    """Generate json data for the provided specification
+    """
+        Generate json data for the provided specification.
 
         Args:
             template_string (str): Jinja template string
@@ -93,7 +94,8 @@ def generate(template_string) -> str:
 
 
 def generate_with_custom_template_function(template: JinjaTemplate) -> str:
-    """Generate json data for the provided specification
+    """
+        Generate json data for the provided specification.
 
         Args:
             template (Template): Jinja template

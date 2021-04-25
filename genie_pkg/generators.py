@@ -139,7 +139,8 @@ def _credit_card_digits(prefixes, length):
 
 # https://en.wikipedia.org/wiki/Luhn_algorithm
 def check_digit_luhn_mod_10(digits) -> int:
-    """Luhn check verifies if 16 digits are a valid credit card or not.
+    """
+    Luhn check verifies if 16 digits are a valid credit card or not.
 
     Args:
         digits ([str]): Credit card number
@@ -220,7 +221,8 @@ def random_dob(year=None, month=None, day=None, format_string='%m/%d/%Y'):
 
 
 def utc_epoch_start_and_end_ms_for(year, month, day):
-    """utc start and end of day.
+    """
+    utc start and end of day.
 
     Args:
         year ([int]): year

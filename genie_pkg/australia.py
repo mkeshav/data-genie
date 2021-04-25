@@ -6,10 +6,10 @@ from typing import Tuple
 
 class Australia(object):
 
-    """Provides random addresses from australia."""
+    """Provide random OZ address."""
 
     def __init__(self):
-        """No arguments."""
+        """Loads postcode data from repository."""
         self.data = json.loads(resource_string(__name__, 'data/oz_postcodes.json'))
 
     def get_random_state(self) -> str:

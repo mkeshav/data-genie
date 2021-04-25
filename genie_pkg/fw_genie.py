@@ -79,7 +79,8 @@ def _generate_columns(colspecs, encoding):
 
 
 def generate(colspecs, nrows, encoding='utf-8'):
-    """Generate fixedwidth data for the provided specification
+    """
+        Generate fixedwidth data for the provided specification.
 
         Args:
             colspecs (tuple-> (length, type, optional)): List of column specifications (similar to pandas)
