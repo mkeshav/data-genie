@@ -1,8 +1,7 @@
 from genie_pkg.generators import check_digit_luhn_mod_10
 
 def is_valid_cc(cc) -> bool:
-    """
-    Validates credit card.
+    """Validates credit card.
 
     Args:
         cc ([str]): Credit card number

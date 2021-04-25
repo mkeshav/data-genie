@@ -13,8 +13,7 @@ class QualityChecker(object):
     """Monkeypatch pandas dataframe to provide quality checks."""
 
     def __init__(self, pandas_obj: pd.DataFrame) -> None:
-        """
-        Dataframe to work on
+        """Dataframe to work on.
 
         Args:
             pandas_obj (pd.DataFrame): Dataframe to apply the checks on
