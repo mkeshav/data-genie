@@ -5,13 +5,13 @@ from typing import Tuple, List, Any
 from genie_pkg import GenieException
 import numpy as np
 from dateutil.parser import parse
-
+import pandas as pd
 
 @pf.register_dataframe_accessor('dqc')
 class QualityChecker(object):
     """Monkey patches pandas dataframe to run data quality checks."""
 
-    def __init__(self, pandas_obj):
+    def __init__(self, pandas_obj: pd.DataFrame):
         """Pandas dataframe to work on."""
         self._validate(pandas_obj)
         self._obj = pandas_obj
