@@ -140,8 +140,9 @@ class QualityChecker(object):
         else:
             if (not_na_df.shape[0] > 0):
                 return node.data, column_name, (passing.shape[0]/not_na_df.shape[0])*100 >= pass_percent
+            else:
+                return node.data, column_name, True
 
-        return node.data, column_name, False
 
     def _apply_has_columns(self, node) -> Tuple[str, Any, bool]:
         column_names = [ct.value.replace("\"", "") for ct in node.children[0].children]
