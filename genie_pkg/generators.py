@@ -36,6 +36,8 @@ def generate_ip(v=4) -> str:
         # str(addr) always returns the short address
         # .exploded is the opposite of this, always returning the full address with all-zero groups and so on
         return IPv6Address(bits).compressed
+    else:
+        return '127.0.0.1'
 
 
 def generate_ipv4_in_subnet(subnet_cidr) -> str:
