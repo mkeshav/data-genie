@@ -314,9 +314,9 @@ def test_percent_values_have_length_param_combinations():
                     percent_of_values_have_length(foo, pass_percent_threshold=50, ignore_nulls=True) == 2
                     percent_of_values_have_length(bar, ignore_nulls=True) == 2
                     percent_of_values_have_length(foobar, pass_percent_threshold=50) == 2
-                    percent_of_values_have_length(foo) == 2
+                    percent_of_values_have_length(name) == 3
                 }
                 """
 
-    result = df.dqc.run(check_spec)
-    assert True
+    successes = list(filter(lambda x: x[2], df.dqc.run(check_spec)))
+    assert len(successes) > 0

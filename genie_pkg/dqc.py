@@ -70,17 +70,11 @@ class QualityChecker(object):
         column_name = self._treat_column_name(node.children[0])
         pass_percent = 100
         ignore_nulls = False
-        if len(node.children) == 3:
-            pass_percent = int(node.children[1])
-            ignore_nulls = self._str_to_bool(node.children[2])
-
-        if len(node.children) == 2:
-            c = node.children[1]
+        for c in node.children:
             if c.type == 'PERCENT':
                 pass_percent = int(c.value)
             if c.type == 'BOOL':
                 ignore_nulls = self._str_to_bool(c.value)
-
 
         non_null_rows = self._obj[self._obj[column_name].notnull()]
         valid_dates = non_null_rows[non_null_rows[column_name].apply(self._is_date)]
@@ -98,8 +92,9 @@ class QualityChecker(object):
         allowed_values = [ct.value.replace("\"", "") for ct in node.children[1].children]
         unique_values = self._obj[column_name].unique()
         ignore_case = False
-        if len(node.children) == 3:
-            ignore_case = self._str_to_bool(node.children[2].value)
+        for c in node.children:
+            if not isinstance(c, Tree) and c.type == 'BOOL':
+                ignore_case = self._str_to_bool(c.value)
 
         if ignore_case:
             allowed_values = [v.lower() for v in allowed_values]
@@ -111,22 +106,13 @@ class QualityChecker(object):
         column_name = self._treat_column_name(node.children[0])
         pass_percent = 100
         ignore_nulls = False
-        if len(node.children) == 4:
-            # index 2 is "=="
-            c = node.children[1]
+        for c in node.children:
             if c.type == 'PERCENT':
                 pass_percent = int(c.value)
-            if c.type == 'BOOL':
+            elif c.type == 'BOOL':
                 ignore_nulls = self._str_to_bool(c.value)
-            rhs = int(node.children[3])
-        elif len(node.children) == 3:
-            # index 1 is "=="
-            rhs = int(node.children[2])
-        else:
-            pass_percent = int(node.children[1])
-            ignore_nulls = self._str_to_bool(node.children[2].value)
-            # index 3 is "=="
-            rhs = int(node.children[4])
+            elif c.type == 'SIGNED_NUMBER':
+                rhs = int(c.value)
 
         self._obj['length'] = self._obj[column_name].fillna('').astype(str).map(len)
         if ignore_nulls:
@@ -147,8 +133,9 @@ class QualityChecker(object):
     def _apply_has_columns(self, node) -> Tuple[str, Any, bool]:
         column_names = [ct.value.replace("\"", "") for ct in node.children[0].children]
         ignore_case = False
-        if len(node.children) == 2:
-            ignore_case = self._str_to_bool(node.children[1].value)
+        for c in node.children:
+            if not isinstance(c, Tree) and c.type == 'BOOL':
+                ignore_case = self._str_to_bool(c.value)
 
         if ignore_case:
             expected_columns = [c.lower() for c in column_names]
