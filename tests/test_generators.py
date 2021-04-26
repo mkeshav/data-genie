@@ -15,6 +15,11 @@ def test_ipv6():
         '{0}:{0}:{0}:{0}:{0}:{0}:{0}:{0}'.format(v6_part_regex), ipv6)
 
 
+
+def test_bad_ip_length():
+    with pytest.raises(GenieException) as _:
+        generate_ip(3)
+
 def test_ipv4_subnet():
     # network containing all addresses from 10.0.0.0 to 10.0.0.255
     ipv4 = generate_ipv4_in_subnet("10.0.0.0/24")

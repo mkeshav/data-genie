@@ -13,6 +13,7 @@ from pkg_resources import resource_string
 
 from genie_pkg import GenieException
 from typing import Tuple
+from genie_pkg import GenieException
 
 def generate_email_id(width, domain='dummy.com') -> str:
     actual_length = width - len(domain) - 1  # 1 for @
@@ -37,7 +38,7 @@ def generate_ip(v=4) -> str:
         # .exploded is the opposite of this, always returning the full address with all-zero groups and so on
         return IPv6Address(bits).compressed
     else:
-        return '127.0.0.1'
+        raise GenieException(f'Bad ip length: {v}')
 
 
 def generate_ipv4_in_subnet(subnet_cidr) -> str:
