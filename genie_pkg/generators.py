@@ -12,9 +12,9 @@ import pytz
 from pkg_resources import resource_string
 
 from genie_pkg import GenieException
+from typing import Tuple
 
-
-def generate_email_id(width, domain='dummy.com'):
+def generate_email_id(width, domain='dummy.com') -> str:
     actual_length = width - len(domain) - 1  # 1 for @
     if actual_length < 1:
         minimum_expected_length = len(domain) + 2  # 1 for @ and 1 for .
@@ -26,7 +26,7 @@ def generate_email_id(width, domain='dummy.com'):
     return ''.join(local_part) + '@' + domain
 
 
-def generate_ip(v=4):
+def generate_ip(v=4) -> str:
     if v == 4:
         bits = getrandbits(32)  # generates an integer with 32 random bits
         return str(IPv4Address(bits))
@@ -38,7 +38,7 @@ def generate_ip(v=4):
         return IPv6Address(bits).compressed
 
 
-def generate_ipv4_in_subnet(subnet_cidr):
+def generate_ipv4_in_subnet(subnet_cidr) -> str:
     subnet = IPv4Network(subnet_cidr)
     # subnet.max_prefixlen contains 32 for IPv4 subnets and 128 for IPv6 subnets
     # subnet.prefixlen is 24 in this case, so we'll generate only 8 random bits
@@ -46,52 +46,52 @@ def generate_ipv4_in_subnet(subnet_cidr):
     return str(IPv4Address(subnet.network_address + bits))
 
 
-def random_integer(start=1, max_value=999):
+def random_integer(start=1, max_value=999) -> int:
     return randint(start, max_value)
 
 
-def random_float(start=1, max_value=999, decimal_places=2):
+def random_float(start=1, max_value=999, decimal_places=2) -> float:
     return round(uniform(start, max_value), decimal_places)
 
 
-def random_string(length=20):
+def random_string(length=20) -> str:
     return ''.join([choice(string.ascii_letters) for _ in range(0, length)])
 
 
-def random_string_with_special_chars(length=20):
+def random_string_with_special_chars(length=20) -> str:
     special = ["¢", "£", "¥"]
     random_chars = [choice(string.ascii_letters + ''.join(special))
                     for _ in range(0, length - 1)]
     return ''.join([choice(special)] + random_chars)
 
 
-def random_date_from_today(format_string='%Y/%m/%d', delta_days=0):
+def random_date_from_today(format_string='%Y/%m/%d', delta_days=0) -> str:
     if delta_days > 0:
         return (datetime.today() + timedelta(days=delta_days)).strftime(format_string)
 
     return (datetime.today() - timedelta(days=delta_days)).strftime(format_string)
 
 
-def _current_milli_time(): return int(round(time.time() * 1000))
+def _current_milli_time() -> int: return int(round(time.time() * 1000))
 
 
-def random_bool():
+def random_bool() -> str:
     return choice(['true', 'false'])
 
 
-def now_epoch():
+def now_epoch() -> int:
     return _current_milli_time()
 
 
-def utc_now_epoch():
+def utc_now_epoch_ms() -> int:
     return int(round(datetime.utcnow().timestamp() * 1000))
 
 
-def guid():
+def guid() -> str:
     return str(uuid.uuid4())
 
 
-def random_geo_coords(center=(-37.814, 144.963,), radius=10000, accuracy=3):
+def random_geo_coords(center=(-37.814, 144.963,), radius=10000, accuracy=3) -> Tuple[float, float]:
     """
         Generate random geo co ordinates
 
@@ -128,7 +128,7 @@ def random_geo_coords(center=(-37.814, 144.963,), radius=10000, accuracy=3):
     return round(x_latitude, accuracy), round(y_longitude, accuracy)
 
 
-def _credit_card_digits(prefixes, length):
+def _credit_card_digits(prefixes, length) -> str:
     rnd = Random()
     rnd.seed()
 
@@ -169,13 +169,13 @@ def _random_cc(prefixes, length):
     return ''.join(digs + [str(cd)])
 
 
-def random_mastercard_number():
+def random_mastercard_number() -> str:
     mastercard_prefixes = [
         ['5', '1'], ['5', '2'], ['5', '3'], ['5', '4'], ['5', '5']]
     return _random_cc(mastercard_prefixes, length=16)
 
 
-def random_visacard_number(length=16):
+def random_visacard_number(length=16) -> str:
     visa_prefixes = [
         ['4', '5', '3', '9'],
         ['4', '5', '5', '6'],
@@ -204,7 +204,7 @@ def random_wonderland_text(number_of_sentences=5) -> str:
     return ' '.join(sentences)
 
 
-def random_dob(year=None, month=None, day=None, format_string='%m/%d/%Y'):
+def random_dob(year=None, month=None, day=None, format_string='%m/%d/%Y') -> str:
     if year is None:
         current_year = datetime.today().year
         year = randint(current_year - 50, current_year)
@@ -219,7 +219,7 @@ def random_dob(year=None, month=None, day=None, format_string='%m/%d/%Y'):
     return datetime(year, month, day).strftime(format_string)
 
 
-def utc_epoch_start_and_end_ms_for(year, month, day):
+def utc_epoch_start_and_end_ms_for(year, month, day) -> Tuple[int, int]:
     """utc start and end of day.
 
     Args:
