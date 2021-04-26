@@ -83,3 +83,8 @@ def test_utc_epoch_start_and_end_ms_for():
     s, e = utc_epoch_start_and_end_ms_for(2019, 7, 22)
     ms_in_day = e - s
     assert ms_in_day + 10 == 24 * 60 * 60 * 1000
+
+def test_utc_now_epoch():
+    utc1 = utc_now_epoch_ms()
+    utc2 = utc_now_epoch_ms()
+    assert utc2 >= utc1
