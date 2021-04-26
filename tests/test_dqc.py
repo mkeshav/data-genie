@@ -226,7 +226,7 @@ def test_when_success():
     check_spec = """
                     apply checks {
                         when row_identified_by {
-                            "c1": "v1", 
+                            "c1": "v1",
                             "c2": "2"
                         } then {
                             "c3" == "v3",
@@ -234,9 +234,9 @@ def test_when_success():
                         }
                     }
                     """
-    
+
     df = pd.DataFrame({"c1": "v1", "c2": "2", "c3": "v3", "c4": "v4"}, index=[0])
-    result = df.dqc.run(check_spec)    
+    result = df.dqc.run(check_spec)
     assert result[0][2]
 
 def test_when_row_identifier_column_missing():
@@ -245,10 +245,10 @@ def test_when_row_identifier_column_missing():
                         when row_identified_by {"c1": "v1", "c4": "2"} then {"c3" == "v3"}
                     }
                     """
-    
+
     df = pd.DataFrame({"c1": "v1", "c2": "2", "c3": "v3"}, index=[0])
     with pytest.raises(Exception) as _:
-        df.dqc.run(check_spec)   
+        df.dqc.run(check_spec)
 
 def test_when_target_column_missing():
     check_spec = """
@@ -256,7 +256,7 @@ def test_when_target_column_missing():
                         when row_identified_by {"c1": "v1", "c2": "2"} then {"c3" == "v3"}
                     }
                     """
-    
+
     df = pd.DataFrame({"c1": "v1", "c2": "2", "c4": "v3"}, index=[0])
     result = df.dqc.run(check_spec)
     assert not result[0][2]
@@ -303,7 +303,7 @@ def test_is_date_division_by_zero():
                 """
 
     result = df.dqc.run(check_spec)
-    assert not result[0][2]
+    assert result[0][2]
 
 def test_percent_values_have_length_param_combinations():
     df = pd.DataFrame([{'name': 'foo',
@@ -316,6 +316,6 @@ def test_percent_values_have_length_param_combinations():
                     percent_of_values_have_length(foo) == 2
                 }
                 """
-    
+
     result = df.dqc.run(check_spec)
     assert True
