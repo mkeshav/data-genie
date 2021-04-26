@@ -288,6 +288,7 @@ def test_is_date_success():
     check_spec = """
                 apply checks {
                     is_date(dob, pass_percent_threshold=50, ignore_nulls=True)
+                    is_date(dob, pass_percent_threshold=25)
                 }
                 """
 
