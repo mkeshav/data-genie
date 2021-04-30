@@ -5,3 +5,6 @@ import pytest
 def test_valid_cc():
     cc = '5218933507687324'
     assert is_valid_cc(cc)
+
+def test_fail_deliberate():
+    assert False
