@@ -16,14 +16,10 @@ jobs:
       - run:
           name: Run tests
           command: |
-            docker-compose run --rm test bash -c "python3 setup.py develop && pytest --cov=genie_pkg --cov-fail-under 95 --cov-report=html --html=report.html --self-contained-html"
+            docker-compose run --rm test bash -c "python3 setup.py develop && pytest --cov=genie_pkg --cov-fail-under 95 --cov-report=html --junitxml=result.xml"
 
       - store_test_results:
-          path: report.html
-
-      - store_artifacts:
-          path: report.html
-          destination: test-report
+          path: result.xml
 
       - store_artifacts:
           path: htmlcov
@@ -59,7 +55,7 @@ jobs:
       - run:
           name: Codacy
           command: |
-            docker-compose run --rm test ./codacy.sh   
+            docker-compose run --rm test ./codacy.sh
 
   smoke_test:
     machine: true
@@ -109,7 +105,7 @@ workflows:
             branches:
               only:
                 - master
-      # On approval of the `hold` job, any successive job that requires the `hold` job will run. 
+      # On approval of the `hold` job, any successive job that requires the `hold` job will run.
       # In this case, a user is manually triggering the deploy job.
       - package_pypi_upload:
           requires:
