@@ -5,7 +5,7 @@ build/
 data_genie*.egg-info/
 .coverage
 **/__pycache__/**
-report.html
+results.xml
 
 docs/_build
 docs/_static

@@ -16,10 +16,10 @@ jobs:
       - run:
           name: Run tests
           command: |
-            docker-compose run --rm test bash -c "python3 setup.py develop && pytest --cov=genie_pkg --cov-fail-under 95 --cov-report=html --junitxml=result.xml"
+            docker-compose run --rm test bash -c "python3 setup.py develop && pytest --cov=genie_pkg --cov-fail-under 95 --cov-report=html --junitxml=results.xml"
 
       - store_test_results:
-          path: result.xml
+          path: results.xml
 
       - store_artifacts:
           path: htmlcov
