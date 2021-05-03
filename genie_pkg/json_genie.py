@@ -4,6 +4,7 @@ import string
 from typing import NewType
 
 from jinja2 import Template
+import typing
 
 from genie_pkg.generators import (generate_email_id, generate_ip, guid,
                                   now_epoch, one_of, random_bool,
@@ -58,6 +59,7 @@ def random_text():
 JinjaTemplate = NewType('JinjaTemplate', Template)
 
 
+@typing.no_type_check
 def _add_template_functions(template: JinjaTemplate) -> JinjaTemplate:
     template.globals['random_integer'] = random_integer
     template.globals['random_float'] = random_float
