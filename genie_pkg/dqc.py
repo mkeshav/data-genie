@@ -113,12 +113,8 @@ class QualityChecker(object):
                 ignore_nulls = self._str_to_bool(c.value)
             elif c.type == 'SIGNED_NUMBER':
                 rhs = int(c.value)
-        filled = self._obj[column_name].fillna('')
-        if filled:
-            self._obj['length'] = filled.astype(str).map(len)
-        else:
-            self._obj['length'] = 0
 
+        self._obj['length'] = self._obj[column_name].fillna('').astype(str).map(len) # type: ignore
         if ignore_nulls:
             not_na_df = self._obj.replace(r'^\s*$', np.NaN, regex=True).dropna()
         else:
