@@ -11,6 +11,7 @@ WORKDIR /app
 COPY requirements* /app/
 COPY pypirc /root/.pypirc
 
+RUN python3 -m pip install -r /app/requirements.txt
 RUN python3 -m pip install -r /app/requirements_dev.txt
 
 COPY . /app
