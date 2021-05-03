@@ -1,5 +1,5 @@
-pandas
-jinja2
-markovify
-lark-parser
-data-science-types
+pandas==1.2.4
+jinja2==2.11.3
+markovify==0.9.0
+lark-parser==0.11.3
+data-science-types==0.2.23
