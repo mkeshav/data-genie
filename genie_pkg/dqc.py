@@ -1,4 +1,3 @@
-import pandas_flavor as pf
 from lark import Lark, Tree, Token
 from pkg_resources import resource_string
 from typing import Tuple, List, Any
@@ -7,7 +6,7 @@ import numpy as np
 from dateutil.parser import parse
 import pandas as pd
 
-@pf.register_dataframe_accessor('dqc')
+@pd.api.extensions.register_dataframe_accessor('dqc')
 class QualityChecker(object):
 
     """Monkeypatch pandas dataframe to provide quality checks."""
