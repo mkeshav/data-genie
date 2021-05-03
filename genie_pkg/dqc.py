@@ -5,8 +5,9 @@ from genie_pkg import GenieException
 import numpy as np
 from dateutil.parser import parse
 import pandas as pd
+import typing
 
-@pd.api.extensions.register_dataframe_accessor('dqc')
+@pd.api.extensions.register_dataframe_accessor('dqc') # type: ignore
 class QualityChecker(object):
 
     """Monkeypatch pandas dataframe to provide quality checks."""
@@ -47,7 +48,7 @@ class QualityChecker(object):
         q = float(node.children[1])
         c = node.children[2]
         rhs = float(node.children[3])
-        lhs = self._obj[column_name].quantile(q)
+        lhs = self._obj[column_name].quantile(q) # type: ignore
         return node.data, column_name, self._comparator_to_fn(c, rhs)(lhs)
 
     @staticmethod
@@ -97,7 +98,7 @@ class QualityChecker(object):
 
         if ignore_case:
             allowed_values = [v.lower() for v in allowed_values]
-            unique_values = [v.lower() for v in unique_values]
+            unique_values = [v.lower() for v in unique_values] # type: ignore
 
         return node.data, column_name, all(elem in allowed_values for elem in unique_values)
 
@@ -112,8 +113,12 @@ class QualityChecker(object):
                 ignore_nulls = self._str_to_bool(c.value)
             elif c.type == 'SIGNED_NUMBER':
                 rhs = int(c.value)
+        filled = self._obj[column_name].fillna('')
+        if filled:
+            self._obj['length'] = filled.astype(str).map(len)
+        else:
+            self._obj['length'] = 0
 
-        self._obj['length'] = self._obj[column_name].fillna('').astype(str).map(len)
         if ignore_nulls:
             not_na_df = self._obj.replace(r'^\s*$', np.NaN, regex=True).dropna()
         else:
@@ -141,13 +146,13 @@ class QualityChecker(object):
             columns_in_df = list(map(str.lower, self._obj.columns))
         else:
             expected_columns = column_names
-            columns_in_df = self._obj.columns
+            columns_in_df = list(self._obj.columns)
 
         return node.data, ','.join(columns_in_df), len(set(columns_in_df).intersection(expected_columns)) == len(set(expected_columns))
 
     @staticmethod
     def _build_query(key_value_node: Tree):
-        splits = [ct.value.split(":") for ct in key_value_node.children]
+        splits = [ct.value.split(":") for ct in key_value_node.children] # type: ignore
         cleansed = [(s[0].replace("\"", "").strip(), s[1].replace("\"", "").strip()) for s in splits]
         return ' & '.join([f'{c[0]} == "{c[1]}"' for c in cleansed])
 
@@ -175,7 +180,7 @@ class QualityChecker(object):
                 return self._apply_has_columns(c)
             elif c.data == "is_unique":
                 column_name = self._treat_column_name(c.children[0])
-                return c.data, None, self._obj[column_name].is_unique
+                return c.data, None, self._obj[column_name].is_unique # type: ignore
             elif c.data == "not_null":
                 column_name = self._treat_column_name(c.children[0])
                 return c.data, None, self._obj[column_name].isna().sum() == 0
@@ -210,6 +215,8 @@ class QualityChecker(object):
                 raise GenieException('Unknown instruction: %s' % predicates.data)
         return results
 
+    # Adding this decorator as mypy cant work out lark tree
+    @typing.no_type_check
     def _run(self, pt: Tree) -> List[Tuple[str, Any, bool]]:
         if len(pt.children) != 1:
             raise GenieException('How is this possible: %s' % pt.children)
@@ -237,7 +244,7 @@ class QualityChecker(object):
         ast = self._parse_spec(check_spec)
         self.ignore_column_case = ignore_column_case
         if self.ignore_column_case:
-            self._obj.columns = map(str.lower, self._obj.columns)
+            self._obj.columns = map(str.lower, self._obj.columns) # type: ignore
 
         return self._run(ast)
 
