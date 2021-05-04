@@ -176,10 +176,10 @@ class QualityChecker(object):
                 return self._apply_has_columns(c)
             elif c.data == "is_unique":
                 column_name = self._treat_column_name(c.children[0])
-                return c.data, None, self._obj[column_name].is_unique # type: ignore
+                return c.data, column_name, self._obj[column_name].is_unique
             elif c.data == "not_null":
                 column_name = self._treat_column_name(c.children[0])
-                return c.data, None, self._obj[column_name].isna().sum() == 0
+                return c.data, column_name, self._obj[column_name].isna().sum() == 0
             elif c.data == "is_positive":
                 column_name = self._treat_column_name(c.children[0])
                 return c.data, column_name, (self._obj[column_name] > 0).all()
