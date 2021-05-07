@@ -14,16 +14,9 @@ jobs:
             sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
       - run:
-          name: Run tests
+          name: Tox (tests across python versions)
           command: |
-            docker-compose run --rm test bash -c "python3 setup.py develop && pytest --cov=genie_pkg --cov-fail-under 95 --cov-report=html --junitxml=results.xml"
-
-      - store_test_results:
-          path: results.xml
-
-      - store_artifacts:
-          path: htmlcov
-          destination: cov
+            docker-compose run --rm test bash -c "tox"
 
   type_check:
     machine: true
