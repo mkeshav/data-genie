@@ -1,8 +1,8 @@
-.tox/**
-.git/**
-.history/**
-.hypothesis/**
-.vscode/**
-.idea/**
+.tox
+.git
+.history
+.hypothesis
+.vscode
+.idea
 htmlcov
-.mypy_cache/**
+.mypy_cache

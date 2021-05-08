@@ -8,11 +8,7 @@ RUN python3 -m pip install --user --upgrade twine
 RUN mkdir -p /app
 WORKDIR /app
 
-COPY requirements_dev.txt /app/
 COPY pypirc /root/.pypirc
-
-# test will install the requirements before running the test
-RUN python3 -m pip install -r /app/requirements_dev.txt
 
 COPY . /app
 ENV PATH="/root/.local/bin:${PATH}"

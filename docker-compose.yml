@@ -7,7 +7,7 @@ services:
     volumes:
       - .:/app:cached
     command: >
-      bash -c "python3 setup.py develop && pytest -vv"
+      bash -c "tox -e py38"
     environment:
       - PYPI_API_TOKEN
       - CODACY_PROJECT_TOKEN
