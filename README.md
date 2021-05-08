@@ -6,7 +6,7 @@
 
 # Data Genie
 
-Genie that can satisfy your data wish.
+Genie that can satisfy your data wish. **Python 3.5+**
 
 ## QuickStart
 
