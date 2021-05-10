@@ -12,6 +12,3 @@ COPY pypirc /root/.pypirc
 
 COPY . /app
 ENV PATH="/root/.local/bin:${PATH}"
-
-FROM python:3.8 as smoketest
-RUN python3 -m pip install data-genie

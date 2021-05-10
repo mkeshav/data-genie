@@ -14,10 +14,8 @@ services:
       - CIRCLE_SHA1
 
   smoke_test:
-    build:
-      context: .
-      target: smoketest
+    image: python:3.8
     volumes:
       - ./smoke_test.py:/app/smoke_test.py
     command: >
-      bash -c "/app/smoke_test.py"
+      bash -c "python3 -m pip install data-genie;/app/smoke_test.py"
