@@ -9,6 +9,8 @@ RUN mkdir -p /app
 WORKDIR /app
 
 COPY pypirc /root/.pypirc
+RUN curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | bash
 
 COPY . /app
 ENV PATH="/root/.local/bin:${PATH}"
+
