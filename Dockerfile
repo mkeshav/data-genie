@@ -12,10 +12,6 @@ COPY requirements_dev.txt /app/
 # test will install the requirements before running the test
 RUN python3 -m pip install -r /app/requirements_dev.txt
 
-USER root
-RUN curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | bash
-USER tox
-
 COPY pypirc /home/tox/.pypirc
 COPY . /app
 ENV PATH="/home/tox/.local/bin:${PATH}"
