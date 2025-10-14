@@ -1,4 +1,4 @@
-FROM fkrull/multi-python:latest as dev
+FROM divio/multi-python:latest as dev
 
 LABEL Author="Keshav Murthy"
 
