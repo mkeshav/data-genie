@@ -32,7 +32,7 @@ jobs:
           command: |
             docker-compose run --rm test bash -c "mypy genie_pkg"
 
-  code_quality:
+  smoke_test:
     machine: true
     steps:
       - checkout
@@ -41,22 +41,6 @@ jobs:
           command: |
             sudo curl -L "https://github.com/docker/compose/releases/download/v2.40.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             sudo chmod +x /usr/local/bin/docker-compose
-
-      - run:
-          name: Codacy
-          command: |
-            docker-compose run --rm test ./codacy.sh
-
-  smoke_test:
-    machine: true
-    steps:
-      - checkout
-      - run:
-          name: Install Docker Compose
-          command: |
-            curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
       - run:
           name: Smoke Test Package
@@ -70,9 +54,8 @@ jobs:
       - run:
           name: Install Docker Compose
           command: |
-            curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+            sudo curl -L "https://github.com/docker/compose/releases/download/v2.40.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
 
       - run:
           name: Upload to pypi
@@ -84,7 +67,6 @@ workflows:
   scan-test-upload:
     jobs:
       - test  # your custom job from your config, that builds your code
-      - code_quality
       - type_check
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
