@@ -13,6 +13,6 @@ COPY requirements_dev.txt /app/
 RUN python3 -m pip install -r /app/requirements_dev.txt
 
 COPY . /app
-COPY pypirc /home/tox/.pypirc
+COPY --chown=tox:tox pypirc /home/tox/.pypirc
 ENV PATH="/home/tox/.local/bin:${PATH}"
 
