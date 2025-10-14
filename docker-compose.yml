@@ -1,4 +1,3 @@
-version: '3.7'
 services:
   test:
     build:
@@ -7,7 +6,7 @@ services:
     volumes:
       - .:/app:cached
     command: >
-      bash -c "tox -e py38"
+      bash -c "tox -e py39"
     environment:
       - PYPI_API_TOKEN
       - CODACY_PROJECT_TOKEN
