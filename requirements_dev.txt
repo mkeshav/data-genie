@@ -1,3 +1,5 @@
+mypy
+mypy-extensions
 pytest
 pytest-sugar
 pytest-html

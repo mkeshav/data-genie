@@ -13,7 +13,7 @@ services:
       - CIRCLE_SHA1
 
   smoke_test:
-    image: python:3.8
+    image: python:3.9
     volumes:
       - ./smoke_test.py:/app/smoke_test.py
     command: >
