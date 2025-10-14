@@ -1,10 +1,16 @@
 services:
-  test:
+  dev:
     build:
       context: .
       target: dev
     volumes:
       - .:/app:cached
+
+  # dockerignore will be bypassed if you mount volume like dev
+  test:
+    build:
+      context: .
+      target: dev
     command: >
       bash -c "tox -e py39"
     environment:
