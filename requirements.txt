@@ -1,6 +1,6 @@
 numpy<2
 pandas==2.2.2
-jinja2==3.1.3
+jinja2==3.1.6
 markovify==0.9.0
 lark-parser==0.11.3
 data-science-types==0.2.23
