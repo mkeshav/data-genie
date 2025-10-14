@@ -58,6 +58,21 @@ jobs:
             sudo chmod +x /usr/local/bin/docker-compose
 
       - run:
+          name: Get commit message
+          command: |
+            COMMIT_MSG=$(git log --format=oneline -n 1 $CIRCLE_SHA1)
+            echo "export COMMIT_MSG='$COMMIT_MSG'" >> $BASH_ENV
+
+      - run:
+          name: Conditional test execution
+          command: |
+            if [[ "$COMMIT_MSG" == *"[skip release]"* ]]; then
+              echo "Skipping release job due to commit message."
+              circleci step halt
+            fi
+          when: always
+
+      - run:
           name: Upload to pypi
           command: |
             docker-compose run --rm test ./upload_pypi
