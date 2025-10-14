@@ -116,7 +116,7 @@ class QualityChecker(object):
 
         self._obj['length'] = self._obj[column_name].fillna('').astype(str).map(len) # type: ignore
         if ignore_nulls:
-            not_na_df = self._obj.replace(r'^\s*$', np.NaN, regex=True).dropna()
+            not_na_df = self._obj.replace(r'^\s*$', np.nan, regex=True).dropna()
         else:
             not_na_df = self._obj
 
