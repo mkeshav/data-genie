@@ -16,7 +16,7 @@ USER root
 RUN curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | bash
 USER tox
 
-COPY pypirc /root/.pypirc
+COPY pypirc /home/tox/.pypirc
 COPY . /app
-ENV PATH="/root/.local/bin:${PATH}"
+ENV PATH="/home/tox/.local/bin:${PATH}"
 
