@@ -12,7 +12,7 @@ COPY requirements_dev.txt /app/
 # test will install the requirements before running the test
 RUN python3 -m pip install -r /app/requirements_dev.txt
 
-COPY pypirc /home/tox/.pypirc
 COPY . /app
+COPY pypirc /home/tox/.pypirc
 ENV PATH="/home/tox/.local/bin:${PATH}"
 
