@@ -13,9 +13,10 @@ COPY requirements_dev.txt /app/
 RUN python3 -m pip install -r /app/requirements_dev.txt
 
 USER root
-COPY pypirc /root/.pypirc
 RUN curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | bash
+USER tox
 
+COPY pypirc /root/.pypirc
 COPY . /app
 ENV PATH="/root/.local/bin:${PATH}"
 
