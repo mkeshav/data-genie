@@ -22,5 +22,6 @@ services:
     image: python:3.9
     volumes:
       - ./smoke_test.py:/app/smoke_test.py
+    working_dir: /app
     command: >
       bash -c "python3 -m pip install data-genie;/app/smoke_test.py"

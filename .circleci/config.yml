@@ -45,7 +45,7 @@ jobs:
       - run:
           name: Smoke Test Package
           command: |
-            docker-compose run --rm smoke_test ./smoke_test.py
+            docker-compose run --rm smoke_test
 
   package_pypi_upload:
     machine: true
