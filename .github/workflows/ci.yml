@@ -1,0 +1,36 @@
+name: scan-test-upload
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose run --rm test bash -c "tox"
+
+  type_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose run --rm test bash -c "mypy genie_pkg"
+
+  package_pypi_upload:
+    needs: [test, type_check]
+    if: github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip release]')
+    runs-on: ubuntu-latest
+    environment: pypi  # add required reviewers here to keep the manual approval gate
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose run --rm test ./upload_pypi
+        env:
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+
+  smoke_test:
+    needs: package_pypi_upload
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose run --rm smoke_test
