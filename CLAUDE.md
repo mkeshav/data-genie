@@ -1,200 +1,151 @@
-# CLAUDE.md
+# Coding Principles
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Behavioral guidelines to reduce common LLM coding mistakes.
 
-## Project Overview
+**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
-Data Genie is a Python library for generating synthetic test data in multiple formats: fixed-width, delimited (CSV), and JSON. It also provides a data quality checking DSL through the `dqc` module that operates on pandas DataFrames.
+## 1. Think Before Coding
 
-**Python Version**: 3.5+
-**Package Name**: data-genie (published to PyPI)
-**Documentation**: https://data-genie.readthedocs.io
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
 
-## Development Environment
+Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them - don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
 
-### Docker-based Workflow (Recommended)
+## 2. Simplicity First
 
-All development commands should be run through Docker Compose:
+**Minimum code that solves the problem. Nothing speculative.**
 
-```bash
-# Build test container
-docker-compose build test
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
 
-# Run all tests (uses tox for multi-version testing)
-docker-compose run --rm test
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
 
-# Run tests inside container (after getting shell)
-docker-compose run --rm test bash
-python setup.py develop && pytest
+## 3. Surgical Changes
 
-# Run single test
-docker-compose run --rm test bash -c "python setup.py develop && pytest tests/test_fw.py -k 'test_float'"
+**Touch only what you must. Clean up only your own mess.**
 
-# Type checking with mypy
-docker-compose run --rm test bash -c "mypy genie_pkg"
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it - don't delete it.
 
-# Smoke test (tests installed package)
-docker-compose run --rm smoke_test
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
+
+The test: Every changed line should trace directly to the user's request.
+
+## 4. Goal-Driven Execution
+
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan:
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
 ```
 
-### Local Development
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
-If working outside Docker:
+---
 
-```bash
-# Install dependencies
-pip install -r requirements.txt
-pip install -r requirements_dev.txt
+# Code Review
 
-# Install package in development mode
-python setup.py develop
+When asked to review a branch, compare it against `master` and produce the following:
 
-# Run tests
-pytest
+## Inline comments
+Call out specific lines or hunks with file + line reference. Label each as:
+- **[BLOCKER]** — must be fixed before merge (correctness bugs, security issues, data loss risk)
+- **[SUGGESTION]** — worth fixing but not a merge gate (style, minor perf, readability)
 
-# Run tests for specific Python versions
-tox
+## Summary report
+After the inline comments, write a short summary covering:
+- What the branch does (1–2 sentences)
+- Correctness — logic bugs, edge cases, error handling
+- Security — injection, auth, secrets, input validation
+- Code style — consistency with the existing codebase
+- Performance — obvious inefficiencies
+- Test coverage — are the changes tested adequately
 
-# Type checking
-mypy genie_pkg
-```
+## Merge recommendation
+End with a clear recommendation: **Merge**, **Merge after fixing blockers**, or **Do not merge**, with a one-line reason. The final call is the user's.
 
-## Architecture
+---
 
-### Core Modules
+# Session Protocol
 
-The package is organized around three data format generators plus utilities:
+At the start of every session, ask the user: **"Are we in PR mode or trunk mode?"**
 
-1. **fw_genie.py** - Fixed-width file generation
-   - Generates fixed-length fields with precise width specifications
-   - Supports encoding variations (UTF-8, ASCII)
-   - Provides `generate()` and `anonymise_columns()` functions
+---
 
-2. **delimited_genie.py** - CSV/delimited file generation
-   - Generates delimiter-separated values (default: comma)
-   - Provides `generate()` and `anonymise_columns()` functions
-   - Handles special cases like geo coordinates that expand to multiple columns
+## Trunk Mode
 
-3. **json_genie.py** - JSON data generation using Jinja2 templates
-   - Template-based generation with custom functions injected into Jinja environment
-   - All generator functions exposed as template globals (e.g., `random_integer`, `random_email_id`)
-   - Use `generate()` with template string or `generate_with_custom_template_function()` for custom templates
+Work happens directly on `master`. No PRs involved.
 
-4. **generators.py** - Shared random data generators
-   - Core random data generation functions used by all format generators
-   - Includes: emails, IPs, credit cards, dates, geo coordinates, UUIDs, etc.
-   - Uses Markov chain (`markovify`) for text generation from `wonderland.txt`
+### Take-off
+1. **Open issues** — run `gh issue list --state open` and show a quick summary.
+2. **Repo state** — check for unpushed commits (`git log origin/master..HEAD`) and uncommitted work (`git status`).
+3. **Memory review** — scan `MEMORY.md` for relevant context from prior sessions.
+4. **Graph review** — read `graphify-out/GRAPH_REPORT.md` for god nodes, community structure, and surprising connections to orient on the codebase.
+5. **User check-in** — ask the user if there's anything to track or prioritize before starting.
 
-5. **dqc.py** - Data Quality Checker
-   - Pandas DataFrame accessor (use as `df.dqc.run(check_spec)`)
-   - Custom DSL parsed with Lark grammar (`data/dqc_grammar.lark`)
-   - Supports checks: row_count, is_unique, not_null, is_positive, has_one_of, quantile, is_date, percent_value_length, when_row_identified_by, has_columns
-   - Returns list of tuples: `(check_name, column_name, passed: bool)`
+### Landing
+1. **Run tests** — confirm nothing is broken before wrapping up.
+2. **GitHub issues** — ask the user if anything from the session should be tracked as an issue. Never create issues without confirming first.
+3. **Memory review** — save new learnings, update stale entries, remove outdated ones from auto-memory.
+4. **Commit** — commit the work, but **do not push** without asking the user first.
+5. **Close issues** — only close an issue after the code has been pushed — a commit alone is not enough, since changes may still come.
+6. **Session summary** — provide a brief summary of what was accomplished.
 
-6. **australia.py** - Australian address data
-   - Provides random OZ addresses using postcode data (`data/oz_postcodes.json`)
-   - Methods: `get_random_state()`, `get_random_city_postcode()`, `get_city()`, `get_random_geo_coordinate()`
+---
 
-7. **validators.py** - Data validation utilities
-   - Currently provides credit card validation using Luhn algorithm
+## PR Mode
 
-### Package Data Files
+A **Coder** (local model) writes code and opens PRs. A **Reviewer** (Claude Code) reviews and fixes.
 
-Located in `genie_pkg/data/`:
-- `dqc_grammar.lark` - Grammar definition for data quality DSL
-- `oz_postcodes.json` - Australian postcode/locality database
-- `wonderland.txt` - Source text for Markov chain text generation
+### Coder — Take-off
+1. **Pick an issue** — run `gh issue list --state open --assignee @me` first, then fall back to unassigned issues. Choose one to work on.
+2. **Repo state** — pull latest `master`, create a feature branch named `<issue#>-<short-slug>`.
+3. **Understand context** — read the issue description, related code, and any linked issues or discussions. Run `/graphify query` on the issue topic to find related code across communities.
 
-These files are included via `package_data` in setup.py and accessed using `pkg_resources.resource_string()`.
+### Coder — Landing
+1. **Run tests** — confirm all tests pass before opening a PR.
+2. **Open a PR** with this structure:
+   - **Title**: short, under 70 characters
+   - **Body**:
+     - `Closes #<issue>` link
+     - `## Summary` — 1–3 bullet points of what changed
+     - `## Test plan` — how the changes were verified
+3. **Request review** — assign the reviewer.
 
-## Testing
+### Reviewer — Take-off
+1. **Open issues** — run `gh issue list --state open` and show a quick summary.
+2. **Open PRs** — run `gh pr list --state open` and flag any awaiting review.
+3. **Repo state** — check for unpushed commits (`git log origin/master..HEAD`) and uncommitted work (`git status`).
+4. **Memory review** — scan `MEMORY.md` for relevant context from prior sessions.
+5. **Graph review** — read `graphify-out/GRAPH_REPORT.md` for god nodes, community structure, and surprising connections to orient on the codebase.
+6. **User check-in** — ask the user if there's anything to track or prioritize before starting.
 
-Tests use pytest with hypothesis for property-based testing. Test files mirror the module structure:
-- `test_fw.py` - Fixed-width generation tests
-- `test_delimited.py` - CSV/delimited generation tests
-- `test_json.py` - JSON generation tests
-- `test_dqc.py` - Data quality checker tests
-- `test_generators.py` - Core generator function tests
-- `test_validators.py` - Validator tests
-- `test_australia.py` - Australia module tests
+### Reviewer — Landing
+1. **Run tests** — confirm nothing is broken before wrapping up.
+2. **Fix blockers** — if a reviewed PR has blockers, fix them on the branch directly.
+3. **GitHub issues** — ask the user if anything from the session should be tracked as an issue. Never create issues without confirming first.
+4. **Memory review** — save new learnings, update stale entries, remove outdated ones from auto-memory.
+5. **Commit** — commit the work, but **do not push** without asking the user first.
+6. **Close issues** — only close an issue after the code has been pushed — a commit alone is not enough, since changes may still come.
+7. **Session summary** — provide a brief summary of what was accomplished.
 
-## Release Process
-
-1. Update version in `genie_pkg/__init__.py`
-2. Commit with message (use `[skip release]` prefix to skip release)
-3. Run `./tag-master` to create git tag
-4. Push to master: `git push origin master`
-5. CircleCI workflow runs: test → type_check → hold (manual approval) → package_pypi_upload → smoke_test
-6. Manually approve the hold step in CircleCI web UI to trigger PyPI upload
-7. If documentation updated, manually trigger build on readthedocs
-
-**Pre-push Hook**: Copy `pre-push` script to `.git/hooks/pre-push` after cloning
-
-## CI/CD
-
-CircleCI configuration (`.circleci/config.yml`) defines:
-- **test**: Runs tox for multi-version testing
-- **type_check**: Runs mypy type checking
-- **package_pypi_upload**: Uploads to PyPI (requires manual approval, skipped if commit contains "[skip release]")
-- **smoke_test**: Tests installed package from PyPI
-
-Environment variables required in CircleCI:
-- `PYPI_API_TOKEN` - PyPI project API token for package publishing
-- `CODACY_PROJECT_TOKEN` - For code quality reporting during builds
-
-## Common Patterns
-
-### Column Specifications
-
-All generators use tuple-based column specifications:
-
-**Fixed-width**: `(length, type, *optional_args)`
-```python
-[(10, 'int'), (15, 'email', 'example.com'), (10, 'date', '%Y/%m/%d', 2)]
-```
-
-**Delimited**: `(type, *optional_args)`
-```python
-[('int', 1, 100), ('email', 20, 'test.com'), ('geo_coord', center, radius)]
-```
-
-### Data Types
-
-Common types across generators: `int`, `float`, `str`, `date`, `email`, `one_of`, `special_string`, `geo_coord`, `cc_mastercard`, `cc_visacard`
-
-### Anonymization
-
-Both fw_genie and delimited_genie support anonymizing existing data:
-- `anonymise_columns()` takes row bytes and column specs to replace specific columns with generated data
-
-### DQC Usage
-
-```python
-import pandas as pd
-
-df = pd.read_csv('data.csv')
-check_spec = """
-row_count > 100
-column_name is_unique
-column_name not_null
-"""
-results = df.dqc.run(check_spec, ignore_column_case=True)
-# Returns: [(check_type, column_name, passed)]
-```
-
-## Dependencies
-
-**Runtime** (requirements.txt):
-- numpy<2
-- pandas==2.2.2
-- jinja2==3.1.3
-- markovify==0.9.0
-- lark-parser==0.11.3
-- data-science-types==0.2.23
-
-**Development** (requirements_dev.txt):
-- pytest, pytest-sugar, pytest-html, pytest-cov
-- hypothesis[pandas] - for property-based testing
-- jsonschema
-- sphinx - for documentation
-- pipdeptree
+---
