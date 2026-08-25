@@ -19,15 +19,15 @@ After cloning deploy pre-push hook by copying `pre-push` script to `.git/hooks/p
 - `./tag-master`
 - `git push origin master`
 
-Unblock the step in circleci
+Approve the `pypi` environment deployment in GitHub Actions
 
 If you have updated the documentation, login to readthedocs and build latest
 
-## Circle CI
+## GitHub Actions
 
-Builds happen on circle ci with github integration
+Builds happen on GitHub Actions (`.github/workflows/ci.yml`)
 
-Following environment variables need to be set on circle
+Following secrets need to be set on the repo
 
 - `PYPI_API_TOKEN` (Pypi project token to allow publishing)
 
